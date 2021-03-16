@@ -1,0 +1,88 @@
+.header{
+    height: 120px;
+    background-image: linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%);
+    font-family: 'Open Sans', sans-serif;
+    line-height: 2.4rem;
+    justify-content: center;
+
+    &__navbar{
+        display: flex;
+        justify-content: space-between;
+    }
+
+    &__logo{
+            height: 100px;
+            width: 100px;
+            margin-top: 10%;
+    }
+
+    &__list{
+        list-style: none;
+        padding-left: 0;
+        margin-top: 2.5rem;
+        padding: 0 30px;
+        
+    }
+
+    &__item{
+        @extend .header__item-link;
+        margin-top: 1rem;
+        margin: 0 8px;
+        position: relative;
+
+        &-link{
+            display: inline-block;
+            font-size: 2rem;
+            font-weight: 400;
+            color: white;
+            text-decoration: none;
+            
+            &:hover{
+                color: rgba(255, 255, 255, 0.7);
+                cursor: pointer;
+            }
+        }
+
+        &-strong{
+            font-weight: 600;
+        }
+
+        &--separate::after{
+            content:'';
+            display: block;
+            position: absolute;
+            width: 1px;
+            height: 15px;
+            background-color: rgb(240, 221, 221);
+            right: -8px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+    }
+
+    &__navbar-icon{
+        margin: 0 5px;
+    }
+    
+}
+.active{
+    font-size: 2rem;
+    color: #fce66d;
+    position: relative;
+    &::after{
+        position: absolute;
+        display: block;
+        top:2.2rem;
+        content: '';
+        width: 100%;
+        height: 0.8rem;
+        transform: rotate(-2deg);
+        background-color: #FFC000;
+}
+}
+.MuiDialog-paperWidthSm{
+    width: 100%;
+    
+}
+
+
