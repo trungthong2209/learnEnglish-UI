@@ -3,6 +3,7 @@ import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
 import React from "react";
+import { useSelector } from "react-redux";
 import CoursesForYou from "../courses/components/courser_personal";
 import GroupsForYou from "../groups/components/group_personal";
 import Clock from "./components/clock";
@@ -26,25 +27,27 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Home() {
+  const loggedInUser = useSelector((state) => state.user.current);
   const classes = useStyles();
+  
 
   return (
     <div className={classes.root}>
       <Container>
         <Grid container spacing={3}>
           <Grid item xs={4}>
-            <Paper className={classes.paper}>
-              <ProfileHome />
+            <Paper elevation={3} className={classes.paper}>
+              <ProfileHome user={loggedInUser} />
             </Paper>
-            <Paper className={classes.paper}><Clock/></Paper>
-            <Paper className={classes.paper}>Result</Paper>
-            <Paper className={classes.paper}>rank</Paper>
+            <Paper user={loggedInUser}  elevation={3} className={classes.paper}><Clock/></Paper>
+            <Paper elevation={3} className={classes.paper}>Result</Paper>
+            <Paper elevation={3} className={classes.paper}>rank</Paper>
           </Grid>
           <Grid item xs={8}>
-            <Paper className={classes.paper}>
+            <Paper user={loggedInUser} elevation={3} className={classes.paper}>
               <CoursesForYou />
             </Paper>
-            <Paper className={classes.paper}>
+            <Paper user={loggedInUser} elevation={3} className={classes.paper}>
               <GroupsForYou />
             </Paper>
           </Grid>

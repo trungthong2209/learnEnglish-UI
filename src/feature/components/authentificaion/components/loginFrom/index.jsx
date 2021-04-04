@@ -23,6 +23,11 @@ const useStyle = makeStyles((theme)=>({
     title:{
         textAlign: 'center',
         margin: theme.spacing(2,0,1,0),
+        fontFamily: [
+            "Open Sans",
+            'sans-serif',
+          ].join(','),
+        fontSize:"2rem",
     },
     submit:{
         marginTop: theme.spacing(2),
@@ -33,6 +38,11 @@ const useStyle = makeStyles((theme)=>({
         color: 'white',
         height: 48,
         padding: '0 30px',
+        fontFamily: [
+            "Open Sans",
+            'sans-serif',
+          ].join(','),
+        fontSize:"2rem",
   
     },
     progress:{
@@ -41,6 +51,13 @@ const useStyle = makeStyles((theme)=>({
       left:0,
       right: 0
     },
+    forget:{
+        fontFamily: [
+            "Open Sans",
+            'sans-serif',
+          ].join(','),
+        fontSize:"1.6rem",
+      },
 }));
 
 LoginForm.propTypes = {
@@ -52,16 +69,14 @@ LoginForm.propTypes = {
 function LoginForm(props) {
     const classes = useStyle();
     const schema = yup.object().shape({
-      identifier: yup.string().required('Bạn hãy nhập email.').email('Bạn phải nhập đúng kiểu email.'),
+      email: yup.string().required('Bạn hãy nhập email.').email('Bạn phải nhập đúng kiểu email.'),
       password: yup.string().required('Bạn hãy điền mật khẩu'),
       
     });
     const formm = useForm({
         defaultValues:{
-            
-            identifier:'',
-            password:'',
-            
+            email:'',
+            password:'',   
         },
         resolver: yupResolver(schema),
     });
@@ -84,14 +99,12 @@ function LoginForm(props) {
                  Đăng nhập
              </Typography>
             <form onSubmit={formm.handleSubmit(handleSubmit)}>
-            
-            
-            <InputField name="identifier" label="Email" form={formm} />
+            <InputField name="email" label="Email" form={formm} />
             <PasswordField name="password" label="Mật khẩu" form={formm} />
             <Box textAlign="right">
                   <Link href="#"
                     color="primary"
-                    
+                    className={classes.forget}
                   >
                    Quên mật khẩu?
                   </Link>

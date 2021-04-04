@@ -1,9 +1,13 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import Grid from "@material-ui/core/Grid";
 import { Avatar, Button } from "@material-ui/core";
+import Grid from "@material-ui/core/Grid";
+import Paper from "@material-ui/core/Paper";
+import { makeStyles } from "@material-ui/core/styles";
+import PropTypes from 'prop-types';
+import React from "react";
 
+ProfileHome.propTypes = {
+  loggedInUser: PropTypes.object.isRequired,
+};
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -13,9 +17,10 @@ const useStyles = makeStyles((theme) => ({
   },
   avt: {
     boxShadow: "none",
-    width: "60%",
-    height: "50%",
+    width: "18rem",
+    height: "18rem",
     margin: "0 auto",
+    
   },
   fontOpen: {
     fontFamily: ["Open Sans", "sans-serif"].join(","),
@@ -52,17 +57,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ProfileHome() {
+export default function ProfileHome(props) {
+  console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXXXX: ", props);
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
       <Grid container spacing={1}>
         <Grid item xs={12}>
-          <Paper className={classes.font_name}>Lê Xuân Hiếu</Paper>
+          <Paper className={classes.font_name}>{props.user.userName}</Paper>
         </Grid>
         <Grid item xs={12}>
-          <Paper className={classes.font_level}>Member</Paper>
+          <Paper className={classes.font_level}>{props.user.role}</Paper>
         </Grid>
         <Grid item xs={12}>
           <Paper className={classes.paper}>

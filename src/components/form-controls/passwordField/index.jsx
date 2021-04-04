@@ -36,13 +36,11 @@ function PasswordField(props) {
             id={name}
             type={showPassword ? 'text' : 'password'}
             label={label}
-           
             endAdornment={
               <InputAdornment position="end">
                 <IconButton
                   aria-label="toggle password visibility"
                   onClick={toggleShowPassword}
-                  
                   edge="end"
                 >
                   {showPassword ? <Visibility /> : <VisibilityOff />}
@@ -50,8 +48,19 @@ function PasswordField(props) {
               </InputAdornment>
             }
             error={!!hasError}
-            helperText={errors[name]?.massage}
-           
+            helperText={errors[name]?.message}
+            inputProps={{
+              style: {
+                fontFamily: ["Open Sans", "sans-serif"].join(","),
+                fontSize: "2rem",
+              },
+            }}
+            InputLabelProps={{
+              style: {
+                fontFamily: ["Open Sans", "sans-serif"].join(","),
+                fontSize: "2rem",
+              },
+            }}
           /> </FormControl>
         </div>
         

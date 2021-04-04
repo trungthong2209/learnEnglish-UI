@@ -1,10 +1,14 @@
 import axios from 'axios';
 
 const axiosClient = axios.create({
-  baseURL: 'https://api.ezfrontend.com/',
+  baseURL: 'http://3.131.71.201:3001/',
   headers: {
-    'Content-Type': 'application/json',
-  },
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
+        'Access-Control-Allow-Headers': 'userid, authorization, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers',
+        'Access-Control-Allow-Credentials': 'true',
+      },
 });
 
 // Interceptors
@@ -31,7 +35,7 @@ axiosClient.interceptors.response.use(
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
     const { config, status, data } = error.response;
-    const URLS = ['/auth/local/register', '/auth/local'];
+    const URLS = ['/auth/local/register', '/login'];
     if (URLS.includes(config.url) && status === 400) {
       const errorList = data.data || [];
       const firstError = errorList.length > 0 ? errorList[0] : {};

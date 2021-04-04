@@ -18,7 +18,8 @@ import { useDispatch, useSelector } from "react-redux";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import { logout } from "../../feature/components/authentificaion/userSlice";
-
+import Forget from "../../feature/components/authentificaion/components/forgetPass";
+import MailOutlineIcon from '@material-ui/icons/MailOutline';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -46,19 +47,23 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: ["Open Sans", "sans-serif"].join(","),
     fontSize: "2rem",
   },
-  dialog:{
-    width:'40%',
-  }
-
+  font_text: {
+    fontFamily: ["Open Sans", "sans-serif"].join(","),
+    fontSize: "1.6rem",
+  },
+  dialog: {
+    width: "40%",
+  },
 }));
 const MODE = {
   LOGIN: "login",
   REGISTER: "register",
+  FORGET: "forget",
 };
 
-function Header() {
+function Header(props) {
   const loggedInUser = useSelector((state) => state.user.current);
-  const isLoggedIn = !!loggedInUser.id;
+  const isLoggedIn = !!loggedInUser._id;
 
   const [mode, setMode] = useState(MODE.LOGIN);
   const classes = useStyles();
@@ -79,13 +84,12 @@ function Header() {
     setAnchorEl(e.currentTarget);
   };
 
-
   const dispatch = useDispatch();
-  const handleLogoutClick = () =>{
+  const handleLogoutClick = () => {
     handleCloseMenu();
     const action = logout();
     dispatch(action);
-  }
+  };
 
   return (
     <div>
@@ -103,14 +107,14 @@ function Header() {
             <ul className="header__list">
               <li className="header__item">
                 <Link to="/home" className="header__item-link">
-                  <HomeIcon className="header__navbar-icon" color="white" />
+                  <HomeIcon fontSize="large" className="header__navbar-icon" color="white" />
                   Trang chủ
                 </Link>
               </li>
               <li className="header__item">
                 <NavLink to="/khoa-hoc" className="header__item-link">
                   <LocalLibraryIcon
-                    className="header__navbar-icon"
+                    className="header__navbar-icon" fontSize="large"
                     color="white"
                   />
                   Khóa học
@@ -118,8 +122,14 @@ function Header() {
               </li>
               <li className="header__item">
                 <NavLink to="/nhom" className="header__item-link">
-                  <GroupIcon className="header__navbar-icon" color="white" />
+                  <GroupIcon className="header__navbar-icon" fontSize="large" color="white" />
                   Nhóm
+                </NavLink>
+              </li>
+              <li className="header__item">
+                <NavLink to="/tin-nhan" className="header__item-link">
+                  <MailOutlineIcon className="header__navbar-icon" fontSize="large" color="white" />
+                  Tin nhắn
                 </NavLink>
               </li>
 
@@ -136,7 +146,7 @@ function Header() {
                 )}
                 {isLoggedIn && (
                   <Avatar
-                    alt="Hieu Le"
+                    alt= {loggedInUser.userName}
                     src="/static/images/avatar/1.jpg"
                     className={classes.large}
                     onClick={handleMenuUserClick}
@@ -161,11 +171,16 @@ function Header() {
           horizontal: "center",
         }}
         getContentAnchorEl={null}
-        
       >
-        <MenuItem className={classes.font} onClick={handleCloseMenu}>Trang cá nhân</MenuItem>
-        <MenuItem className={classes.font} onClick={handleCloseMenu}>Cài đặt</MenuItem>
-        <MenuItem className={classes.font} onClick={handleLogoutClick}>Đăng xuất</MenuItem>
+        <MenuItem  onClick={handleCloseMenu}>
+          <Link className={classes.font} to="/profile">Trang cá nhân</Link>
+        </MenuItem>
+        <MenuItem className={classes.font} onClick={handleCloseMenu}>
+          Cài đặt
+        </MenuItem>
+        <MenuItem className={classes.font} onClick={handleLogoutClick}>
+          Đăng xuất
+        </MenuItem>
       </Menu>
 
       <div>
@@ -175,7 +190,6 @@ function Header() {
           open={open}
           onClose={handleClose}
           aria-labelledby="form-dialog-title"
-          
         >
           <IconButton className={classes.closeButton} onClick={handleClose}>
             <Close />
@@ -186,7 +200,11 @@ function Header() {
                 <Register closeDialog={handleClose} />
 
                 <Box textAlign="center">
-                  <Button color="primary" onClick={() => setMode(MODE.LOGIN)}>
+                  <Button
+                    color="primary"
+                    onClick={() => setMode(MODE.LOGIN)}
+                    className={classes.font_text}
+                  >
                     Bạn đã có tài khoản
                   </Button>
                 </Box>
@@ -201,10 +219,16 @@ function Header() {
                   <Button
                     color="primary"
                     onClick={() => setMode(MODE.REGISTER)}
+                    className={classes.font_text}
                   >
                     Bạn chưa có tài khoản
                   </Button>
                 </Box>
+              </>
+            )}
+            {mode === MODE.FORGET && (
+              <>
+                <Forget closeDialog={handleClose} />
               </>
             )}
           </DialogContent>
