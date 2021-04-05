@@ -46,6 +46,8 @@ const useStyles = makeStyles((theme) => ({
   font: {
     fontFamily: ["Open Sans", "sans-serif"].join(","),
     fontSize: "2rem",
+    textDecoration:"none",
+    color: "#0d0800",
   },
   font_text: {
     fontFamily: ["Open Sans", "sans-serif"].join(","),

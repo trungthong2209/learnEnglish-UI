@@ -84,7 +84,6 @@ function HeaderUser(props) {
   const classes = useStyles();
   return (
     <React.Fragment>
- 
             <Grid container spacing={0}>
               <Grid item xs={3}>
                 <Paper className={classes.paperImg} elevation={0}>
