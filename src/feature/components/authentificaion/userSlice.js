@@ -43,17 +43,28 @@ const userSlice = createSlice({
     settings: {},
   },
   reducers: {
-    logout(state){
-      localStorage.remove(StorageKeys.USER);
-      localStorage.remove(StorageKeys.TOKEN);
-      state.current = {};
+    logout(state) {
+      // clear local storage
+      localStorage.removeItem(StorageKeys.USER);
+      localStorage.removeItem(StorageKeys.TOKEN);
 
-      //clear local storage
-      // cookies.remove(StorageKeys.USER);
-      // cookies.remove(StorageKeys.TOKEN);
-      // state.current = {};
-    }
+      state.current = {};
+    },
   },
+  // reducers: {
+  //   logout(state) {
+  //     // clear local storage
+  //     localStorage.removeItem(StorageKeys.USER);
+  //     localStorage.removeItem(StorageKeys.TOKEN);
+
+  //     state.current = {};
+  //   },
+
+  //     //clear local storage
+  //     // cookies.remove(StorageKeys.USER);
+  //     // cookies.remove(StorageKeys.TOKEN);
+  //     // state.current = {};
+  // },
   extraReducers: {
     [register.fulfilled]: (state, action) => {
       state.current = action.payload;
