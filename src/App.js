@@ -17,9 +17,9 @@ function App() {
       < Header/>
       {/* Routing */}
 
-      <Router history={history}>
+      
           <Routes />
-      </Router>
+      
 
       {/* End routing */}
       
