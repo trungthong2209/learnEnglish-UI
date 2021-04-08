@@ -31,8 +31,10 @@ function Login(props) {
           closeDialog();
       }
       
+      enqueueSnackbar('Đăng nhập thành công',{variant:'success'});
     } catch (error) {
-        enqueueSnackbar(error.message,{variant:'error'});
+      if(error.message === "Request failed with status code 401")
+        enqueueSnackbar('Email hoặc tài khoản của bạn bị sai',{variant:'error'} );
     }
   };
 

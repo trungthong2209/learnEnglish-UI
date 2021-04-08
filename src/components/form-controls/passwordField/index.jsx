@@ -1,3 +1,5 @@
+  
+import { FormHelperText } from '@material-ui/core';
 import FormControl from '@material-ui/core/FormControl';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -10,61 +12,55 @@ import React, { useState } from 'react';
 import { Controller } from 'react-hook-form';
 
 PasswordField.propTypes = {
-    form: PropTypes.object.isRequired,
-    name: PropTypes.string.isRequired,
-    label:PropTypes.string.isRequired,
-    
+  form: PropTypes.object.isRequired,
+  name: PropTypes.string.isRequired,
+
+  label: PropTypes.string,
+  disabled: PropTypes.bool,
 };
 
 function PasswordField(props) {
-    const {form, name, label} = props;
-    const { errors, formState } = form;
-    const hasError = formState.touched[name] && errors[name];
-    const [showPassword, setShowPassword] = useState(false);
-    const toggleShowPassword =() => {
-        setShowPassword(x => !x)
-    }
-    return (
-        <div>
-            
-        <FormControl margin="normal" fullWidth variant="outlined">
-          <InputLabel htmlFor={name}>{label}</InputLabel>
-          <Controller
-          name={name}
-          control={form.control}
-          as={OutlinedInput}
+  const { form, name, label, disabled } = props;
+  const { errors } = form;
+  const hasError = !!errors[name];
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const toggleShowPassword = () => {
+    setShowPassword((x) => !x);
+  };
+
+  return (
+    <FormControl error={hasError} fullWidth margin="normal" variant="outlined">
+      <InputLabel htmlFor={name}>{label}</InputLabel>
+
+      <Controller
+        name={name}
+        control={form.control}
+        render={({ onChange, onBlur, value, name }) => (
+          <OutlinedInput
             id={name}
             type={showPassword ? 'text' : 'password'}
             label={label}
             endAdornment={
               <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={toggleShowPassword}
-                  edge="end"
-                >
+                <IconButton aria-label="toggle password visibility" onClick={toggleShowPassword} edge="end">
                   {showPassword ? <Visibility /> : <VisibilityOff />}
                 </IconButton>
               </InputAdornment>
             }
-            error={!!hasError}
-            helperText={errors[name]?.message}
-            inputProps={{
-              style: {
-                fontFamily: ["Open Sans", "sans-serif"].join(","),
-                fontSize: "2rem",
-              },
-            }}
-            InputLabelProps={{
-              style: {
-                fontFamily: ["Open Sans", "sans-serif"].join(","),
-                fontSize: "2rem",
-              },
-            }}
-          /> </FormControl>
-        </div>
-        
-    );
+            disabled={disabled}
+            value={value}
+            onChange={onChange}
+            onBlur={onBlur}
+            
+          />
+        )}
+      />
+
+      <FormHelperText>{errors[name]?.message}</FormHelperText>
+    </FormControl>
+  );
 }
 
 export default PasswordField;
