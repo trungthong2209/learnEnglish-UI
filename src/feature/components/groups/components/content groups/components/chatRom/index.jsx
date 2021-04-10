@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: "500",
     fontFamily: ["Open Sans", "sans-serif"].join(","),
     color: "#fffffe",
-    background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
+    background: "linear-gradient(315deg, #83eaf1 30%, #63a4ff 90%)",
   },
   paper: {
     marginTop: "1rem",
@@ -115,7 +115,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop:"2rem"
   },
   submit: {
-    background: "gray",
+    background: "linear-gradient(315deg, #83eaf1 30%, #63a4ff 90%)",
     border: 0,
     borderRadius: 3,
     boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",

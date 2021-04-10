@@ -1,4 +1,5 @@
 import AppBar from "@material-ui/core/AppBar";
+import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
@@ -12,7 +13,8 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import LocalLibraryIcon from "@material-ui/icons/LocalLibrary";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
+import PersonIcon from '@material-ui/icons/Person';
 
 CoursesForYou.propTypes = {};
 const cards = [1, 2, 3];
@@ -25,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     flexWrap: "wrap",
   },
   toolbar: {
-    background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
+    background: "linear-gradient(315deg, #83eaf1 30%, #63a4ff 90%)",
     fontFamily: "'Open Sans', sans-serif",
     fontSize: "1.6 rem",
     marginTop: "3rem",
@@ -74,6 +76,8 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: ["Open Sans", "sans-serif"].join(","),
     fontSize: "1.6rem",
     textDecoration: "none",
+    height:"100%",
+    width:"100%"
   },
 }));
 
@@ -159,6 +163,27 @@ function CoursesForYou(props) {
                           </CardContent>
                         </Link>
                       </CardActions>
+                      {/* <CardActions>
+                      <Typography
+                              gutterBottom
+                              className={classes.font_head}
+                              variant="h5"
+                              component="h2"
+                            >
+                              <PersonIcon/>
+                              100
+                            </Typography>
+                            <Typography
+                              gutterBottom
+                              className={classes.font_head}
+                              variant="h5"
+                              component="h2"
+                            >
+                              <LocalLibraryIcon />
+                              600
+                            </Typography>
+                    
+                  </CardActions> */}
                     </Card>
                   </Grid>
                 ))}

@@ -5,7 +5,7 @@ import Link from "@material-ui/core/Link";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
-import logo from "../header/logo/logoCap2.gif";
+// import logo from "../header/logo/logoCap2.gif";
 Footer.propTypes = {};
 
 function Copyright() {
@@ -106,7 +106,7 @@ function Footer(props) {
         <Grid container spacing={4} justify="space-evenly">
           <li>
             <Link href="/" variant="subtitle1" color="textSecondary">
-              <img className="header__logo" src={logo} alt="Logo" />
+              {/* <img className="header__logo" src={logo} alt="Logo" /> */}
             </Link>
           </li>
 

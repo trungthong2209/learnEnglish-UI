@@ -9,7 +9,7 @@ import Paper from "@material-ui/core/Paper";
 import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
 import StarsIcon from "@material-ui/icons/Stars";
 import React from "react";
-Members.propTypes = {};
+ListFriend.propTypes = {};
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -38,6 +38,9 @@ const useStyles = makeStyles((theme) => ({
     fontSize:"3rem",
     color:"#fce66d",
 
+  },
+  rightHome:{
+    height:"1000px",
   }
 }));
 
@@ -86,14 +89,15 @@ const users = [
   },
 ];
 
-function Members(props) {
+function ListFriend(props) {
   const classes = useStyles();
   return (
-    <React.Fragment>
+   
+      <div className={classes.rightHome}>
       <Grid item xs={12} >
       <Paper className={classes.title}>
       <Typography variant="h3" className="header-message">
-          Thành viên
+          Bạn bè
         </Typography>
       </Paper>
         
@@ -114,13 +118,6 @@ function Members(props) {
             >
               
             </ListItemText>
-            {mem.role === "owner" ? (
-              <ListItemText >
-                <StarsIcon className={classes.role}/>
-              </ListItemText>
-            ) : (
-              " "
-            )}
             {mem.status === "online" ? (
               <ListItemText align="right">
                 <FiberManualRecordIcon color="primary" />
@@ -133,8 +130,10 @@ function Members(props) {
           </ListItem>
         ))}
       </List>
-    </React.Fragment>
+      </div>
+      
+
   );
 }
 
-export default Members;
+export default ListFriend;

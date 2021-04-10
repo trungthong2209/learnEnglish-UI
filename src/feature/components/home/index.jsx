@@ -6,7 +6,9 @@ import React from "react";
 import { useSelector } from "react-redux";
 import CoursesForYou from "../courses/components/courser_personal";
 import GroupsForYou from "../groups/components/group_personal";
-import Clock from "./components/clock";
+import Calendar from "./components/calendar";
+
+import ListFriend from "./components/listUser";
 import ProfileHome from "./components/profileHome";
 
 Home.propTypes = {};
@@ -16,13 +18,14 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     marginTop: theme.spacing(2),
+
     padding: theme.spacing(2),
     textAlign: "center",
     color: theme.palette.text.secondary,
     flexWrap: "wrap",
   },
-  clock:{
-
+  container:{
+    padding: theme.spacing(2)
   }
 }));
 
@@ -33,17 +36,18 @@ export default function Home() {
 
   return (
     <div className={classes.root}>
-      <Container>
-        <Grid container spacing={3}>
-          <Grid item xs={4}>
+      
+        <Grid container className={classes.container} spacing={3}>
+          <Grid item xs={3}>
             <Paper elevation={3} className={classes.paper}>
               <ProfileHome user={loggedInUser} />
             </Paper>
-            <Paper user={loggedInUser}  elevation={3} className={classes.paper}><Clock/></Paper>
-            <Paper elevation={3} className={classes.paper}>Result</Paper>
-            <Paper elevation={3} className={classes.paper}>rank</Paper>
+            <Paper elevation={3} className={classes.paper}>
+              <Calendar />
+            </Paper>
+            
           </Grid>
-          <Grid item xs={8}>
+          <Grid item xs={7}>
             <Paper user={loggedInUser} elevation={3} className={classes.paper}>
               <CoursesForYou />
             </Paper>
@@ -51,8 +55,14 @@ export default function Home() {
               <GroupsForYou />
             </Paper>
           </Grid>
+          <Grid item xs={2}>
+            <Paper user={loggedInUser} elevation={3} className={classes.paper}>
+              < ListFriend />
+            </Paper>
+            
+          </Grid>
         </Grid>
-      </Container>
+      
     </div>
   );
 }

@@ -1,0 +1,19 @@
+.nav{
+    display: flex;
+    width: 100%;
+    position: relative;
+}
+.nav_left{
+    
+}
+
+.nav_center{
+    margin-left: 30%;
+    display: flex;
+}
+.nav_center-item{
+    list-style: none;
+}
+.nav_right{
+    margin-left: 30%;
+}   

@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: "500",
     fontFamily: ["Open Sans", "sans-serif"].join(","),
     color: "#fffffe",
-    background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
+    background: "linear-gradient(315deg, #83eaf1 30%, #63a4ff 90%)",
     marginBottom:"2rem"
   },
   name: {
