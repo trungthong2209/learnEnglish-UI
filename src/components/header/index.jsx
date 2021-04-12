@@ -24,6 +24,7 @@ import Logo from "./components/logo";
 import SearchNav from "./components/search";
 import ListBar from "./components/listBar";
 import UserBar from "./components/user";
+import HeaderAbout from "../../feature/components/About/components/header";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -65,22 +66,31 @@ const useStyles = makeStyles((theme) => ({
 
 
 function Header(props) {
+  const loggedInUser = useSelector((state) => state.user.current);
+  const isLoggedIn = !!loggedInUser._id;
    return (
+     
     <div>
+      {!isLoggedIn && (
+      <HeaderAbout />
+    )}
+    {isLoggedIn && (
       <header className="header">
-        <nav className="header__navbar">
-          <div class="header__navbar_left">
-            <Logo />
-            <SearchNav />
-          </div>
-          <div class="header__navbar_center">
-            <ListBar />
-          </div>
-          <div class="header__navbar_right">
-            < UserBar />
-          </div>
-        </nav>
-      </header>
+      <nav className="header__navbar">
+        <div class="header__navbar_left">
+          <Logo />
+          <SearchNav />
+        </div>
+        <div class="header__navbar_center">
+          <ListBar />
+        </div>
+        <div class="header__navbar_right">
+          < UserBar />
+        </div>
+      </nav>
+    </header>
+    )}
+      
      
 
      

@@ -39,12 +39,12 @@ export default function Home() {
       
         <Grid container className={classes.container} spacing={3}>
           <Grid item xs={3}>
-            <Paper elevation={3} className={classes.paper}>
+            {/* <Paper elevation={3} className={classes.paper}>
               <ProfileHome user={loggedInUser} />
             </Paper>
             <Paper elevation={3} className={classes.paper}>
               <Calendar />
-            </Paper>
+            </Paper> */}
             
           </Grid>
           <Grid item xs={7}>

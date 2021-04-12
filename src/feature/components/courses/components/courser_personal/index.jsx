@@ -14,7 +14,7 @@ import Typography from "@material-ui/core/Typography";
 import LocalLibraryIcon from "@material-ui/icons/LocalLibrary";
 import React, { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import PersonIcon from '@material-ui/icons/Person';
+import PersonIcon from "@material-ui/icons/Person";
 
 CoursesForYou.propTypes = {};
 const cards = [1, 2, 3];
@@ -72,13 +72,45 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: ["Open Sans", "sans-serif"].join(","),
     fontSize: "2rem",
   },
+  font_head_title:{
+    fontFamily: ["Open Sans", "sans-serif"].join(","),
+    fontSize: "2rem",
+    height:"3rem"
+
+  },
+
   font_content: {
     fontFamily: ["Open Sans", "sans-serif"].join(","),
     fontSize: "1.6rem",
     textDecoration: "none",
-    height:"100%",
-    width:"100%"
+    height: "100%",
+    width: "100%",
   },
+  infoCourse:{
+    fontFamily: ["Open Sans", "sans-serif"].join(","),
+    fontSize:"2rem !important",
+    padding: '1rem',
+    // background:"#fff",
+    // border: "solid black",
+    // borderColor: "black",
+    // float: "left", 
+    // width: "350px",
+    // borderWidth: "3px 3px 5px 5px",
+    // borderRadius: "4% 95% 6% 95%/95% 4% 92% 5%",
+    // transform: "rotate(-2deg)",
+    display:"flex",
+  },
+  fatherGrid:{
+
+  },
+  maginInfo:{
+    marginRight:"1rem",
+  },
+  pInfo:{
+    margin:"0",
+
+  }
+
 }));
 
 const courses = [
@@ -128,14 +160,14 @@ function CoursesForYou(props) {
                   color="inherit"
                   noWrap
                 >
-                  KHÓA HỌC
+                  KHÓA HỌC CỦA BẠN
                 </Typography>
               </Toolbar>
             </AppBar>
             <Paper className={classes.paper}>
               <Grid container spacing={4}>
                 {courses.map((course) => (
-                  <Grid item key={course.id} xs={12} sm={6} md={4}>
+                  <Grid className={classes.fatherGrid} item key={course.id} xs={12} sm={6} md={4}>
                     <Card className={classes.card}>
                       <CardActions>
                         <Link
@@ -154,7 +186,7 @@ function CoursesForYou(props) {
                           <CardContent className={classes.font_head}>
                             <Typography
                               gutterBottom
-                              className={classes.font_head}
+                              className={classes.font_head_title}
                               variant="h5"
                               component="h2"
                             >
@@ -163,27 +195,29 @@ function CoursesForYou(props) {
                           </CardContent>
                         </Link>
                       </CardActions>
-                      {/* <CardActions>
-                      <Typography
-                              gutterBottom
-                              className={classes.font_head}
-                              variant="h5"
-                              component="h2"
-                            >
-                              <PersonIcon/>
-                              100
-                            </Typography>
-                            <Typography
-                              gutterBottom
-                              className={classes.font_head}
-                              variant="h5"
-                              component="h2"
-                            >
-                              <LocalLibraryIcon />
-                              600
-                            </Typography>
-                    
-                  </CardActions> */}
+                      <div className={classes.infoCourse}>
+                      <Grid className={classes.maginInfo} md={6}>
+                      <Paper className={classes.paper}>
+                        <p className={classes.pInfo}>
+                          <PersonIcon />
+                          100
+                        </p>
+                      </Paper>
+                      </Grid>
+                      <Grid md={6}>
+                      <Paper className={classes.paper}>
+                      <p className={classes.pInfo}>
+                          <LocalLibraryIcon />
+                          600
+                        </p>
+                      </Paper>
+                      </Grid>
+                      </div>
+                      
+                     
+                      
+                      
+                      
                     </Card>
                   </Grid>
                 ))}

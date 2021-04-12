@@ -97,8 +97,8 @@ const useStyles = makeStyles((theme) => ({
     wordWrap: "breakWord",
   },
   inputMess: {
-    // padding: "1.2rem 2rem",
-    // fontSize: "1rem",
+     marginTop: "0.3rem",
+    fontSize: "2rem",
     // borderWidth: "calc(var(--border-width) * 1px)",
     // borderStyle: "solid",
     // borderColor: "0.5rem",
@@ -109,6 +109,7 @@ const useStyles = makeStyles((theme) => ({
     borderStyle:"none",
     width:"100%",
     height:"80%",
+
   },
   paperInput:{
     padding:" 0.5rem 0.5rem",
@@ -120,7 +121,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 3,
     boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
     color: "white",
-    height: "80%",
+    height: "100%",
     padding: "0 30px",
     fontFamily: ["Open Sans", "sans-serif"].join(","),
     fontSize: "1.6rem",
@@ -233,7 +234,7 @@ const ChatRoom = (props) => {
             <input
               value={newMessage}
               onChange={handleNewMessageChange}
-              placeholder="Write message..."
+              placeholder="Nhập tin nhắn"
               className={classes.inputMess}
               onKeyPress={(ev) => {
                 console.log(`Pressed keyCode ${ev.key}`);

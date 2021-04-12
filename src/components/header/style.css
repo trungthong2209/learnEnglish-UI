@@ -20,10 +20,15 @@
 }
 .ForwardRef-root-1 {
     border-radius: 10rem !important;
+    
+}
+.MuiInputBase-input{
+    font-size: 1.6rem !important;
 }
 
 .header__navbar_left{
     display: flex;
+    margin-top: 1rem;
     width: 30%;
     
 }
@@ -35,8 +40,8 @@
 
 }
 .header__navbar-icon{
-    margin: 0 3rem 0 0;
-    font-size: 3.5rem !important; 
+    margin: 0 2.5rem 0 0;
+    font-size: 4.5rem !important; 
 }
 
 
@@ -44,6 +49,7 @@
 
 .header__navbar_right{
     width: 30%;
+    margin-top: 0.7rem;
     
 }
 .header__navbar {
@@ -107,6 +113,9 @@
 .icon-user-drop{
     font-size: 4rem !important;
     margin-top: 0.2rem !important;
+}
+.item-user, .item-user-drop{
+    cursor: pointer;
 }
 
 

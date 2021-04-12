@@ -2,6 +2,8 @@ import { Chat } from '@material-ui/icons';
 import { Redirect, Route } from 'react-router';
 import { Switch } from "react-router-dom";
 import NotFound from '../components/not_found';
+import AboutUs from '../feature/components/About';
+
 import Courses from '../feature/components/courses';
 import ContentCourse from '../feature/components/courses/components/content courses';
 import Groups from '../feature/components/groups';
@@ -14,7 +16,8 @@ import Profile from '../feature/components/profile';
 function Routes(props){
     return (
     <Switch>
-        <Redirect from='/' to='/home' exact /> 
+        <Redirect from='/' to='/about' exact /> 
+        <Route path="/about" component={AboutUs} />
         <Route path="/home" component={Home} />
         <Route path="/khoa-hoc" component={Courses}/>
         <Route path="/nhom" component={Groups}/>

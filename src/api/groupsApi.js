@@ -13,6 +13,9 @@ const groupsApi = {
                    'authorization': `${localStorage.getItem(StorageKeys.TOKEN)}`
                 },});
     },
+    getGroup(id){
+
+    }
   
 };
 
