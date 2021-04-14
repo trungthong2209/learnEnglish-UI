@@ -8,7 +8,8 @@ const axiosClient = axios.create({
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
         'Access-Control-Allow-Headers': 'userid, authorization, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers',
         'Access-Control-Allow-Credentials': 'true',
-        'x-wfg-token': `${localStorage.getItem(StorageKeys.TOKEN)}`
+        'x-wfg-token': `${localStorage.getItem(StorageKeys.TOKEN)}`,
+        'idMess': `${localStorage.getItem(StorageKeys.IDMESS)}`
       },
 });
 
