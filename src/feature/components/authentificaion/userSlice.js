@@ -1,21 +1,14 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import userApi from "../../../api/userApi";
 import StorageKeys from "../../../constants/storage-key";
-import Cookies from 'universal-cookie';
-const cookies = new Cookies();
-export const register = createAsyncThunk("user/register", async (payload) => {
-  // call api to register
+// import Cookies from 'universal-cookie';
+// const cookies = new Cookies();
+export const register = createAsyncThunk('user/register', async (payload) => {
   const data = await userApi.register(payload);
 
   // save data to local storage
-  localStorage.setItem(StorageKeys.TOKEN, data.jwt);
-  localStorage.setItem(StorageKeys.USER, JSON.stringify(data.user));
-
-  //save data to cookies
-  // cookies.set(StorageKeys.TOKEN,data.jwt,{ path: '/' });
-  // cookies.set(StorageKeys.USER, JSON.stringify(data.user),{ path: '/' });
-
-  //return user data
+  // localStorage.setItem(StorageKeys.TOKEN, data.token);
+  // localStorage.setItem(StorageKeys.USER, JSON.stringify(data));
 
   return data.user;
 });
@@ -70,6 +63,7 @@ const userSlice = createSlice({
   extraReducers: {
     [register.fulfilled]: (state, action) => {
       state.current = action.payload;
+      state.current = {};
     },
     [login.fulfilled]: (state, action) => {
       state.current = action.payload;

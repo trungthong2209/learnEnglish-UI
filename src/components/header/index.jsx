@@ -67,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
 
 function Header(props) {
   const loggedInUser = useSelector((state) => state.user.current);
-  const isLoggedIn = !!loggedInUser._id;
+  const isLoggedIn = !!loggedInUser._id || '';
    return (
      
     <div>

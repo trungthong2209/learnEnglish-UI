@@ -50,6 +50,11 @@ const useStyles = makeStyles((theme) => ({
   dialog: {
     width: "40%",
   },
+  avt:{
+    width:"5rem",
+    height:"5rem",
+    marginBottom:"2px",
+  }
 }));
 
 function UserBar(props) {
@@ -70,18 +75,23 @@ function UserBar(props) {
     const action = logout();
     dispatch(action);
   };
-  console.log(loggedInUser);
+  
+  // get name
+  var fullName= String(loggedInUser.userName).trim();
+  var lastName = fullName.split(' ').slice(-1).join(' ');
+  
     return (
         <div>
           <ul className="header__list-user">
               <li >
                 <a className="header__user" href="/profile">
                 <Avatar
-                  alt="Hiếu"
+                  className={classes.avt}
+                  alt={lastName}
                   src="/static/images/avatar/1.jpg"
                 />
                 
-                <p className="name">{loggedInUser.userName}</p>
+                <p className="name">{lastName}</p>
                 </a>
                 
               </li>

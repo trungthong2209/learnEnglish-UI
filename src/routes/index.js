@@ -11,6 +11,7 @@ import ContentGroup from '../feature/components/groups/components/content groups
 import Home from '../feature/components/home';
 import Learn from '../feature/components/learn';
 import Messenger from '../feature/components/messenger';
+import Call from '../feature/components/messenger/components/call';
 import Profile from '../feature/components/profile';
 
 function Routes(props){
@@ -26,7 +27,7 @@ function Routes(props){
         <Route exact path="/groups/:groupId" component={ContentGroup} />
         <Route  exact path="/profile" component={Profile}/>
         <Route path="/quiz" component={Learn}/>
-        <Route path="/chat" component={Chat}/>
+        <Route path="/chat" component={Call}/>
         <Route component={NotFound} />
     </Switch>
 );

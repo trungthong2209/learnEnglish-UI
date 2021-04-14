@@ -20,19 +20,23 @@ function Register(props) {
   const handleSubmit = async (values) => {
     try {
       // auto set username = email
-      values.username = values.email;
+      values.userName = values.fullName;
+
       const action = register(values);
       const resultAction = await dispatch(action);
       unwrapResult(resultAction);
 
-      //close dialog
-      const {closeDialog} = props;
-      if(closeDialog){
-          closeDialog();
+      // close dialog
+      const { closeDialog } = props;
+      if (closeDialog) {
+        closeDialog();
       }
+      
       enqueueSnackbar('Đăng ký thành công',{variant:'success'});
+
     } catch (error) {
-        enqueueSnackbar(error.message,{variant:'error'});
+      console.log(values)
+        enqueueSnackbar('Email đã tồn tại',{variant:'error'});
     }
   };
 

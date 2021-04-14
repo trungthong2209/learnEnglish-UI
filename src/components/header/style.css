@@ -73,6 +73,9 @@
 .name{
     font-size: 2rem;
     margin: 0.75rem;
+    color: rgb(250, 250, 255);
+    margin-top: 1rem;
+    font-weight: 600;
 }
 .icon-user{
     font-size: 2.5rem !important;
@@ -88,11 +91,11 @@
     display: flex !important;
 }
 .header__user{
-    margin-top: 1rem;
-    margin: 0 8px;
+    margin: -0.5rem 0 0 0;
     position: relative;
     padding: 0.5rem 0 0 0;
     display: flex !important;
+    color:white;
 }
 .item-user{
     background-color: #e4e6eb;
