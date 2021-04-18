@@ -2,8 +2,9 @@ import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import userApi from "../../../api/userApi";
 import CoursesForProfile from "./components/courses";
 import HeaderUser from "./components/headerUser";
 Profile.propTypes = {};
@@ -67,6 +68,18 @@ const user = {
 function Profile(props) {
   const loggedInUser = useSelector((state) => state.user.current);
   const classes = useStyles();
+
+  //get api profile
+  const [profile, setProfile]= useState({});
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const Profile = await userApi.infoProfile();
+      setProfile(Profile);
+    };
+    fetchProfile();
+  }, {});
+  // console.log(profile);
+
   return (
     <div>
       <Grid>

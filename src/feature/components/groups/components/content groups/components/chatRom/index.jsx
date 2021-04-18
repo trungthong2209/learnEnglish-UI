@@ -6,7 +6,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Paper from "@material-ui/core/Paper";
 import SendIcon from "@material-ui/icons/Send";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button, makeStyles, Typography } from "@material-ui/core";
 import * as yup from "yup";
@@ -21,6 +21,7 @@ import {
   useParams,
 } from "react-router-dom";
 import useChat from "./components/useChat";
+import groupsApi from "../../../../../../../api/groupsApi";
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -165,6 +166,7 @@ const ChatRoom = (props) => {
   const { roomId } = useParams(); // Gets roomId from URL
   const { messages, sendMessage } = useChat(roomId); // Creates a websocket and manages messaging
   const [newMessage, setNewMessage] = useState(""); // Message to be sent
+  
   const handleNewMessageChange = (event) => {
     setNewMessage(event.target.value);
   };
@@ -172,6 +174,19 @@ const ChatRoom = (props) => {
     sendMessage(newMessage);
     setNewMessage("");
   };
+  //get message old
+  const [MessesageOld, setMessesageOld] = useState([]);
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    const fetchMessage = async () => {
+      setLoading(true);
+      const messList = await groupsApi.getMess(roomId);
+      console.log(messList)
+      // setGroups(messList);
+      setLoading(false);
+    };
+    fetchMessage();
+  }, []);
   return (
     <div>
       <Grid item xs={12}>

@@ -10,12 +10,14 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { Close } from "@material-ui/icons";
 import React from "react";
 import { Link } from "react-router-dom";
-import CreateGroups from "../create_groups";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import { Box, IconButton } from "@material-ui/core";
+import CreateTopics from "../create_topic";
 
-GroupList.propTypes = {};
+import ActionTopic from "./components/action";
+
+TopicList.propTypes = {};
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(2),
@@ -81,8 +83,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function GroupList(props) {
-  const { groups, handleRoomNameChange, loading } = props;
+function TopicList(props) {
+  const { topics, loading } = props;
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => {
@@ -106,22 +108,21 @@ function GroupList(props) {
             onClick={handleClickOpen}
           />
         </Grid>
-        {groups.map((group) => (
-          <Grid item key={group._id} xs={12} sm={6} md={4}>
+        {topics.map((topic) => (
+          <Grid item key={topic._id} xs={12} sm={6} md={4}>
             <Card className={classes.card}>
               <CardActions>
-                <Link
-                  to={`/groups/${group._id}`}
+              <Link
+                  to={`/topics/${topic._id}`}
                   size="small"
                   color="primary"
                   className={classes.groups}
-                  value={group._id}
-                  onClick={handleRoomNameChange}
+                  value={topic._id}
                 >
                   <CardMedia
                     className={classes.cardMedia}
                     image="https://source.unsplash.com/random"
-                    title={group.topic}
+                    title={topic.topic}
                   />
                   <CardContent className={classes.font_head}>
                     <Typography
@@ -130,12 +131,15 @@ function GroupList(props) {
                       variant="h5"
                       component="h2"
                     >
-                      {group.topic}
-                      {group._id}
+                      {topic.topic}
+                     
                     </Typography>
                   </CardContent>
-                </Link>
+                  </Link>
               </CardActions>
+              <CardActions>
+              <ActionTopic idTopic={topic._id} topic={topic.topic} description={topic.description}  />
+                  </CardActions >
             </Card>
           </Grid>
         ))}
@@ -152,7 +156,7 @@ function GroupList(props) {
             <Close />
           </IconButton>
           <DialogContent>
-            <CreateGroups closeDialog={handleClose} />
+            <CreateTopics closeDialog={handleClose} />
           </DialogContent>
         </Dialog>
       </div>
@@ -160,4 +164,4 @@ function GroupList(props) {
   );
 }
 
-export default GroupList;
+export default TopicList;

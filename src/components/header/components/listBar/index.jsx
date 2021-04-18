@@ -37,7 +37,7 @@ function ListBar(props) {
                 <span class="tooltiptextCourse">Khóa học</span>
               </li>
               <li className="header__item tooltipGroup">
-                <NavLink to="/nhom" className="header__item-link">
+                <NavLink to="/topic" className="header__item-link">
                   <GroupIcon
                     className="header__navbar-icon"
                     fontSize="large"
