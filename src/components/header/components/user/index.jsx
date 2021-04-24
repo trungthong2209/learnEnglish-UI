@@ -1,5 +1,5 @@
 import Avatar from "@material-ui/core/Avatar";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
@@ -10,6 +10,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import { useDispatch, useSelector } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import { logout } from "../../../../feature/components/authentificaion/userSlice";
+import userApi from "../../../../api/userApi";
+import StorageKeys from "../../../../constants/storage-key";
 
 
 UserBar.propTypes = {
@@ -57,6 +59,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+
 function UserBar(props) {
   const classes = useStyles();
   const loggedInUser = useSelector((state) => state.user.current);
@@ -68,9 +71,20 @@ function UserBar(props) {
   const handleMenuUserClick = (e) => {
     setAnchorEl(e.currentTarget);
   };
+  const Logout =()=>{
+    const token = {
+      'x-wfg-token': localStorage.getItem(StorageKeys.TOKEN)
+    }
+    
+      const fectchlogout = async () => {
+        await userApi.logout(token);
+      };
+      fectchlogout();
+  }
 
   const dispatch = useDispatch();
   const handleLogoutClick = () => {
+    Logout();
     handleCloseMenu();
     const action = logout();
     dispatch(action);

@@ -15,7 +15,7 @@ const topicGroupApi = {
         authorization: `${localStorage.getItem(StorageKeys.TOKEN)}`,
       },
     });
-  },
+  },  
 
   createTopic(data) {
     const url = "/frames/insert-frame";

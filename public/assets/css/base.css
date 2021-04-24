@@ -41,3 +41,7 @@ html{
 input:focus{
     outline: none;
 }
+#zmmtg-root{
+    /* background-color: #fafafa !important;*/
+    display: none !important; 
+}

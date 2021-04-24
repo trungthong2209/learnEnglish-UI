@@ -8,6 +8,7 @@ import Courses from "../feature/components/courses";
 import ContentCourse from "../feature/components/courses/components/content courses";
 import Groups from "../feature/components/groups";
 import ContentGroup from "../feature/components/groups/components/content groups";
+import Room from "../feature/components/groups/components/content groups/components/livestream/service/room";
 import Home from "../feature/components/home";
 import Learn from "../feature/components/learn";
 import Messenger from "../feature/components/messenger";
@@ -30,6 +31,7 @@ function Routes(props) {
         path="/topics/:topicId"
         component={ContentTopic}
       />
+      <Route path="/room/:roomID" component={Room} />
       <Route path="/nhom" component={Groups} />
       <Route path="/tin-nhan" component={Messenger} />
       <Route exact path="/courses/:courseId" component={ContentCourse} />

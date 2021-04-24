@@ -7,6 +7,7 @@ import Screen from "./components/livestream";
 import ChatRoom from "./components/chatRom";
 import Record from "./components/record";
 import ListGroups from "./components/listGroups";
+import { useParams } from "react-router";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,9 +29,13 @@ const useStyles = makeStyles((theme) => ({
  
 }));
 
+
+
 export default function ContentGroup() {
   const classes = useStyles();
-
+  const param = useParams();
+  const groupId = param.groupId;
+  
   return (
     <div className={classes.root}>
       <Grid spacing={3} >
@@ -51,7 +56,7 @@ export default function ContentGroup() {
           </Grid>
           <Grid item xs={7}>
             <Paper elevation={3} className={classes.paper}>
-              <Screen />
+              {/* <Screen groupId={groupId} /> */}
             </Paper>
             <Paper elevation={3} className={classes.paper}>
               <Record />
@@ -59,7 +64,7 @@ export default function ContentGroup() {
           </Grid>
           <Grid  item xs={3}>
             <Paper elevation={3} className={classes.paper}>
-              <ChatRoom />
+              <ChatRoom groupId={groupId}/>
             </Paper>
           </Grid>
         </Grid>
