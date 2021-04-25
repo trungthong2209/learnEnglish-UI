@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
@@ -8,6 +8,11 @@ import ChatRoom from "./components/chatRom";
 import Record from "./components/record";
 import ListGroups from "./components/listGroups";
 import { useParams } from "react-router";
+import io from "socket.io-client";
+import groupsApi from "../../../../../api/groupsApi";
+import StorageKeys from "../../../../../constants/storage-key";
+
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,6 +40,29 @@ export default function ContentGroup() {
   const classes = useStyles();
   const param = useParams();
   const groupId = param.groupId;
+  const [infoGroup, setInfoGroup] = useState('');
+  const id ={"_id" : groupId};
+  useEffect(() => {
+    const fetchInfoGroup = async () => {
+      const info = await groupsApi.getGroupById(groupId);
+      console.log("info: ",info)
+      setInfoGroup(info);
+    };
+    fetchInfoGroup();
+  }, []);
+  var socket = io("http://3.131.71.201:3001/", {
+  auth: {
+    token:
+    `${localStorage.getItem(StorageKeys.TOKEN)}`,
+  },
+});
+
+  socket.on("send-message-public", (data)=>{
+    console.log("data đã send: ",data);
+  })
+  
+  
+ 
   
   return (
     <div className={classes.root}>
@@ -56,7 +84,7 @@ export default function ContentGroup() {
           </Grid>
           <Grid item xs={7}>
             <Paper elevation={3} className={classes.paper}>
-              {/* <Screen groupId={groupId} /> */}
+              <Screen groupId={groupId} />
             </Paper>
             <Paper elevation={3} className={classes.paper}>
               <Record />

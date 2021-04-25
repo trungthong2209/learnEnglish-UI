@@ -14,6 +14,8 @@ import CreateGroups from "../create_groups";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import { Box, IconButton } from "@material-ui/core";
+import io from "socket.io-client";
+import StorageKeys from "../../../../../constants/storage-key";
 
 GroupList.propTypes = {};
 const useStyles = makeStyles((theme) => ({
@@ -81,8 +83,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
 function GroupList(props) {
-  const { groups, handleRoomNameChange, loading } = props;
+  const { groups, loading } = props;
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => {
@@ -96,7 +99,15 @@ function GroupList(props) {
   if (loading) {
     return <CircularProgress size="10rem" />;
   }
+  var socket = io("http://3.131.71.201:3001/", {
+  auth: {
+    token:
+    `${localStorage.getItem(StorageKeys.TOKEN)}`,
+  },
+});
 
+ 
+  
   return (
     <div>
       <Grid container spacing={4}>
@@ -107,21 +118,32 @@ function GroupList(props) {
           />
         </Grid>
         {groups.map((group) => (
-          <Grid item key={group._id} xs={12} sm={6} md={4}>
+          <Grid item key={group._id} xs={12} sm={6} md={4} >
             <Card className={classes.card}>
-              <CardActions>
+              <CardActions >
                 <Link
                   to={`/groups/${group._id}`}
                   size="small"
                   color="primary"
                   className={classes.groups}
                   value={group._id}
-                  onClick={handleRoomNameChange}
+                  onClick={
+                    () =>{
+                      // console.log(group._id)
+                      socket.emit("joinGroup", group._id);
+                      //join group
+                      socket.on("joinGroup", (data) =>{
+                        console.log( "xxxxxxxxxxxxx: ",data);
+                      });
+                    }
+                  }
+                  
                 >
                   <CardMedia
                     className={classes.cardMedia}
                     image="https://source.unsplash.com/random"
                     title={group.topic}
+                    
                   />
                   <CardContent className={classes.font_head}>
                     <Typography
@@ -130,8 +152,8 @@ function GroupList(props) {
                       variant="h5"
                       component="h2"
                     >
-                      {group.topic}
-                      {group._id}
+                      {group.groupCode}
+                    
                     </Typography>
                   </CardContent>
                 </Link>

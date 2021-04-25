@@ -32,7 +32,7 @@ const userApi = {
   }
   ,
 
-  infoProfile(params) {
+  infoProfile(data) {
     const url = "/profile";
     return axiosClient.get(url, {
       headers: {

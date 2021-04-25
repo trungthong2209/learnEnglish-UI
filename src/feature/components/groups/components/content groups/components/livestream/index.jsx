@@ -18,11 +18,10 @@ const useStyles = makeStyles((theme) => ({
     },
     back:{
         
-        height:"90rem",
+        height:"52rem",
     },
     paper1: {
-        
-        height:"60rem",
+        height:"52rem",
         padding: theme.spacing(2),
         textAlign: "center",
         color: theme.palette.text.secondary,
@@ -56,9 +55,9 @@ function Screen(props) {
     return (
         <div className={classes.back}>
           <Paper elevation={3} className={classes.paper1}>
-              <Room groupId={groupId} />
+              {/* <Room groupId={groupId} /> */}
             </Paper>
-            <Paper elevation={3} className={classes.paper2}>
+            {/* <Paper elevation={3} className={classes.paper2}>
             <Paper elevation={3} className={classes.paper3}>
               user 1
             </Paper>
@@ -68,7 +67,7 @@ function Screen(props) {
             <Paper elevation={3} className={classes.paper3}>
               user 3
             </Paper>
-            </Paper>
+            </Paper> */}
 
         </div>
     );

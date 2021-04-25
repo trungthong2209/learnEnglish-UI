@@ -32,6 +32,7 @@ function Login(props) {
           closeDialog();
       }
       history.push("/home");
+      window.location.reload();
       
       enqueueSnackbar('Đăng nhập thành công',{variant:'success'});
     } catch (error) {

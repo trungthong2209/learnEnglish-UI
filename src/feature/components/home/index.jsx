@@ -32,6 +32,15 @@ const useStyles = makeStyles((theme) => ({
 export default function Home() {
   const loggedInUser = useSelector((state) => state.user.current);
   const classes = useStyles();
+
+
+  const first = true;
+  if(first == true){
+    // 
+    // first = false;
+    // console.log(first)
+
+  }
   
 
   return (

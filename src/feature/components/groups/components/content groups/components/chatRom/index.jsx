@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.secondary,
   },
   chatRom: {
-    width: "47.6rem",
+    width: "42.6rem",
     marginTop: "1rem",
     padding: theme.spacing(1),
     textAlign: "center",
@@ -131,7 +131,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const listMess =[];
 const userSend = {
   id: 1,
   avt: "https://source.unsplash.com/random/200x200?sig=1",
@@ -157,44 +156,45 @@ let textMessSend= '';
 
 const ChatRoom = (props) => {
   const classes = useStyles();
-
-  // const { roomId } = useParams(); // Gets roomId from URL
-  // const { messages, sendMessage } = useState([]); ; // Creates a websocket and manages messaging
-  // const [newMessage, setNewMessage] = useState(""); // Message to be sent
-
-  // const handleNewMessageChange = (event) => {
-  //   setNewMessage(event.target.value);
-  // };
-  // const handleSendMessage = () => {
-  //   sendMessage(newMessage);
-  //   setNewMessage("");
-  // };
+  const roomId = props.groupId;
+  const [listMess,setlistMess] = useState([]);
   //get message old
   const [MessesageOld, setMessesageOld] = useState([]);
   const [loading, setLoading] = useState(false);
+  const groupId ={'groupId' : roomId};
+  console.log(groupId)
   useEffect(() => {
     const fetchMessage = async () => {
       setLoading(true);
       const messList = await groupsApi.getMess(roomId);
       console.log("mess",messList)
-      // setGroups(messList);
+      setMessesageOld(messList);
       setLoading(false);
     };
     fetchMessage();
   }, []);
 
   // socket
+  socket.on("send-message-public", (data)=>{
+    console.log("data đã send: ",data);
+  })
  
   const [newMessage, setNewMessage] = useState("");
   const loggedInUser = useSelector((state) => state.user.current);
-  const roomId = props.groupId;
+  
 
   if (socket !== undefined) {
     console.log(socket);
     console.log("Connected to server");
-    
-    // //join group
-    // socket.emit("joinGroup", roomId);
+    //join group
+    socket.on("joinGroup", (data) =>{
+      console.log( "xxxxxxxxxxxxx: ",data);
+    });
+
+    //send public
+    socket.on("send-message-public", (data)=>{
+      console.log("data đã send: ",data);
+    })
 
     // //out group
     // socket.on("leavingGroup", (message) => {
@@ -204,31 +204,36 @@ const ChatRoom = (props) => {
     //   console.log(data);
     // });
   }
+  
   const handleNewMessageChange = (event) => {
     setNewMessage(event.target.value);
   };
   const handleSendMessage = () => {
     textMessSend = newMessage;
-    // let data = {
-    //   // groupId: roomId,
-    //   sendToId: '60768f44c3f0a0ade9846736',
-    //   message: textMessSend,
-    // };
-    let data = {  
-      sendToId: '60685a95a8953bc885582b75',
+    let data = {
+      groupId: roomId,
       message: textMessSend,
-      }
-
-    console.log("data máy: ",data);
-     socket.emit("send-message-private", data)
-     socket.on("send-message-private", (data)=>{
-      console.log(data)
+    };
+    console.log("dataaaaaaaaa: ",data);
+    socket.emit("send-message-public", data)
+    socket.on("send-message-public", (data)=>{
+      console.log("data đã send: ",data);
     })
 
-    // socket.emit("send-message-public", data)
-    // socket.on("send-message-public", (data)=>{
-    //   console.log("data đã send: ",data)
+    // let data = {  
+    //   sendToId: '60685a61a8953bc885582b70',
+    //   message: textMessSend,
+    //   }
+
+    // console.log("data máy: ",data);
+    //  socket.emit("send-message-private", data)
+    //  socket.on("send-message-private", (data)=>{
+    //   console.log(data)
     // })
+    console.log("mess: ",textMessSend)
+    setNewMessage("");
+
+  };
 
     let userSend = {
       id: loggedInUser._id,
@@ -237,12 +242,8 @@ const ChatRoom = (props) => {
       content: textMessSend,
       time: time,
     };
-    listMess.push(userSend);
 
-    console.log("mess: ",textMessSend)
-    setNewMessage("");
-
-  };
+    
   const outputMessage = (message)=>{
     //output mess
     socket.on("message", message =>{
@@ -264,7 +265,7 @@ const ChatRoom = (props) => {
       <Grid item xs={12}>
         <Paper className={classes.chatRom}>
           <List className={classes.messageArea}>
-             {listMess.map((message, i) => ( 
+             {MessesageOld.map((message, i) => ( 
             <ListItem
             key={i}
             className={`message-item ${
@@ -298,7 +299,7 @@ const ChatRoom = (props) => {
                   <ListItemText
                     align="center"
                     primary={
-                      <Typography className={classes.time}> {message.time}</Typography>
+                      <Typography className={classes.time}> {message.timeSend}</Typography>
                     }
                   ></ListItemText>
                 </Grid>
@@ -319,13 +320,13 @@ const ChatRoom = (props) => {
                 onChange={handleNewMessageChange}
                 placeholder="Nhập tin nhắn"
                 className={classes.inputMess}
-                onKeyPress={(ev) => {
-                  if (ev.key === "Enter") {
-                    textMessSend= newMessage;
-                    setNewMessage("");
-                    ev.preventDefault();
-                  }
-                }}
+                // onKeyPress={(ev) => {
+                //   if (ev.key === "Enter") {
+                //     textMessSend= newMessage;
+                //     setNewMessage("");
+                //     ev.preventDefault();
+                //   }
+                // }}
               />
             </Grid>
             <Grid xs={2} align="right">
