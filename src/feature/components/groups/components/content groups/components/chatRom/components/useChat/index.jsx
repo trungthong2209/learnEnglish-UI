@@ -1,39 +1,22 @@
 import { useEffect, useRef, useState } from "react";
-import socketIOClient from "socket.io-client";
-
-const NEW_CHAT_MESSAGE_EVENT = "newChatMessage";
-const SOCKET_SERVER_URL = "http://localhost:4000";
-
+import Socket from "../../../../../../../../../service/socket";
 const useChat = (roomId) => {
-  const [messages, setMessages] = useState([]);
-  const socketRef = useRef();
-
-  useEffect(() => {
-    socketRef.current = socketIOClient(SOCKET_SERVER_URL, {
-      query: { roomId },
-    });
-
-    socketRef.current.on(NEW_CHAT_MESSAGE_EVENT, (message) => {
-      const incomingMessage = {
-        ...message,
-        ownedByCurrentUser: message.senderId === socketRef.current.id,
-      };
-      setMessages((messages) => [...messages, incomingMessage]);
-    });
-
-    return () => {
-      socketRef.current.disconnect();
+    const [messages, setMessages] = useState([]); // Sent and received messages
+    useEffect(() => {
+        Socket.on("send-message-public", (data)=>{
+        // console.log("data đã send: ",data);
+        setMessages((messages) => [...messages, data]);
+      })
+    }, [roomId]);
+    const sendMessage = (messageBody) => {
+        let data = {
+        groupId: roomId,
+        // groupId: roomId,
+        message: messageBody,
+        };
+        Socket.emit("send-message-public", data);
     };
-  }, [roomId]);
-
-  const sendMessage = (messageBody) => {
-    socketRef.current.emit(NEW_CHAT_MESSAGE_EVENT, {
-      body: messageBody,
-      senderId: socketRef.current.id,
-    });
+    return { messages, sendMessage };
   };
-
-  return { messages, sendMessage };
-};
 
 export default useChat;

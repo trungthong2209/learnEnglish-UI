@@ -5,6 +5,7 @@ import React from "react";
 import { useDispatch } from 'react-redux';
 import { login } from "../../userSlice";
 import LoginForm from "../loginFrom";
+import { useHistory } from "react-router-dom";
 
 Login.propTypes = {
     closeDialog: PropTypes.func,
@@ -13,7 +14,7 @@ Login.propTypes = {
 
 
 function Login(props) {
-    
+  const history = useHistory();
   const dispatch = useDispatch();
   const {enqueueSnackbar} = useSnackbar();
 
@@ -30,6 +31,8 @@ function Login(props) {
       if(closeDialog){
           closeDialog();
       }
+      history.push("/home");
+      window.location.reload();
       
       enqueueSnackbar('Đăng nhập thành công',{variant:'success'});
     } catch (error) {

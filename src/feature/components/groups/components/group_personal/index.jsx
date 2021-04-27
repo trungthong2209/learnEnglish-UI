@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     flexWrap: "wrap",
   },
   toolbar: {
-    background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
+    background: "linear-gradient(315deg, #83eaf1 30%, #63a4ff 90%)",
     fontFamily: "'Open Sans', sans-serif",
     fontSize: "1.6 rem",
     marginTop: "3rem",
@@ -35,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
   heroContent: {
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(8, 0, 6),
+    
   },
   heroButtons: {
     marginTop: theme.spacing(4),
@@ -42,6 +43,10 @@ const useStyles = makeStyles((theme) => ({
   cardGrid: {
     paddingTop: theme.spacing(8),
     paddingBottom: theme.spacing(8),
+  },
+  groups:{
+    width:"100%",
+    textDecoration: "none",
   },
   card: {
     height: "100%",
@@ -68,6 +73,7 @@ const useStyles = makeStyles((theme) => ({
   font_head: {
     fontFamily: ["Open Sans", "sans-serif"].join(","),
     fontSize: "2rem",
+    textDecoration:"none",
   },
   font_content: {
     fontFamily: ["Open Sans", "sans-serif"].join(","),
@@ -103,7 +109,7 @@ function GroupsForYou(props) {
 
   return (
     <React.Fragment>
-      <Container>
+<Container>
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <CssBaseline />
@@ -123,13 +129,13 @@ function GroupsForYou(props) {
                   color="inherit"
                   noWrap
                 >
-                  NHÓM
+                  NHÓM CỦA BẠN
                 </Typography>
               </Toolbar>
             </AppBar>
             <Paper className={classes.paper}>
               <Grid container spacing={4}>
-                {Groups.map((group) => (
+              {Groups.map((group) => (
                   <Grid item key={group.id} xs={12} sm={6} md={4}>
                     <Card className={classes.card}>
                       <CardActions>
@@ -137,14 +143,14 @@ function GroupsForYou(props) {
                           to={`/groups/${group.id}`}
                           size="small"
                           color="primary"
-                          className={classes.font_content}
+                          className={classes.groups}
                           value={group.id}
                           onClick={handleRoomNameChange}
                         >
                           <CardMedia
                             className={classes.cardMedia}
-                            image={group.img}
-                            title={group.name}
+                            image="https://source.unsplash.com/random"
+                            title={group.topic}
                           />
                           <CardContent className={classes.font_head}>
                             <Typography
@@ -154,6 +160,7 @@ function GroupsForYou(props) {
                               component="h2"
                             >
                               {group.name}
+                              
                             </Typography>
                           </CardContent>
                         </Link>

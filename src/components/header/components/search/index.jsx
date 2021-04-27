@@ -1,0 +1,20 @@
+import SearchBar from 'material-ui-search-bar';
+import React from 'react';
+SearchNav.propTypes = {
+    
+};
+
+function SearchNav(props) {
+    return (
+        <div class="header__navbar_left-search">
+        
+        <SearchBar
+        className="search_input"
+          placeholder="Nhập tìm kiếm của bạn"
+          autoFocus
+        />
+      </div>
+    );
+}
+
+export default SearchNav;

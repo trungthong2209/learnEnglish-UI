@@ -8,18 +8,24 @@ import { Close } from "@material-ui/icons";
 import GroupIcon from "@material-ui/icons/Group";
 import HomeIcon from "@material-ui/icons/Home";
 import LocalLibraryIcon from "@material-ui/icons/LocalLibrary";
-import React, { useState } from "react";
+import React, {useEffect ,useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import Login from "../../feature/components/authentificaion/components/login";
 import Register from "../../feature/components/authentificaion/components/register";
-import logo from "./logo/logoCap2.gif";
-import "./style.scss";
+import MenuIcon from "@material-ui/icons/Menu";
+import "./style.css";
 import { useDispatch, useSelector } from "react-redux";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import { logout } from "../../feature/components/authentificaion/userSlice";
 import Forget from "../../feature/components/authentificaion/components/forgetPass";
-import MailOutlineIcon from '@material-ui/icons/MailOutline';
+import MailOutlineIcon from "@material-ui/icons/MailOutline";
+import Logo from "./components/logo";
+import SearchNav from "./components/search";
+import ListBar from "./components/listBar";
+import UserBar from "./components/user";
+import HeaderAbout from "../../feature/components/About/components/header";
+import CloseIcon from '@material-ui/icons/Close';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -46,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
   font: {
     fontFamily: ["Open Sans", "sans-serif"].join(","),
     fontSize: "2rem",
-    textDecoration:"none",
+    textDecoration: "none",
     color: "#0d0800",
   },
   font_text: {
@@ -57,185 +63,59 @@ const useStyles = makeStyles((theme) => ({
     width: "40%",
   },
 }));
-const MODE = {
-  LOGIN: "login",
-  REGISTER: "register",
-  FORGET: "forget",
-};
 
 function Header(props) {
   const loggedInUser = useSelector((state) => state.user.current);
-  const isLoggedIn = !!loggedInUser._id;
+  const isLoggedIn = !!loggedInUser._id || "";
 
-  const [mode, setMode] = useState(MODE.LOGIN);
-  const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const handleCloseMenu = (e) => {
-    setAnchorEl(null);
-  };
-  const handleMenuUserClick = (e) => {
-    setAnchorEl(e.currentTarget);
-  };
-
-  const dispatch = useDispatch();
-  const handleLogoutClick = () => {
-    handleCloseMenu();
-    const action = logout();
-    dispatch(action);
-  };
-
+  var fullName= String(loggedInUser.userName).trim();
+  var lastName = fullName.split(' ').slice(-1).join(' ');
   return (
     <div>
-      <header className="header">
-        <div className="grid">
+      {!isLoggedIn && <HeaderAbout />}
+      {isLoggedIn && (
+        <header className="header">
           <nav className="header__navbar">
-            <ul>
-              <li className="header__item ">
-                <Link to="/home">
-                  <img className="header__logo" src={logo} alt="Logo" />
-                </Link>
-              </li>
-              <li className="header__item "></li>
-            </ul>
-            <ul className="header__list">
-              <li className="header__item">
-                <Link to="/home" className="header__item-link">
-                  <HomeIcon fontSize="large" className="header__navbar-icon" color="white" />
-                  Trang chủ
-                </Link>
-              </li>
-              <li className="header__item">
-                <NavLink to="/khoa-hoc" className="header__item-link">
-                  <LocalLibraryIcon
-                    className="header__navbar-icon" fontSize="large"
-                    color="white"
-                  />
-                  Khóa học
-                </NavLink>
-              </li>
-              <li className="header__item">
-                <NavLink to="/nhom" className="header__item-link">
-                  <GroupIcon className="header__navbar-icon" fontSize="large" color="white" />
-                  Nhóm
-                </NavLink>
-              </li>
-              <li className="header__item">
-                <NavLink to="/tin-nhan" className="header__item-link">
-                  <MailOutlineIcon className="header__navbar-icon" fontSize="large" color="white" />
-                  Tin nhắn
-                </NavLink>
-              </li>
-
-              <li className="header__item ">
-                {!isLoggedIn && (
-                  <p
-                    className="header__item-link header__item-strong"
-                    variant="outlined"
-                    color="primary"
-                    onClick={handleClickOpen}
-                  >
-                    Đăng nhập
-                  </p>
-                )}
-                {isLoggedIn && (
-                  <Avatar
-                    alt= {loggedInUser.userName}
-                    src="/static/images/avatar/1.jpg"
-                    className={classes.large}
-                    onClick={handleMenuUserClick}
-                  />
-                )}
-              </li>
-            </ul>
+            <div class="header__navbar_left">
+              <Logo />
+              <SearchNav />
+            </div>
+            <div class="header__navbar_center">
+              <ListBar />
+            </div>
+            <div class="header__navbar_right">
+              <UserBar />
+            </div>
           </nav>
-        </div>
-      </header>
-      <Menu
-        anchorEl={anchorEl}
-        keepMounted
-        open={Boolean(anchorEl)}
-        onClose={handleCloseMenu}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "center",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "center",
-        }}
-        getContentAnchorEl={null}
-      >
-        <MenuItem  onClick={handleCloseMenu}>
-          <Link className={classes.font} to="/profile">Trang cá nhân</Link>
-        </MenuItem>
-        <MenuItem className={classes.font} onClick={handleCloseMenu}>
-          Cài đặt
-        </MenuItem>
-        <MenuItem className={classes.font} onClick={handleLogoutClick}>
-          Đăng xuất
-        </MenuItem>
-      </Menu>
+          <div className="menu_mobile">
 
-      <div>
-        <Dialog
-          disableBackdropClick
-          disableEscapeKeyDown
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="form-dialog-title"
-        >
-          <IconButton className={classes.closeButton} onClick={handleClose}>
-            <Close />
-          </IconButton>
-          <DialogContent>
-            {mode === MODE.REGISTER && (
-              <>
-                <Register closeDialog={handleClose} />
+            <Logo />
+            <label for="nav-mobile-input" className="menu-icon">
+              <MenuIcon className="menu-drop" />
+            </label>
+            <label for="nav-mobile-input">
+              <div className="overlay">
+              </div>
+            </label>
+              <input type="checkbox" hidden className="nav__input" name="" id="nav-mobile-input"/>
+              <input type="checkbox" hidden className="close" name="" id="nav-mobile-input"/>
 
-                <Box textAlign="center">
-                  <Button
-                    color="primary"
-                    onClick={() => setMode(MODE.LOGIN)}
-                    className={classes.font_text}
-                  >
-                    Bạn đã có tài khoản
-                  </Button>
-                </Box>
-              </>
-            )}
-
-            {mode === MODE.LOGIN && (
-              <>
-                <Login closeDialog={handleClose} />
-
-                <Box textAlign="center">
-                  <Button
-                    color="primary"
-                    onClick={() => setMode(MODE.REGISTER)}
-                    className={classes.font_text}
-                  >
-                    Bạn chưa có tài khoản
-                  </Button>
-                </Box>
-              </>
-            )}
-            {mode === MODE.FORGET && (
-              <>
-                <Forget closeDialog={handleClose} />
-              </>
-            )}
-          </DialogContent>
-        </Dialog>
-      </div>
+            <div className="nav__moblie">
+            <ul className="nav__moblie-list">
+              <label for="close" class="nav__moblie-close" >
+                  <Close className="nav__moblie-Btnclose"/>
+              </label>
+            <li><a href="" className="nav__mobile-link">{lastName}</a></li>
+              <li><a href="" className="nav__mobile-link">Trang chủ</a></li>
+              <li><a href="" className="nav__mobile-link">Khóa học</a></li>
+              <li><a href="" className="nav__mobile-link">Nhóm</a></li>
+              <li><a href="" className="nav__mobile-link">sự kiện</a></li>
+              <li><a href="" className="nav__mobile-link">Đăng xuất</a></li>
+            </ul>
+            </div>
+          </div>
+        </header>
+      )}
     </div>
   );
 }

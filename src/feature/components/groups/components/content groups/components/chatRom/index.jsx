@@ -6,12 +6,13 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Paper from "@material-ui/core/Paper";
 import SendIcon from "@material-ui/icons/Send";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button, makeStyles, Typography } from "@material-ui/core";
 import * as yup from "yup";
 import InputField from "../../../../../../../components/form-controls/InputField";
 import { yupResolver } from "@hookform/resolvers/yup";
+
 import PropTypes from "prop-types";
 import {
   BrowserRouter as Router,
@@ -21,7 +22,12 @@ import {
   useParams,
 } from "react-router-dom";
 import useChat from "./components/useChat";
-
+import groupsApi from "../../../../../../../api/groupsApi";
+import { Server } from "socket.io";
+import io from "socket.io-client";
+import { useSelector } from "react-redux";
+import StorageKeys from "../../../../../../../constants/storage-key";
+import Socket from "../../../../../../../service/socket";
 const useStyles = makeStyles((theme) => ({
   table: {
     minWidth: 650,
@@ -45,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: "500",
     fontFamily: ["Open Sans", "sans-serif"].join(","),
     color: "#fffffe",
-    background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
+    background: "linear-gradient(315deg, #83eaf1 30%, #63a4ff 90%)",
   },
   paper: {
     marginTop: "1rem",
@@ -54,35 +60,38 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.secondary,
   },
   chatRom: {
-    width:"47.6rem",
+    width: "100%",
     marginTop: "1rem",
     padding: theme.spacing(1),
     textAlign: "center",
     color: theme.palette.text.secondary,
-    
+    border: "1px solid #83eaf1"
   },
   avt: {
     height: "4rem",
     width: "4rem",
   },
+  block:{
+    width:"90%"
+  },
   name: {
     fontSize: "1.8rem",
     fontWeight: "700",
-    marginLeft: "1rem",
+    marginLeft: "2rem",
     fontFamily: ["Open Sans", "sans-serif"].join(","),
     color: "#0d0800",
     textAlign: "justify",
     textJustify: "inter-word",
-    height:"100%",
-    width:"20rem",
+    height: "100%",
+    
   },
   message: {
     fontSize: "1.8rem",
     fontWeight: "500",
-    marginLeft: "0.5rem",
+    marginLeft: "2.0rem",
     fontFamily: ["Open Sans", "sans-serif"].join(","),
-
     color: "#0d0800",
+    wordWrap:"break-word"
   },
   time: {
     fontSize: "1.3rem",
@@ -91,14 +100,18 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: ["Open Sans", "sans-serif"].join(","),
     color: "#gray",
   },
-  mess:{
-    padding:0,
-    width:"40rem",
+  mess: {
+    padding: 0,
+    width: "40rem",
     wordWrap: "breakWord",
   },
+  content :{
+    overflowX: "hidden",
+    height:"80vh"
+  },
   inputMess: {
-    // padding: "1.2rem 2rem",
-    // fontSize: "1rem",
+    marginTop: "0.3rem",
+    fontSize: "2rem",
     // borderWidth: "calc(var(--border-width) * 1px)",
     // borderStyle: "solid",
     // borderColor: "0.5rem",
@@ -106,64 +119,105 @@ const useStyles = makeStyles((theme) => ({
     // outline: "transparent",
     // width: "100%",
     // transition: "border-color calc(var(--transition, 0.2) * 1s) ease",
-    borderStyle:"none",
-    width:"100%",
-    height:"80%",
+    borderStyle: "none",
+    width: "100%",
+    height: "80%",
   },
-  paperInput:{
-    padding:" 0.5rem 0.5rem",
-    marginTop:"2rem"
+  paperInput: {
+    padding: " 0.5rem 0.5rem",
+    marginTop: "2rem",
   },
   submit: {
-    background: "gray",
+    background: "linear-gradient(315deg, #83eaf1 30%, #63a4ff 90%)",
     border: 0,
     borderRadius: 3,
     boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
     color: "white",
-    height: "80%",
+    height: "100%",
     padding: "0 30px",
     fontFamily: ["Open Sans", "sans-serif"].join(","),
     fontSize: "1.6rem",
   },
 }));
+
 const userSend = {
-    id: 1,
-    avt: "https://source.unsplash.com/random/200x200?sig=1",
-    user: "Lê Xuân Hiếu",
-    content:
-      "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Excepturi eum provident accusamus sed repellat totam commodi ipsum distinctio deleniti fugiat asperiores itaque, libero mollitia illo quia deserunt vel doloremque eius.",
-    time: "06:00 09/10/1999",
-  };
+  id: 1,
+  avt: "https://source.unsplash.com/random/200x200?sig=1",
+  user: "Lê Xuân Hiếu",
+  content:
+    "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Excepturi eum provident accusamus sed repellat totam commodi ipsum distinctio deleniti fugiat asperiores itaque, libero mollitia illo quia deserunt vel doloremque eius.",
+  time: "06:00 09/10/1999",
+};
 // ChatRoom.propTypes = {
 //     onSubmit: PropTypes.func,
 
 // };
 const today = new Date();
-const time =
-  today.getHours() + ":" + today.getMinutes();
+const time = today.getHours() + ":" + today.getMinutes();
+
+
+let textMessSend= '';
 
 const ChatRoom = (props) => {
   const classes = useStyles();
-  const schema = yup.object().shape({
-    identifier: yup.string().required,
-  });
-  const formm = useForm({
-    defaultValues: {
-      mess: "",
-    },
-    resolver: yupResolver(schema),
-  });
+  const roomId = props.groupId;
+  const [listMess,setlistMess] = useState([]);
+  
 
-  const handleSubmit = async (value) => {
-    const { onSubmit } = props;
-    if (onSubmit) {
-      await onSubmit(value);
-    }
-  };
+  //get message old
+  const [MessesageOld, setMessesageOld] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const groupId ={'groupId' : roomId};
+  console.log(groupId)
+  useEffect(() => {
+    const fetchMessage = async () => {
+      setLoading(true);
+      const messList = await groupsApi.getMess(roomId);
+      console.log("mess",messList)
+      setMessesageOld(messList);
+      setLoading(false);
+    };
+    fetchMessage();
+  }, []);
 
-  const { roomId } = useParams(); // Gets roomId from URL
-  const { messages, sendMessage } = useChat(roomId); // Creates a websocket and manages messaging
-  const [newMessage, setNewMessage] = useState(""); // Message to be sent
+  // socket
+  // socket.on("send-message-public", (data)=>{
+  //   console.log("data đã send: ",data);
+  // })
+  
+  const { messages, sendMessage } = useChat(roomId);
+  const [newMessage, setNewMessage] = useState("");
+  const loggedInUser = useSelector((state) => state.user.current);
+  
+
+  
+    console.log(Socket);
+    console.log("Connected to server");
+    //join group
+    Socket.emit("joinGroup", roomId);
+    Socket.on("joinGroup", (data) =>{
+      // console.log( "xxxxxxxxxxxxx: ",data);
+    });
+
+    //send public
+    // socket.on("send-message-public", (data)=>{
+    //   console.log("data đã send: ",data);
+    // })
+
+    // //out group
+    // socket.on("leavingGroup", (message) => {
+    //   console.log(message);
+    // });
+    // socket.on("pairing", (data) => {
+    //   console.log(data);
+    // });
+
+    //log error
+    Socket.on('send-message-error', (data)=>{
+      console.log(data)
+  })
+  
+  
   const handleNewMessageChange = (event) => {
     setNewMessage(event.target.value);
   };
@@ -171,6 +225,19 @@ const ChatRoom = (props) => {
     sendMessage(newMessage);
     setNewMessage("");
   };
+
+    let userSend = {
+      id: loggedInUser._id,
+      avt: "https://source.unsplash.com/random/200x200?sig=1",
+      user: loggedInUser.userName,
+      content: textMessSend,
+      time: time,
+    };
+    // lọc phần tử trùng
+  function unique(arr) {
+    return Array.from(new Set(arr)) 
+  }
+
   return (
     <div>
       <Grid item xs={12}>
@@ -180,86 +247,122 @@ const ChatRoom = (props) => {
           </Typography>
         </Paper>
       </Grid>
-      <Grid item xs={12}>
+      <Grid item xs={12} class={classes.content}>
         <Paper className={classes.chatRom}>
-          <List className={classes.messageArea}>
-            {messages.map((message, i) => (
-              <ListItem
-                key={i}
-                className={`message-item ${
-                  message.ownedByCurrentUser ? "my-message" : "received-message"
-                }`}
-              >
-                <Grid container>
-                  <Grid item xs={1}>
-                    <Avatar className={classes.avt} alt={userSend.user} src={userSend.avt} />
-                  </Grid>
-                  <Grid item xs={11}>
-                    <ListItemText
-                      align="left"
-                      className={classes.mess}
-                      primary={
-                        <Typography className={classes.name}>
-                          <Typography className={classes.name}>{userSend.user} <span className={classes.message}>{message.body}</span> </Typography>
-                          
-                        </Typography>
-                        
-                      }
-                    ></ListItemText>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <ListItemText
-                      align="center"
-                      primary={
-                        <Typography className={classes.time}>
-                          {" "}
-                          {time}
-                        </Typography>
-                      }
-                    ></ListItemText>
-                  </Grid>
+          <List >
+          {unique(MessesageOld).map((message,i) => ( 
+            <ListItem
+            key={i}
+            className={`message-item ${
+              message.ownedByCurrentUser ? "my-message" : "received-message"
+            }`}
+            >
+              <Grid container>
+                <Grid item xs={1}>
+                  <Avatar
+                    className={classes.avt}
+                    alt={message.author.authorName}
+                    src={message.author.authorAvatar}
+                  />
                 </Grid>
-              </ListItem>
+                <Grid item xs={11}>
+                  <ListItemText
+                    align="left"
+                    className={classes.mess}
+                    primary={
+                      <Typography className={classes.block}>
+                        <span className={classes.name}>{message.author.authorName}</span> <span className={classes.message}>{message.message}</span> 
+                        
+                      </Typography>
+                    }
+                  ></ListItemText>
+                </Grid>
+                <Grid item xs={6}>
+                  <ListItemText
+                    align="center"
+                    primary={
+                      <Typography className={classes.time}> {message.timeSend.slice(0,16)}</Typography>
+                    }
+                  ></ListItemText>
+                </Grid>
+              </Grid>
+            </ListItem>
+            ))}
+             {unique(messages).map((message,i) => ( 
+            <ListItem
+            key={i}
+            className={`message-item ${
+              message.ownedByCurrentUser ? "my-message" : "received-message"
+            }`}
+            >
+              {console.log(message)}
+              <Grid container>
+                <Grid item xs={1}>
+                  <Avatar
+                    className={classes.avt}
+                    alt={message.user}
+                    src={message.avatar}
+                  />
+                </Grid>
+                <Grid item xs={11}>
+                  <ListItemText
+                    align="left"
+                    className={classes.mess}
+                    primary={
+                      <Typography className={classes.block}>
+                        <span className={classes.name}>{message.userName}</span> <span className={classes.message}>{message.message}</span> 
+                        
+                      </Typography>
+                    }
+                  ></ListItemText>
+                </Grid>
+                <Grid item xs={6}>
+                  <ListItemText
+                    align="center"
+                    primary={
+                      <Typography className={classes.time}> {message.timeSend.slice(0,16)}</Typography>
+                    }
+                  ></ListItemText>
+                </Grid>
+              </Grid>
+            </ListItem>
             ))}
           </List>
         </Paper>
       </Grid>
 
       <Grid item xs={12}>
-      <Paper  elevation={3} className={classes.paperInput}>
-      <Grid container>
-          
-          <Grid item xs={10}>
-            <input
-              value={newMessage}
-              onChange={handleNewMessageChange}
-              placeholder="Write message..."
-              className={classes.inputMess}
-              onKeyPress={(ev) => {
-                console.log(`Pressed keyCode ${ev.key}`);
-                if (ev.key === 'Enter') {
-                  sendMessage(newMessage);
-                  setNewMessage("");
-                  ev.preventDefault();
-                }
-              }}
-            />
+        <Paper elevation={3} className={classes.paperInput}>
+          <Grid container>
+            <Grid item xs={10}>
+              <input
+                value={newMessage}
+
+                onChange={handleNewMessageChange}
+                placeholder="Nhập tin nhắn"
+                className={classes.inputMess}
+                // onKeyPress={(ev) => {
+                //   if (ev.key === "Enter") {
+                //     textMessSend= newMessage;
+                //     setNewMessage("");
+                //     ev.preventDefault();
+                //   }
+                // }}
+              />
+            </Grid>
+            <Grid xs={2} align="right">
+              <Button
+                type="submit"
+                className={classes.submit}
+                variant="contained"
+                fullWidth
+                onClick={handleSendMessage}
+              >
+                Gửi
+              </Button>
+            </Grid>
           </Grid>
-          <Grid xs={2} align="right"> 
-            <Button
-              type="submit"
-              className={classes.submit}
-              variant="contained"
-              fullWidth
-              onClick={handleSendMessage}
-              
-            >
-              Gửi
-            </Button>
-          </Grid>
-        </Grid>
-      </Paper>
-        
+        </Paper>
       </Grid>
     </div>
   );

@@ -38,9 +38,7 @@ function Groups(props) {
   const classes = useStyles();
 
   const [roomName, setRoomName] = useState("Nhóm");
-  const handleRoomNameChange = (event) => {
-    setRoomName(event.target.value);
-  };
+  
 
   const [groups, setGroups] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -76,7 +74,9 @@ function Groups(props) {
   const changePage = ({ selected }) => {
     setPageNumber(selected);
   };
-  console.log(groups);
+  
+
+  
   return (
     <React.Fragment>
       <Container>
@@ -87,7 +87,7 @@ function Groups(props) {
             <Paper className={classes.paper}>
               <GroupList
                 groups={currentGroups}
-                handleRoomNameChange={handleRoomNameChange}
+                
                 loading={loading}
               />
               <ReactPaginate

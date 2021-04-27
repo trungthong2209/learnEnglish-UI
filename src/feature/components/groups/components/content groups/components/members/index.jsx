@@ -6,8 +6,6 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Paper from "@material-ui/core/Paper";
-import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
-import StarsIcon from "@material-ui/icons/Stars";
 import React from "react";
 Members.propTypes = {};
 const useStyles = makeStyles((theme) => ({
@@ -19,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: "500",
     fontFamily: ["Open Sans", "sans-serif"].join(","),
     color: "#fffffe",
-    background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
+    background: "linear-gradient(315deg, #83eaf1 30%, #63a4ff 90%)",
     marginBottom:"2rem"
   },
   name: {
@@ -85,9 +83,12 @@ const users = [
     status: "online",
   },
 ];
+  
 
 function Members(props) {
   const classes = useStyles();
+  let member = props.member;
+  console.log(member)
   return (
     <React.Fragment>
       <Grid item xs={12} >
@@ -99,22 +100,22 @@ function Members(props) {
         
       </Grid>
       <List>
-        {users.map((mem) => (
+        {member.map((mem) => (
           <ListItem button key={mem.id}>
             <ListItemIcon>
               <Avatar
                 alt={mem.name}
-                src={mem.avt}
+                src={mem.avatar}
               />
             </ListItemIcon>
             <ListItemText
               primary={
-                <Typography className={classes.name}>{mem.name}</Typography>
+                <Typography className={classes.name}>{mem.userName}</Typography>
               }
             >
               
             </ListItemText>
-            {mem.role === "owner" ? (
+            {/* {mem.role === "owner" ? (
               <ListItemText >
                 <StarsIcon className={classes.role}/>
               </ListItemText>
@@ -129,7 +130,7 @@ function Members(props) {
               <ListItemText align="right">
                 <FiberManualRecordIcon />
               </ListItemText>
-            )}
+            )} */}
           </ListItem>
         ))}
       </List>
