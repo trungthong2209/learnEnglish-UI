@@ -1,52 +1,57 @@
-// require('dotenv').config();
-// const express = require("express");
-// const http = require("http");
-// const app = express();
-// const server = http.createServer(app);
-// const socket = require("socket.io");
-// const io = socket(server);
+const express = require('express');
+const app = express();
+const bodyParser = require('body-parser');
+const webrtc = require("wrtc");
 
-// const users = {};
+let senderStream;
 
-// const socketToRoom = {};
+app.use(express.static('public'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-// io.on('connection', socket => {
-//     socket.on("join room", roomID => {
-//         if (users[roomID]) {
-//             const length = users[roomID].length;
-//             if (length === 4) {
-//                 socket.emit("room full");
-//                 return;
-//             }
-//             users[roomID].push(socket.id);
-//         } else {
-//             users[roomID] = [socket.id];
-//         }
-//         socketToRoom[socket.id] = roomID;
-//         const usersInThisRoom = users[roomID].filter(id => id !== socket.id);
+app.post("/consumer", async ({ body }, res) => {
+    const peer = new webrtc.RTCPeerConnection({
+        iceServers: [
+            {
+                urls: "stun:stun.stunprotocol.org"
+            }
+        ]
+    });
+    const desc = new webrtc.RTCSessionDescription(body.sdp);
+    await peer.setRemoteDescription(desc);
+    senderStream.getTracks().forEach(track => peer.addTrack(track, senderStream));
+    const answer = await peer.createAnswer();
+    await peer.setLocalDescription(answer);
+    const payload = {
+        sdp: peer.localDescription
+    }
 
-//         socket.emit("all users", usersInThisRoom);
-//     });
+    res.json(payload);
+});
 
-//     socket.on("sending signal", payload => {
-//         io.to(payload.userToSignal).emit('user joined', { signal: payload.signal, callerID: payload.callerID });
-//     });
+app.post('/broadcast', async ({ body }, res) => {
+    const peer = new webrtc.RTCPeerConnection({
+        iceServers: [
+            {
+                urls: "stun:stun.stunprotocol.org"
+            }
+        ]
+    });
+    peer.ontrack = (e) => handleTrackEvent(e, peer);
+    const desc = new webrtc.RTCSessionDescription(body.sdp);
+    await peer.setRemoteDescription(desc);
+    const answer = await peer.createAnswer();
+    await peer.setLocalDescription(answer);
+    const payload = {
+        sdp: peer.localDescription
+    }
 
-//     socket.on("returning signal", payload => {
-//         io.to(payload.callerID).emit('receiving returned signal', { signal: payload.signal, id: socket.id });
-//     });
+    res.json(payload);
+});
 
-//     socket.on('disconnect', () => {
-//         const roomID = socketToRoom[socket.id];
-//         let room = users[roomID];
-//         if (room) {
-//             room = room.filter(id => id !== socket.id);
-//             users[roomID] = room;
-//         }
-//     });
-
-// });
-
-// server.listen(process.env.PORT || 8000, () => console.log('server is running on port 8000'));
+function handleTrackEvent(e, peer) {
+    senderStream = e.streams[0];
+};
 
 
+app.listen(5000, () => console.log('server started'));

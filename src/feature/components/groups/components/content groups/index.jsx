@@ -11,6 +11,7 @@ import { useParams } from "react-router";
 import io from "socket.io-client";
 import groupsApi from "../../../../../api/groupsApi";
 import StorageKeys from "../../../../../constants/storage-key";
+import UploadFile from "./components/uploadFile";
 
 
 
@@ -40,29 +41,20 @@ export default function ContentGroup() {
   const classes = useStyles();
   const param = useParams();
   const groupId = param.groupId;
-  const [infoGroup, setInfoGroup] = useState('');
+  const [infoGroup, setInfoGroup] = useState({});
+  const [member, setMember] = useState([]);
+  const [file, setFile] = useState();
   const id ={"_id" : groupId};
   useEffect(() => {
     const fetchInfoGroup = async () => {
-      const info = await groupsApi.getGroupById(groupId);
+      let info = await groupsApi.getGroupById(groupId);
       console.log("info: ",info)
+      setMember(info[0].userJoinGroup)
       setInfoGroup(info);
     };
     fetchInfoGroup();
   }, []);
-  var socket = io("http://3.131.71.201:3001/", {
-  auth: {
-    token:
-    `${localStorage.getItem(StorageKeys.TOKEN)}`,
-  },
-});
-
-  socket.on("send-message-public", (data)=>{
-    console.log("data đã send: ",data);
-  })
-  
-  
- 
+   
   
   return (
     <div className={classes.root}>
@@ -78,8 +70,14 @@ export default function ContentGroup() {
             <Grid item xs={12}>
               
             <Paper elevation={3} className={classes.paper} >
-              <Members />
+              <Members member={member}  />
+              
             </Paper>
+            <Paper elevation={3} className={classes.paper} >
+              <UploadFile groupId={groupId}/>
+              
+            </Paper>
+            
           </Grid>
           </Grid>
           <Grid item xs={7}>

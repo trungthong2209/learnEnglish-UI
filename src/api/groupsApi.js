@@ -22,16 +22,24 @@ const groupsApi = {
     return axiosClient.post(url, data);
   },
 
-  getMess(data) {
-    const url = "/publicMessage";
-    return axiosClient.get(url,{params: {
-      groupId : data
-    }})},
+  getMess(id) {
+    const url = "/publicMessage/"+id;
+    return axiosClient.get(url)},
 
-  getGroupById(data) {
-    const url = '/groups/getGroupsById';
-    return axiosClient.get(url, {"_id" : data });
+
+  getGroupById(groupId) {
+    const url = '/groups/getGroupsById/'+groupId;
+    return axiosClient.get(url);
   },
+  uploadFile(data,id){
+    const url = '/groups/upload-files/'+id;
+    return axiosClient.post(url, data,{
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+  }
   
 };
 

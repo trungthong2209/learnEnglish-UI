@@ -27,6 +27,7 @@ import { Server } from "socket.io";
 import io from "socket.io-client";
 import { useSelector } from "react-redux";
 import StorageKeys from "../../../../../../../constants/storage-key";
+import Socket from "../../../../../../../service/socket";
 const useStyles = makeStyles((theme) => ({
   table: {
     minWidth: 650,
@@ -59,34 +60,38 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.secondary,
   },
   chatRom: {
-    width: "42.6rem",
+    width: "100%",
     marginTop: "1rem",
     padding: theme.spacing(1),
     textAlign: "center",
     color: theme.palette.text.secondary,
+    border: "1px solid #83eaf1"
   },
   avt: {
     height: "4rem",
     width: "4rem",
   },
+  block:{
+    width:"90%"
+  },
   name: {
     fontSize: "1.8rem",
     fontWeight: "700",
-    marginLeft: "1rem",
+    marginLeft: "2rem",
     fontFamily: ["Open Sans", "sans-serif"].join(","),
     color: "#0d0800",
     textAlign: "justify",
     textJustify: "inter-word",
     height: "100%",
-    width: "20rem",
+    
   },
   message: {
     fontSize: "1.8rem",
     fontWeight: "500",
-    marginLeft: "0.5rem",
+    marginLeft: "2.0rem",
     fontFamily: ["Open Sans", "sans-serif"].join(","),
-
     color: "#0d0800",
+    wordWrap:"break-word"
   },
   time: {
     fontSize: "1.3rem",
@@ -99,6 +104,10 @@ const useStyles = makeStyles((theme) => ({
     padding: 0,
     width: "40rem",
     wordWrap: "breakWord",
+  },
+  content :{
+    overflowX: "hidden",
+    height:"80vh"
   },
   inputMess: {
     marginTop: "0.3rem",
@@ -146,18 +155,15 @@ const userSend = {
 const today = new Date();
 const time = today.getHours() + ":" + today.getMinutes();
 
-var socket = io("http://3.131.71.201:3001/", {
-  auth: {
-    token:
-    `${localStorage.getItem(StorageKeys.TOKEN)}`,
-  },
-});
+
 let textMessSend= '';
 
 const ChatRoom = (props) => {
   const classes = useStyles();
   const roomId = props.groupId;
   const [listMess,setlistMess] = useState([]);
+  
+
   //get message old
   const [MessesageOld, setMessesageOld] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -175,26 +181,28 @@ const ChatRoom = (props) => {
   }, []);
 
   // socket
-  socket.on("send-message-public", (data)=>{
-    console.log("data đã send: ",data);
-  })
- 
+  // socket.on("send-message-public", (data)=>{
+  //   console.log("data đã send: ",data);
+  // })
+  
+  const { messages, sendMessage } = useChat(roomId);
   const [newMessage, setNewMessage] = useState("");
   const loggedInUser = useSelector((state) => state.user.current);
   
 
-  if (socket !== undefined) {
-    console.log(socket);
+  
+    console.log(Socket);
     console.log("Connected to server");
     //join group
-    socket.on("joinGroup", (data) =>{
-      console.log( "xxxxxxxxxxxxx: ",data);
+    Socket.emit("joinGroup", roomId);
+    Socket.on("joinGroup", (data) =>{
+      // console.log( "xxxxxxxxxxxxx: ",data);
     });
 
     //send public
-    socket.on("send-message-public", (data)=>{
-      console.log("data đã send: ",data);
-    })
+    // socket.on("send-message-public", (data)=>{
+    //   console.log("data đã send: ",data);
+    // })
 
     // //out group
     // socket.on("leavingGroup", (message) => {
@@ -203,36 +211,19 @@ const ChatRoom = (props) => {
     // socket.on("pairing", (data) => {
     //   console.log(data);
     // });
-  }
+
+    //log error
+    Socket.on('send-message-error', (data)=>{
+      console.log(data)
+  })
+  
   
   const handleNewMessageChange = (event) => {
     setNewMessage(event.target.value);
   };
   const handleSendMessage = () => {
-    textMessSend = newMessage;
-    let data = {
-      groupId: roomId,
-      message: textMessSend,
-    };
-    console.log("dataaaaaaaaa: ",data);
-    socket.emit("send-message-public", data)
-    socket.on("send-message-public", (data)=>{
-      console.log("data đã send: ",data);
-    })
-
-    // let data = {  
-    //   sendToId: '60685a61a8953bc885582b70',
-    //   message: textMessSend,
-    //   }
-
-    // console.log("data máy: ",data);
-    //  socket.emit("send-message-private", data)
-    //  socket.on("send-message-private", (data)=>{
-    //   console.log(data)
-    // })
-    console.log("mess: ",textMessSend)
+    sendMessage(newMessage);
     setNewMessage("");
-
   };
 
     let userSend = {
@@ -242,17 +233,11 @@ const ChatRoom = (props) => {
       content: textMessSend,
       time: time,
     };
-
-    
-  const outputMessage = (message)=>{
-    //output mess
-    socket.on("message", message =>{
-      outputMessage(message);
-   });
+    // lọc phần tử trùng
+  function unique(arr) {
+    return Array.from(new Set(arr)) 
   }
 
-
-  
   return (
     <div>
       <Grid item xs={12}>
@@ -262,10 +247,10 @@ const ChatRoom = (props) => {
           </Typography>
         </Paper>
       </Grid>
-      <Grid item xs={12}>
+      <Grid item xs={12} class={classes.content}>
         <Paper className={classes.chatRom}>
-          <List className={classes.messageArea}>
-             {MessesageOld.map((message, i) => ( 
+          <List >
+          {unique(MessesageOld).map((message,i) => ( 
             <ListItem
             key={i}
             className={`message-item ${
@@ -276,8 +261,8 @@ const ChatRoom = (props) => {
                 <Grid item xs={1}>
                   <Avatar
                     className={classes.avt}
-                    alt={message.user}
-                    src={message.avt}
+                    alt={message.author.authorName}
+                    src={message.author.authorAvatar}
                   />
                 </Grid>
                 <Grid item xs={11}>
@@ -285,12 +270,9 @@ const ChatRoom = (props) => {
                     align="left"
                     className={classes.mess}
                     primary={
-                      <Typography className={classes.name}>
-                        <Typography className={classes.name}>{userSend.user} <span className={classes.message}>{message.content}</span> </Typography>
-                        {/* <Typography className={classes.name}>
-                          {userSend.user}{" "}
-                          <span className={classes.message}> </span>{" "}
-                        </Typography> */}
+                      <Typography className={classes.block}>
+                        <span className={classes.name}>{message.author.authorName}</span> <span className={classes.message}>{message.message}</span> 
+                        
                       </Typography>
                     }
                   ></ListItemText>
@@ -299,7 +281,46 @@ const ChatRoom = (props) => {
                   <ListItemText
                     align="center"
                     primary={
-                      <Typography className={classes.time}> {message.timeSend}</Typography>
+                      <Typography className={classes.time}> {message.timeSend.slice(0,16)}</Typography>
+                    }
+                  ></ListItemText>
+                </Grid>
+              </Grid>
+            </ListItem>
+            ))}
+             {unique(messages).map((message,i) => ( 
+            <ListItem
+            key={i}
+            className={`message-item ${
+              message.ownedByCurrentUser ? "my-message" : "received-message"
+            }`}
+            >
+              {console.log(message)}
+              <Grid container>
+                <Grid item xs={1}>
+                  <Avatar
+                    className={classes.avt}
+                    alt={message.user}
+                    src={message.avatar}
+                  />
+                </Grid>
+                <Grid item xs={11}>
+                  <ListItemText
+                    align="left"
+                    className={classes.mess}
+                    primary={
+                      <Typography className={classes.block}>
+                        <span className={classes.name}>{message.userName}</span> <span className={classes.message}>{message.message}</span> 
+                        
+                      </Typography>
+                    }
+                  ></ListItemText>
+                </Grid>
+                <Grid item xs={6}>
+                  <ListItemText
+                    align="center"
+                    primary={
+                      <Typography className={classes.time}> {message.timeSend.slice(0,16)}</Typography>
                     }
                   ></ListItemText>
                 </Grid>

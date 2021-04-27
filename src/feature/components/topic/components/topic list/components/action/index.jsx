@@ -57,7 +57,6 @@ function ActionTopic(props) {
 
   const sendIdToApi = async () => {
     const id = {_id: idTopic }
-    
     try {
       console.log("Topic id submit: ", id);
       await topicGroupApi.deleteTopic(id);

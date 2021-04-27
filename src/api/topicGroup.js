@@ -27,11 +27,7 @@ const topicGroupApi = {
   },
   deleteTopic(data) {
     const url = '/frames/delete-frame-id';
-    return axiosClient.delete(url,{
-      params:{
-        _id : data
-      }
-    });
+    return axiosClient.delete(url, { data: data});
   },
 };
 

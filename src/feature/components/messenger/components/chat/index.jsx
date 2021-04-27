@@ -1,20 +1,23 @@
 import { useEffect, useRef, useState } from "react";
-import Socket from "../../../../../../../../../service/socket";
-const useChat = (roomId) => {
+import Socket from "../../../../../service/socket";
+
+const useChat = (idUser) => {
     const [messages, setMessages] = useState([]); // Sent and received messages
     useEffect(() => {
-        Socket.on("send-message-public", (data)=>{
+       
+        Socket.on("send-message-private", (data)=>{
         // console.log("data đã send: ",data);
         setMessages((messages) => [...messages, data]);
       })
-    }, [roomId]);
-    const sendMessage = (messageBody) => {
+    }, [idUser]);
+    const sendMessage = (messageBody,user) => {
         let data = {
-        groupId: roomId,
-        // groupId: roomId,
+        sendToId: idUser,
         message: messageBody,
         };
-        Socket.emit("send-message-public", data);
+        setMessages((messages) => [...messages, user]);
+        Socket.emit("send-message-private", data);
+        console.log(data)
     };
     return { messages, sendMessage };
   };

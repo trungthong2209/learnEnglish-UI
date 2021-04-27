@@ -16,6 +16,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import { Box, IconButton } from "@material-ui/core";
 import io from "socket.io-client";
 import StorageKeys from "../../../../../constants/storage-key";
+import Socket from "../../../../../service/socket";
 
 GroupList.propTypes = {};
 const useStyles = makeStyles((theme) => ({
@@ -99,12 +100,7 @@ function GroupList(props) {
   if (loading) {
     return <CircularProgress size="10rem" />;
   }
-  var socket = io("http://3.131.71.201:3001/", {
-  auth: {
-    token:
-    `${localStorage.getItem(StorageKeys.TOKEN)}`,
-  },
-});
+
 
  
   
@@ -130,10 +126,10 @@ function GroupList(props) {
                   onClick={
                     () =>{
                       // console.log(group._id)
-                      socket.emit("joinGroup", group._id);
+                      Socket.emit("joinGroup", group._id);
                       //join group
-                      socket.on("joinGroup", (data) =>{
-                        console.log( "xxxxxxxxxxxxx: ",data);
+                      Socket.on("joinGroup", (data) =>{
+                        console.log( "JOIN GROUP: ",data);
                       });
                     }
                   }

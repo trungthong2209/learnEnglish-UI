@@ -34,6 +34,7 @@ function Routes(props) {
       <Route path="/room/:roomID" component={Room} />
       <Route path="/nhom" component={Groups} />
       <Route path="/tin-nhan" component={Messenger} />
+      <Route path="/tin-nhan/:Id" component={Messenger} />
       <Route exact path="/courses/:courseId" component={ContentCourse} />
       <Route exact path="/groups/:groupId" component={ContentGroup} />
       <Route exact path="/profile" component={Profile} />

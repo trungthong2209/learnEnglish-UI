@@ -4,6 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useState } from "react";
 import Paper from "@material-ui/core/Paper";
 import Room from './service/room';
+import BlockLive from './components/block_live';
 
 
 
@@ -55,7 +56,7 @@ function Screen(props) {
     return (
         <div className={classes.back}>
           <Paper elevation={3} className={classes.paper1}>
-              {/* <Room groupId={groupId} /> */}
+              <BlockLive groupId={groupId} />
             </Paper>
             {/* <Paper elevation={3} className={classes.paper2}>
             <Paper elevation={3} className={classes.paper3}>
