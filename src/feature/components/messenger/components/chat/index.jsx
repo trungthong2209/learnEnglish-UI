@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import Socket from "../../../../../service/socket";
 
-const useChat = (idUser) => {
-    const [messages, setMessages] = useState([]); // Sent and received messages
+
+const useChat = (idUser,setMessages,messages) => {
+
     useEffect(() => {
        
         Socket.on("send-message-private", (data)=>{
-        // console.log("data đã send: ",data);
+        console.log("data đã send: ",data);
         setMessages((messages) => [...messages, data]);
       })
     }, [idUser]);

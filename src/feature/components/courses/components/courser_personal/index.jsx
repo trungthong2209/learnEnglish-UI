@@ -29,8 +29,8 @@ const useStyles = makeStyles((theme) => ({
   toolbar: {
     background: "linear-gradient(315deg, #83eaf1 30%, #63a4ff 90%)",
     fontFamily: "'Open Sans', sans-serif",
-    fontSize: "1.6 rem",
-    marginTop: "3rem",
+    fontSize: "16px",
+    marginTop: "30px",
   },
   icon: {
     marginRight: theme.spacing(2),
@@ -66,30 +66,30 @@ const useStyles = makeStyles((theme) => ({
   },
   font_title: {
     fontFamily: ["Open Sans", "sans-serif"].join(","),
-    fontSize: "3rem",
+    fontSize: "30px",
   },
   font_head: {
     fontFamily: ["Open Sans", "sans-serif"].join(","),
-    fontSize: "2rem",
+    fontSize: "20px",
   },
   font_head_title:{
     fontFamily: ["Open Sans", "sans-serif"].join(","),
-    fontSize: "2rem",
-    height:"3rem"
+    fontSize: "20px",
+    height:"30px"
 
   },
 
   font_content: {
     fontFamily: ["Open Sans", "sans-serif"].join(","),
-    fontSize: "1.6rem",
+    fontSize: "16px",
     textDecoration: "none",
     height: "100%",
     width: "100%",
   },
   infoCourse:{
     fontFamily: ["Open Sans", "sans-serif"].join(","),
-    fontSize:"2rem !important",
-    padding: '1rem',
+    fontSize:"20px !important",
+    padding: '10px',
     // background:"#fff",
     // border: "solid black",
     // borderColor: "black",
@@ -104,7 +104,7 @@ const useStyles = makeStyles((theme) => ({
 
   },
   maginInfo:{
-    marginRight:"1rem",
+    marginRight:"10px",
   },
   pInfo:{
     margin:"0",

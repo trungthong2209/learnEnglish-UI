@@ -12,6 +12,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import topicGroupApi from "../../../../../../../api/topicGroup";
 import { useSnackbar } from "notistack";
+import CoursesApi from "../../../../../../../api/courses";
 ActionTopic.propTypes = {
     idTopic: PropTypes.string.isRequired,
     topic: PropTypes.string.isRequired,
@@ -60,6 +61,7 @@ function ActionTopic(props) {
     try {
       console.log("Topic id submit: ", id);
       await topicGroupApi.deleteTopic(id);
+
    
       // close dialog
       handleCloseDelete();

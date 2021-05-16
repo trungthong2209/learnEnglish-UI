@@ -14,12 +14,12 @@ const useStyles = makeStyles({
   },
   fontText1:{
     fontFamily: ["Open Sans", "sans-serif"].join(","),
-    fontSize: "1.6rem",
+    fontSize: "16px",
     fontWeight:"700"
   },
   fontText:{
     fontFamily: ["Open Sans", "sans-serif"].join(","),
-    fontSize: "1.6rem",
+    fontSize: "16px",
     fontWeight:"600"
   }
 });

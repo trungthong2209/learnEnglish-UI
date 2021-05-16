@@ -22,36 +22,36 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: "500",
     fontFamily: ["Open Sans", "sans-serif"].join(","),
     color: "#fffffe",
-    background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
-    marginBottom: "2rem",
+    background: 'linear-gradient(315deg, #63a4ff  0%, #83eaf1  74%)',
+    marginBottom: "20px",
   },
   name: {
-    fontSize: "1.6rem",
+    fontSize: "16px",
     fontWeight: "500",
     fontFamily: ["Open Sans", "sans-serif"].join(","),
     color: "#0d0800",
     overflow: "hidden",
     textOverflow: "ellipsis",
-    paddingLeft:"2.5rem  "
+    paddingLeft:"25px  "
     //  display: "-webkit-box",
     //  -webkit-line-clamp: 1, /* number of lines to show */
     //  -webkit-box-orient: vertical,
   },
   // role:{
-  //   marginTop:"0.5rem",
-  //   fontSize:"3rem",
+  //   marginTop:"5px",
+  //   fontSize:"30px",
   //   color:"#fce66d",
 
   // }
   stt:{
-    fontSize: "1.6rem",
+    fontSize: "16px",
     fontWeight: "500",
     fontFamily: ["Open Sans", "sans-serif"].join(","),
     color: "#0d0800",
-    margin:"10%  0.5rem 0 0 ",
+    margin:"10%  5px 0 0 ",
   },
   soccer:{
-    fontSize: "1.6rem",
+    fontSize: "16px",
     fontWeight: "500",
     fontFamily: ["Open Sans", "sans-serif"].join(","),
     color: "#0d0800",

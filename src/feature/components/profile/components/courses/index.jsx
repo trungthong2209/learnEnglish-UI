@@ -21,9 +21,9 @@ CoursesForProfile.propTypes = {
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
-    background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
+    background: 'linear-gradient(315deg, #63a4ff  0%, #83eaf1  74%)',
     fontFamily: "'Open Sans', sans-serif",
-    fontSize: "1.6 rem",
+    fontSize: "16px",
   },
   icon: {
     marginRight: theme.spacing(2),
@@ -59,16 +59,16 @@ const useStyles = makeStyles((theme) => ({
   },
   font_title: {
     fontFamily: ["Open Sans", "sans-serif"].join(","),
-    fontSize: "3rem",
+    fontSize: "30px",
   },
   font_head: {
     fontFamily: ["Open Sans", "sans-serif"].join(","),
-    fontSize: "2rem",
-    height: "10rem",
+    fontSize: "20px",
+    height: "100px",
   },
   font_content: {
     fontFamily: ["Open Sans", "sans-serif"].join(","),
-    fontSize: "1.6rem",
+    fontSize: "16px",
   },
 }));
 

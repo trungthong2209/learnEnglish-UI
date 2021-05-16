@@ -17,8 +17,8 @@ const useStyles = makeStyles((theme) => ({
   },
   avt: {
     boxShadow: "none",
-    width: "18rem",
-    height: "18rem",
+    width: "180px",
+    height: "180px",
     margin: "0 auto",
     
   },
@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   },
   font_name: {
     fontFamily: ["Open Sans", "sans-serif"].join(","),
-    fontSize: "2rem",
+    fontSize: "20px",
     fontWeight: 600,
     textAlign: "center",
     color: theme.palette.text.secondary,
@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
   },
   font_level: {
     fontFamily: ["Open Sans", "sans-serif"].join(","),
-    fontSize: "2rem",
+    fontSize: "20px",
 
     textAlign: "center",
     color: theme.palette.text.secondary,
@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
   },
   font_button: {
     fontFamily: ["Open Sans", "sans-serif"].join(","),
-    fontSize: "1.6rem",
+    fontSize: "16px",
     textAlign: "center",
     boxShadow: "none",
     backgroundColor: "#63a4ff",
@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
     color: "white",
     height: 48,
     width:'100%',
-    padding: '0, 3rem',
+    padding: '0, 30px',
   },
 }));
 

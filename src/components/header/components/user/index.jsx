@@ -1,22 +1,19 @@
 import Avatar from "@material-ui/core/Avatar";
 import React, { useEffect, useState } from "react";
-import MailOutlineIcon from '@material-ui/icons/MailOutline';
-import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import MailOutlineIcon from "@material-ui/icons/MailOutline";
+import NotificationsActiveIcon from "@material-ui/icons/NotificationsActive";
+import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import { Link } from "react-router-dom";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
-
+import Badge from "@material-ui/core/Badge";
 import { useDispatch, useSelector } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import { logout } from "../../../../feature/components/authentificaion/userSlice";
 import userApi from "../../../../api/userApi";
 import StorageKeys from "../../../../constants/storage-key";
 
-
-UserBar.propTypes = {
-    
-};
+UserBar.propTypes = {};
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
@@ -41,24 +38,27 @@ const useStyles = makeStyles((theme) => ({
   },
   font: {
     fontFamily: ["Open Sans", "sans-serif"].join(","),
-    fontSize: "2rem",
-    textDecoration:"none",
+    fontSize: "20px",
+    textDecoration: "none",
     color: "#0d0800",
   },
   font_text: {
     fontFamily: ["Open Sans", "sans-serif"].join(","),
-    fontSize: "1.6rem",
+    fontSize: "16px",
   },
   dialog: {
     width: "40%",
   },
-  avt:{
-    width:"5rem",
-    height:"5rem",
-    marginBottom:"2px",
+  avt: {
+    width: "50px",
+    height: "50px",
+    marginBottom: "2px",
+  },
+  icon: {
+    fontSize:"25px !important",
+    marginTop:"2px"
   }
 }));
-
 
 function UserBar(props) {
   const classes = useStyles();
@@ -71,94 +71,88 @@ function UserBar(props) {
   const handleMenuUserClick = (e) => {
     setAnchorEl(e.currentTarget);
   };
-  const Logout =()=>{
-    const token = {
-      'x-wfg-token': localStorage.getItem(StorageKeys.TOKEN)
-    }
-    
-      const fectchlogout = async () => {
-        await userApi.logout(token);
-      };
-      fectchlogout();
-  }
+
+  const fectchlogout = async () => {
+    await userApi.logout({
+      "x-wfg-token": localStorage.getItem(StorageKeys.TOKEN),
+    });
+  };
 
   const dispatch = useDispatch();
   const handleLogoutClick = () => {
-    Logout();
+    userApi.logout({ "x-wfg-token": localStorage.getItem(StorageKeys.TOKEN) });
     handleCloseMenu();
     const action = logout();
     dispatch(action);
   };
-  
+
   // get name
-  var fullName= String(loggedInUser.userName).trim();
-  var lastName = fullName.split(' ').slice(-1).join(' ');
-  
-    return (
-        <div>
-          <ul className="header__list-user">
-              <li >
-                <a className="header__user" href="/profile">
-                <Avatar
-                  className={classes.avt}
-                  alt={lastName}
-                  src="/static/images/avatar/1.jpg"
-                />
-                
-                <p className="name">{lastName}</p>
-                </a>
-                
-              </li>
-              <li className="header__item-user">
-                <div className="item-user">
-                  <a href="/tin-nhan"><MailOutlineIcon className="icon-user" /></a>
-                  
-                </div>
-              </li>
-              <li className="header__item-user">
-                <div className="item-user">
-                  <NotificationsActiveIcon className="icon-user"/>
-                  
-                </div>
-                </li>
-                <li className="header__item-user">
-                <div className="item-user-drop"
-                onClick={handleMenuUserClick}>
-                  <ArrowDropDownIcon className="icon-user-drop"/>
-                  
-                  
-                </div>
-              </li>
-            
-              
-            </ul>
-            <Menu
-            anchorEl={anchorEl}
-            keepMounted
-            open={Boolean(anchorEl)}
-            onClose={handleCloseMenu}
-            anchorOrigin={{
-              vertical: "bottom",
-              horizontal: "center",
-            }}
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "center",
-            }}
-            getContentAnchorEl={null}
-          >
-            {/* <MenuItem  onClick={handleCloseMenu}>
+  var fullName = String(loggedInUser.userName).trim();
+  var lastName = fullName.split(" ").slice(-1).join(" ");
+  var id = loggedInUser._id ;
+  var linkProfile = '/profile/'+id;
+  var linkMess = '/tin-nhan/'+id;
+  return (
+    <div>
+      <ul className="header__list-user">
+        <li>
+          <a className="header__user" href={linkProfile}>
+            <Avatar
+              className={classes.avt}
+              alt={lastName}
+              src="/static/images/avatar/1.jpg"
+            />
+
+            <p className="name">{lastName}</p>
+          </a>
+        </li>
+        <li className="header__item-user">
+          <div className="item-user-drop">
+            <a href={linkMess}>
+            <Badge badgeContent={4} color="secondary">
+              <MailOutlineIcon className="icon-user" />
+            </Badge>
+            </a>
+          </div>
+        </li>
+        <li className="header__item-user">
+          <div className="item-user-drop">
+            <NotificationsActiveIcon className="icon-user" />
+          </div>
+        </li>
+        <li className="header__item-user">
+          <div className="item-user-drop" onClick={handleMenuUserClick}>
+            <ArrowDropDownIcon className="icon-user-drop" />
+          </div>
+        </li>
+      </ul>
+      <Menu
+        anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={handleCloseMenu}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "center",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "center",
+        }}
+        getContentAnchorEl={null}
+      >
+        {/* <MenuItem  onClick={handleCloseMenu}>
               <Link className={classes.font} to="/profile">Trang cá nhân</Link>
             </MenuItem> */}
-            <MenuItem className={classes.font} onClick={handleCloseMenu}>
-              Cài đặt
-            </MenuItem>
-            <MenuItem className={classes.font} onClick={handleLogoutClick}>
-              Đăng xuất
-            </MenuItem>
-          </Menu>
-        </div>
-    );
+        <MenuItem className={classes.font} onClick={handleCloseMenu}>
+          Cài đặt
+        </MenuItem>
+        <MenuItem className={classes.font} onClick={handleLogoutClick}>
+          Đăng xuất
+        </MenuItem>
+      </Menu>
+    </div>
+  );
 }
 
 export default UserBar;

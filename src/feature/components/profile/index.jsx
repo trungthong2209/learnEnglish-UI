@@ -7,6 +7,9 @@ import { useSelector } from "react-redux";
 import userApi from "../../../api/userApi";
 import CoursesForProfile from "./components/courses";
 import HeaderUser from "./components/headerUser";
+import { useParams } from "react-router";
+
+
 Profile.propTypes = {};
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -67,18 +70,40 @@ const user = {
 
 function Profile(props) {
   const loggedInUser = useSelector((state) => state.user.current);
+  const param = useParams();
   const classes = useStyles();
+  
+  
 
   //get api profile
-  const [profile, setProfile]= useState({});
+  const [profile, setProfile]= useState([]);
+  var id = param.id;
+  var pr ={
+    name : '',
+    avartar: '',
+    description: ''
+  };
+  var ifor;
   useEffect(() => {
-    const fetchProfile = async () => {
-      const Profile = await userApi.infoProfile();
-      setProfile(Profile);
+    const fetchInfoGroup = async () => {
+      let info = await userApi.infoProfile(id);
+      ifor = info[0];
+      console.log("info: ",ifor)
+      pr = {
+        name : ifor.userName,
+        avatar : ifor.avartar,
+        des : ifor.description,
+      }
+      setProfile(info);
     };
-    fetchProfile();
-  }, {});
-  // console.log(profile);
+    fetchInfoGroup();
+  }, []);
+  
+      console.log("pr",pr);
+    
+    
+
+ 
 
   return (
     <div>
@@ -88,7 +113,7 @@ function Profile(props) {
             <Grid container spacing={0}>
             <Grid item xs={12}>
             <Paper elevation={3} className={classes.paper}>
-                 <HeaderUser user={loggedInUser} userFake={user}/>
+                 <HeaderUser user={loggedInUser} userFake={user} profile={pr}/>
                  </Paper>
             </Grid>
               <Grid item xs={12}>

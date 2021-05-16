@@ -1,9 +1,8 @@
-import { unwrapResult } from "@reduxjs/toolkit";
 import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
-import React, { useEffect, useState } from "react";
-import groupsApi from "../../../../../api/groupsApi";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
+import groupsApi from "../../../../../api/groupsApi";
 import CreateGroupForm from "./components/create_group_form";
 
 CreateGroups.propTypes = {
@@ -15,6 +14,8 @@ function CreateGroups(props) {
   const loggedInUser = useSelector((state) => state.user.current);
   const [groups, setGroups] = useState({
     topicId: "",
+    groupName: "",
+    image: "",
     timeTeaching: "",
     managerId: loggedInUser._id,
   });
@@ -27,13 +28,6 @@ function CreateGroups(props) {
   const handleSubmit = async (values) => {
 
     try {
-    //   let tempGroup = {
-    //     topicId: values.topicId,
-    //     timeTeaching: values.timeTeaching,
-    //     managerId: loggedInUser._id,
-    //   };
-    //   console.log("temp: ",tempGroup)
-    //   setValueGroup(tempGroup);
       console.log(values);
       await groupsApi.createGroup(values);
    

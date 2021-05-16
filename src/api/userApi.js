@@ -33,8 +33,8 @@ const userApi = {
   }
   ,
 
-  infoProfile(data) {
-    const url = "/profile";
+  infoProfile(id) {
+    const url = "/profile/"+id;
     return axiosClient.get(url, {
       headers: {
         "Access-Control-Allow-Origin": "*",
@@ -47,8 +47,26 @@ const userApi = {
       },
     });
   },
-  getMess() {
-    const url = "/privateMessage/60685a61a8953bc885582b70";
+  updateProfile(data) {
+    const url = "/updateProfile";
+    return axiosClient.get(url, {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods":
+          "GET, POST, OPTIONS, PUT, PATCH, DELETE",
+        "Access-Control-Allow-Headers":
+          "userid, authorization, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers",
+        "Access-Control-Allow-Credentials": "true",
+        authorization: `${localStorage.getItem(StorageKeys.TOKEN)}`,
+      },
+    });
+  },
+  getMessById(id) {
+    const url = "/privateMessage/"+id;
+    return axiosClient.get(url)}
+    ,
+  getUserMess() {
+    const url = "/privateMessage/all";
     return axiosClient.get(url)}
     ,
   

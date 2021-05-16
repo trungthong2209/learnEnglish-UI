@@ -14,7 +14,7 @@ Record.propTypes = {};
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    height:"25rem",
+    height:"250px",
     overflowX: "scroll",
   },
   title: {
@@ -23,25 +23,25 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: ["Open Sans", "sans-serif"].join(","),
     color: "#fffffe",
     background: "linear-gradient(315deg, #83eaf1 30%, #63a4ff 90%)",
-    marginBottom:"2rem"
+    marginBottom:"20px"
   },
   name: {
-    fontSize: "1.8rem",
+    fontSize: "18px",
     fontWeight: "600",
     fontFamily: ["Open Sans", "sans-serif"].join(","),
     color: "#0d0800",
   },
   role:{
-    marginTop:"0.5rem",
-    fontSize:"3rem",
+    marginTop:"5px",
+    fontSize:"30px",
     color:"#fce66d",
 
   },
   play:{
-      fontSize:"3rem"
+      fontSize:"30px"
   },
   time:{
-    fontSize: "1.3rem",
+    fontSize: "13px",
     fontWeight: "500",
     fontFamily: ["Open Sans", "sans-serif"].join(","),
     color: "gray",
@@ -88,7 +88,7 @@ function Record(props) {
     <div  >
       <Grid item xs={12} >
       <Paper className={classes.title}>
-      <Typography variant="h3" className="header-message">
+      <Typography variant="h55" className="header-message">
           Danh sách bản ghi cũ
         </Typography>
       </Paper>

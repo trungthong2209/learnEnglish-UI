@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     flexWrap: "wrap",
   },
   paginationcss: {
-    margin: "30rem",
+    margin: "300px",
   },
 }));
 

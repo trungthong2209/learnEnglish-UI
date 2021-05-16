@@ -1,31 +1,15 @@
-import { Box, IconButton } from "@material-ui/core";
-import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import DialogContent from "@material-ui/core/DialogContent";
 import { makeStyles } from "@material-ui/core/styles";
 import { Close } from "@material-ui/icons";
-import GroupIcon from "@material-ui/icons/Group";
-import HomeIcon from "@material-ui/icons/Home";
-import LocalLibraryIcon from "@material-ui/icons/LocalLibrary";
-import React, {useEffect ,useState } from "react";
-import { Link, NavLink } from "react-router-dom";
-import Login from "../../feature/components/authentificaion/components/login";
-import Register from "../../feature/components/authentificaion/components/register";
 import MenuIcon from "@material-ui/icons/Menu";
-import "./style.css";
-import { useDispatch, useSelector } from "react-redux";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import { logout } from "../../feature/components/authentificaion/userSlice";
-import Forget from "../../feature/components/authentificaion/components/forgetPass";
-import MailOutlineIcon from "@material-ui/icons/MailOutline";
+import React from "react";
+import { useSelector } from "react-redux";
+import HeaderAbout from "../../feature/components/About/components/header";
+import ListBar from "./components/listBar";
 import Logo from "./components/logo";
 import SearchNav from "./components/search";
-import ListBar from "./components/listBar";
 import UserBar from "./components/user";
-import HeaderAbout from "../../feature/components/About/components/header";
-import CloseIcon from '@material-ui/icons/Close';
+import "./style.css";
+
 
 const useStyles = makeStyles((theme) => ({
   root: {

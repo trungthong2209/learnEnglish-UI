@@ -21,14 +21,14 @@ const useStyles = makeStyles((theme) => ({
       marginLeft: "7%",
   },
   question:{
-    fontSize: "2.5rem",
+    fontSize: "25px",
     fontWeight: "500",
     fontFamily: ["Open Sans", "sans-serif"].join(","),
    
    
   },
   answers:{
-    fontSize: "2rem",
+    fontSize: "20px",
     fontWeight: "500",
     fontFamily: ["Open Sans", "sans-serif"].join(","),
    
@@ -41,14 +41,16 @@ Question.propTypes = {};
 
 function Question(props) {
   const classes = useStyles();
+  var quizz = props.data.data.data;
   return (
     <div>
+      
      
         <Container>
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <Paper elevation={3} className={classes.paper}>
-              <p className={classes.question}> Nghĩa or từ</p>
+              <p className={classes.question}> {quizz[0].question}</p>
             </Paper>
           </Grid>
           </Grid>

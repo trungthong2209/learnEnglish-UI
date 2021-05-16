@@ -34,16 +34,16 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "10%",
   },
   imgCourses: {
-    height: "25rem",
-    width: "25rem",
+    height: "250px",
+    width: "250px",
   },
   nameCourses: {
-    fontSize: "3.5rem",
+    fontSize: "35px",
     textAlign: "left",
     fontWeight:"700",
   },
   introCourses: {
-    fontSize: "2rem",
+    fontSize: "20px",
     textAlign: "left !important",
   },
   creator: {
@@ -54,12 +54,12 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "20%",
   },
   imgCreator: {
-    height: "5rem",
-    width: "5rem",
+    height: "50px",
+    width: "50px",
     margin: "6% ",
   },
   textCreator: {
-    fontSize: "1.6rem",
+    fontSize: "16px",
     fontWeight:"600"
   },
   share: {
@@ -79,11 +79,12 @@ const useStyles = makeStyles((theme) => ({
     height: 40,
     padding: "0 30px",
     fontFamily: ["Open Sans", "sans-serif"].join(","),
-    fontSize: "1.6rem",
+    fontSize: "16px",
   },
+  
 }));
 
-function HeaderCourses({user}) {
+function HeaderCourses({onClick}) {
   const classes = useStyles();
   return (
     <React.Fragment>
@@ -112,6 +113,7 @@ function HeaderCourses({user}) {
                     color="default"
                     className={classes.Learn}
                     endIcon={<KeyboardArrowRightIcon />}
+                    onClick={onClick}
                   >
                     Học
                   </Button>
