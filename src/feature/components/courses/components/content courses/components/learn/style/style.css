@@ -35,22 +35,25 @@ body {
     margin-top: 50px;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    /* justify-content: space-between; */
+    justify-content: space-around;
 }
 
 #answers li {
     background-color: #fff;
-    border: 2px solid #0094da;
+    border: 2px solid #73c6f9;
     min-height: 70px;
     width: 48%;
     display: flex;
     margin-bottom: 30px;
     transition: color .3s ease, border-color .3s ease, transform .3s ease;
     cursor: pointer;
+    border-radius: 10px;
+    width: 700px;
 }
 
 #answers li span {
-    background-color: #0084da;
+    background-color: #6bb7fb;
     color: #fff;
     font-size: 30px;
     flex: 75px;
@@ -58,6 +61,7 @@ body {
     justify-content: center;
     align-items: center;
     transition: background-color .3s ease;
+    border-radius: 9px;
 }
 
 #answers li p {

@@ -5,25 +5,25 @@ import { useSnackbar } from "notistack";
 import CreateCoursesForm from "./components/create_courses_form";
 import CoursesApi from "../../../../../api/courses";
 
-function CreateCourses(props) {
+function UpVocabulary(props) {
   const { enqueueSnackbar } = useSnackbar();
   const loggedInUser = useSelector((state) => state.user.current);
-  let setCourses = props.setCourses;
-
+  const [courses, setCourses] = useState({});
   // const setValueGroup = (value) => {
   //   setCourses(value);
   //   console.log("courses: ",courses)
 
   // };
     
-  const handleSubmit = async (values) => {
+  const handleSubmit = async (vcb) => {
 
     try {
       // setValueGroup(values)
-      console.log(values);
+      console.log(vcb);
 
     //   await groupsApi.createGroup(values);
-       await CoursesApi.createCourses(values);
+
+       await CoursesApi.insertVcb(vcb);
    
       // close dialog
       const { closeDialog } = props;
@@ -32,11 +32,6 @@ function CreateCourses(props) {
       }
 
       enqueueSnackbar("Tạo khóa học thành công", { variant: "success" });
-      const fetchCourses = async () => {
-        const groupList = await CoursesApi.getAll();
-        setCourses(groupList);
-      };
-      fetchCourses();
     } catch (error) {
       console.log(error);
       enqueueSnackbar("Tạo khóa học thất bại", { variant: "error" });
@@ -49,9 +44,9 @@ function CreateCourses(props) {
     )
 }
 
-CreateCourses.propTypes = {
+UpVocabulary.propTypes = {
 
 }
 
-export default CreateCourses
+export default UpVocabulary
 

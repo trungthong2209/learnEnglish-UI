@@ -55,18 +55,13 @@ function CreateCoursesForm(props) {
   const handleSubmit = async (event) => {
     try {
       event.preventDefault();
-      const name = document.getElementById("nameCouse").value;
-      const des = document.getElementById("description").value;
-
-      let data={
-        nameCouse: name,
-        description: des,
-      }
-
+      const selectedFile2 = document.getElementById("input2").files[0];
+      let formDataVocabulary = new FormData();
+      formDataVocabulary.append("Files", selectedFile2);
 
       const { onSubmit } = props;
       if (onSubmit) {
-        await onSubmit(data);
+        await onSubmit(formDataVocabulary);
       }
     } catch (error) {
       console.log("LỖI", error);
@@ -79,41 +74,30 @@ function CreateCoursesForm(props) {
         <LockOutlinedIcon />
       </Avatar>
       <Typography className={classes.title} component="h3" variant="h5">
-        Tạo khóa học mới
+        Thêm từ vựng
       </Typography>
       <form
         action="javascript:void(0)"
         onSubmit={handleSubmit}
         encType="multipart/form-data"
       >
-        <TextField
-          name="nameCouse"
-          id="nameCouse"
-          label="Tên khóa học"
-          variant="outlined"
-          margin="normal"
-          required
-          fullWidth
-          autoFocus
-        />
-        <TextField
-           name="description"
-          id="description"
-          label="Mô tả khóa học"
-          variant="outlined"
-          margin="normal"
-          required
-          fullWidth
-          autoFocus
-        />
-
+        <div className="border">
+          <label htmlFor="input">File từ vựng</label>
+          <TextField
+            id="input2"
+            type="file"
+            variant="outlined"
+            margin="normal"
+            fullWidth
+          />
+        </div>
         <Button
           type="submit"
           className={classes.submit}
           variant="contained"
           fullWidth
         >
-          Tạo khóa học
+          Thêm từ vựng
         </Button>
       </form>
     </div>

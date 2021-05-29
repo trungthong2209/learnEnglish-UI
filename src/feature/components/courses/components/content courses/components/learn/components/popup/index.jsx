@@ -1,4 +1,5 @@
 import React from 'react';
+import CoursesApi from '../../../../../../../../../api/courses';
 
 class Popup extends React.Component {
     constructor(props) {
@@ -19,19 +20,27 @@ class Popup extends React.Component {
         if(time === 'start'){
             this.setState({
                 time: 'end',
-                title: 'Congratulations!',
-                buttonText: 'Restart'
+                title: 'Chúc mừng bạn đã hoàn thành',
+                buttonText: 'Đồng ý'
             });
             
             this.props.startQuiz();
-        } else {            
+        } else {
+            let data = {
+                courseVocabularyId: this.props.coursesId,
+                quizz : this.props.dataIdLearn ,
+                highScore : this.props.score
+            }
+            console.log(data)
+            CoursesApi.postQuestion(data)       
             window.location.reload();// restart the application
         }
     }
     
     componentWillReceiveProps(nextProps) {
         this.setState({
-            text: 'Chúc mừng bạn đã hoàn thành. <br /> Bạn đã thuộc: <strong>' + this.props.score + '</strong> trong số <strong>' +this.props.total +'</strong> từ vựng.'
+            text: 'Chúc mừng bạn đã hoàn thành. <br /> Số điểm: <strong>' + Number(this.props.score+1) 
+            // text: 'Chúc mừng bạn đã hoàn thành. <br /> Bạn đã thuộc: <strong>' + this.props.score + '</strong> trong số <strong>' +this.props.total +'</strong> từ vựng.'
         })
     }
     

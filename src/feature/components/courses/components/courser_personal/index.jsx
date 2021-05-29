@@ -12,9 +12,12 @@ import { makeStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import LocalLibraryIcon from "@material-ui/icons/LocalLibrary";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import PersonIcon from "@material-ui/icons/Person";
+import { useDispatch, useSelector } from "react-redux";
+import { CircularProgress } from "@material-ui/core";
+import userApi from "../../../../../api/userApi";
 
 CoursesForYou.propTypes = {};
 const cards = [1, 2, 3];
@@ -131,12 +134,25 @@ const courses = [
   },
 ];
 
-function CoursesForYou(props) {
+function CoursesForYou() {
   const classes = useStyles();
-  const [roomName, setRoomName] = useState("Nhóm");
-  const handleRoomNameChange = (event) => {
-    setRoomName(event.target.value);
-  };
+  const loggedInUser = useSelector((state) => state.user.current);
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(false);
+ 
+  // useEffect(() => {
+  //   const fetchCourses = async () => {
+  //     // setLoading(true);
+  //     // const courseList = await userApi.GetCoursesByIdUser(loggedInUser._id);
+  //     // setCourses(courseList);
+  //     console.log(courseList)
+  //     setLoading(false);
+  //   };
+  //   fetchCourses();
+  // }, []);
+  if (loading) {
+    return <CircularProgress size="100px" />;
+  }
 
   return (
     <React.Fragment>
@@ -176,7 +192,7 @@ function CoursesForYou(props) {
                           color="primary"
                           className={classes.font_content}
                           value={course.id}
-                          onClick={handleRoomNameChange}
+                          
                         >
                           <CardMedia
                             className={classes.cardMedia}

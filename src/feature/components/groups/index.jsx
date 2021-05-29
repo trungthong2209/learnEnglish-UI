@@ -9,6 +9,8 @@ import groupsApi from "../../../api/groupsApi";
 import GroupList from "./components/groupList";
 import HeaderGroups from "./components/Header";
 import "./components/pagination/style.css";
+import { useParams } from "react-router";
+
 Groups.propTypes = {};
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -25,8 +27,8 @@ const useStyles = makeStyles((theme) => ({
 
 function Groups(props) {
   const classes = useStyles();
-
-  const [roomName, setRoomName] = useState("Nhóm");
+  const param = useParams();
+  var idTopic = param.topicId;
   const [groups, setGroups] = useState([]);
   const [loading, setLoading] = useState(false);
   const [pageNumber, setPageNumber] = useState(0);
@@ -38,7 +40,7 @@ function Groups(props) {
     };
     const fetchGroups = async () => {
       setLoading(true);
-      const groupList = await groupsApi.getAll(params);
+      const groupList = await groupsApi.getGroupsByTopicId(idTopic);
       setGroups(groupList);
       setLoading(false);
     };

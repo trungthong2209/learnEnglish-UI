@@ -6,6 +6,7 @@ import { useSnackbar } from "notistack";
 import { useSelector } from "react-redux";
 import userApi from '../../../../../../../api/userApi';
 
+
 UpdateProfile.propTypes = {
     closeDialog: PropTypes.func,
 };
@@ -13,6 +14,7 @@ UpdateProfile.propTypes = {
 
 
 function UpdateProfile(props) {
+    var profile = props.profile;
     const { enqueueSnackbar } = useSnackbar();
     const loggedInUser = useSelector((state) => state.user.current);
     const handleSubmit = async (values) => {
@@ -20,7 +22,7 @@ function UpdateProfile(props) {
       try {
         console.log(values);
       //   await groupsApi.createGroup(values);
-         await userApi.infoProfile(values);
+         await userApi.updateProfile(values);
      
         // close dialog
         const { closeDialog } = props;
@@ -28,15 +30,15 @@ function UpdateProfile(props) {
           closeDialog();
         }
   
-        enqueueSnackbar("Tạo khóa học thành công", { variant: "success" });
+        enqueueSnackbar("Thay đổi thành công", { variant: "success" });
       } catch (error) {
         console.log(error);
-        enqueueSnackbar("Tạo khóa học thất bại", { variant: "error" });
+        enqueueSnackbar("Thay đổi thất bại", { variant: "error" });
       }
     };
     return (
         <div>
-            <UpdateProfileForm onSubmit={handleSubmit} />
+            <UpdateProfileForm profile={profile} onSubmit={handleSubmit} />
         </div>
     );
 }

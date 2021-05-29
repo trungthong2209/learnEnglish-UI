@@ -266,7 +266,11 @@ const ChatRoom = (props) => {
 
   console.log("listttttttttttttt:",elmnt)
   }
-
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      handleSendMessage();
+    }
+  }
   return (
     <div>
       <Grid item xs={12} class={classes.content}>
@@ -368,6 +372,7 @@ const ChatRoom = (props) => {
                 //     ev.preventDefault();
                 //   }
                 // }}
+                onKeyDown={handleKeyDown}
               />
             </Grid>
             <Grid xs={2} align="right">

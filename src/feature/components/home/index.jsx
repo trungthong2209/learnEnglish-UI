@@ -57,9 +57,9 @@ export default function Home() {
             
           </Grid>
           <Grid item xs={7}>
-            <Paper user={loggedInUser} elevation={3} className={classes.paper}>
+            {/* <Paper user={loggedInUser} elevation={3} className={classes.paper}>
               <CoursesForYou />
-            </Paper>
+            </Paper> */}
             <Paper user={loggedInUser} elevation={3} className={classes.paper}>
               <GroupsForYou />
             </Paper>

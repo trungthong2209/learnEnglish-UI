@@ -21,6 +21,7 @@ import { Button } from "@material-ui/core";
 import Switch from "@material-ui/core/Switch";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Socket from "../../../service/socket";
+import CircularProgress from "@material-ui/core/CircularProgress";
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
@@ -60,7 +61,7 @@ const Messenger = () => {
   const [listFriend, setlistFriend] = useState("");
 
   const [userRe, setUserRe] = useState([]);
-
+  const [loading, setLoading] = useState(false);
   //get mess
   const [MessesageOld, setMessesageOld] = useState([]);
 
@@ -71,7 +72,7 @@ const Messenger = () => {
   const loggedInUser = useSelector((state) => state.user.current);
   const idSend = loggedInUser._id;
   const avatarSend = "https://material-ui.com/static/images/avatar/1.jpg";
-  const userNameSend =  loggedInUser.userName;
+  const userNameSend = loggedInUser.userName;
   console.log(loggedInUser);
   const [idd, setId] = useState("");
 
@@ -104,9 +105,11 @@ const Messenger = () => {
     setMessagess([]);
     setId(id);
     const fetchMessage = async () => {
+      setLoading(true);
       const messList = await userApi.getMessById(id);
       console.log("messsss::: ", messList);
       setMessesageOld(messList);
+      setLoading(false);
     };
     fetchMessage();
 
@@ -136,6 +139,9 @@ const Messenger = () => {
   const [freeTime, setfreeTime] = React.useState({
     checked: false,
   });
+  if (loading) {
+    return <CircularProgress size="20px" />;
+  }
   const handleChange = (event) => {
     setfreeTime({ ...freeTime, [event.target.name]: event.target.checked });
 
@@ -150,38 +156,35 @@ const Messenger = () => {
     }
   };
   const handelMatch = () => {
-    
-    Socket.emit("matchVolunteers","607bd8e8c3f0a0ade9846772")
-        let dataVo = {};
-        //send data
-        Socket.on("matchVolunteers", (data)=>{
-          console.log("data đã match: ",data);
-          dataVo = data;
-        })
-        console.log(dataVo)
-        Socket.on("pairing", (data)=>{
-          console.log("data đã paring: ",data);
-          let userRecive =  [data._id, data.avatar, data.userName];
-          setUserRe(userRecive);
-          console.log('người nhânjnnnnnn: ',userRecive)
-          sendId(data._id, data.avatar, data.userName)
-            console.log("newwwwww Messs: ",  )
-            console.log("người nhận: ", userRe);
-            console.log("người gửi: ", userSend);
-
-            sendMessage("Xin chào bạn, hiện tại tôi đang gặp một số vấn đề trong việc học tiêng anh, bạn có thể giúp tôi không ạ? ^^", userSend);
-
-            
-            
-        })
+    Socket.emit("matchVolunteers", "607bd8e8c3f0a0ade9846772");
+    let dataVo = {};
+    //send data
+    setLoading(true);
+    Socket.on("matchVolunteers", (data) => {
+      console.log("data đã match: ", data);
+      dataVo = data;
+    });
+    console.log(dataVo);
+    Socket.on("pairing", (data) => {
+      console.log("data đã paring: ", data);
+      sendId(data._id, data.avatar, data.userName);
+    });
+    setLoading(false);
   };
   console.log("useRRRRRRRRRRREEEEEEEEEEEEEEEE: ", userRe[0]);
 
   const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       handleSendMessage();
     }
-  }
+  };
+
+  var arrayIdList = [];
+
+  if (listFriend == "") console.log("frieeasd", listFriend);
+
+  console.log("idddd", arrayIdList);
+
   return (
     <div>
       <Container className={classes.chat}>
@@ -226,28 +229,64 @@ const Messenger = () => {
             <Divider />
             <List>
               {listFriend != []
-                ? listFriend.map((friend, index) => (
-                    <div
-                      key={friend.recipients.recipientId}
-                      onClick={() => {
-                        sendId(
-                          friend.recipients.recipientId,
-                          friend.recipients.recipientAvatar,
-                          friend.recipients.recipientName
-                        );
-                      }}
-                    >
-                      <ListItem button>
-                        <ListItemIcon>
-                          <Avatar src={friend.recipients.recipientAvatar} />
-                        </ListItemIcon>
-                        <ListItemText primary={friend.recipients.recipientName}>
-                          {friend.recipients.recipientName}
-                        </ListItemText>
-                        {/* <ListItemText secondary="online" align="right"></ListItemText> */}
-                      </ListItem>
-                    </div>
-                  ))
+                ? listFriend.map((friend, index) =>
+                    friend.author.authorNameId == idSend ? (
+                      arrayIdList.indexOf(idSend) != -1 ? (
+                        <div
+                          key={friend.recipients.recipientId}
+                          onClick={() => {
+                            sendId(
+                              friend.recipients.recipientId,
+                              friend.recipients.recipientAvatar,
+                              friend.recipients.recipientName
+                            );
+                          }}
+                        >
+                          <ListItem button>
+                            <ListItemIcon>
+                              (friend.recipients.recipientAvatar == "" ? (
+                              <Avatar src="/static/images/avatar/1.jpg" />
+                              ) : (
+                              <Avatar src={friend.recipients.recipientAvatar} />
+                              ))
+                            </ListItemIcon>
+                            <ListItemText
+                              primary={friend.recipients.recipientName}
+                            >
+                              {friend.recipients.recipientName}
+                            </ListItemText>
+                            {/* <ListItemText secondary="online" align="right"></ListItemText> */}
+                          </ListItem>
+                        </div>
+                      ) : (
+                        ""
+                      )
+                    ) : arrayIdList.indexOf(friend.author.authorNameId) ==
+                      -1 ? (
+                      <div
+                        key={friend.author.authorNameId}
+                        onClick={() => {
+                          sendId(
+                            friend.author.authorNameId,
+                            friend.author.authorAvatar,
+                            friend.author.authorName
+                          );
+                        }}
+                      >
+                        <ListItem button>
+                          <ListItemIcon>
+                            <Avatar src={friend.author.authorAvatar} />
+                          </ListItemIcon>
+                          <ListItemText primary={friend.author.authorName}>
+                            {friend.author.authorName}
+                          </ListItemText>
+                          {/* <ListItemText secondary="online" align="right"></ListItemText> */}
+                        </ListItem>
+                      </div>
+                    ) : (
+                      ""
+                    )
+                  )
                 : ""}
             </List>
           </Grid>
@@ -256,7 +295,11 @@ const Messenger = () => {
               <List>
                 <ListItem button key="RemySharp">
                   <ListItemIcon>
-                  {userRe[1] == undefined ? '' : <Avatar src={userRe[1]} />}
+                    {userRe[1] == undefined ? (
+                      <Avatar src="/static/images/avatar/1.jpg" />
+                    ) : (
+                      <Avatar src={userRe[1]} />
+                    )}
                   </ListItemIcon>
                   <ListItemText primary={userRe[2]}></ListItemText>
                 </ListItem>
@@ -268,6 +311,7 @@ const Messenger = () => {
               idSend={idSend}
               userRe={userRe}
               MessesageOld={MessesageOld}
+              loading={loading}
             />
 
             <Divider />

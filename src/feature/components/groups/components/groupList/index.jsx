@@ -17,6 +17,7 @@ import Socket from "../../../../../service/socket";
 import CreateGroups from "../create_groups";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import pic from "./avtGroup.jpg"
 GroupList.propTypes = {};
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -83,7 +84,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
 function GroupList(props) {
   const { groups, loading } = props;
   const loggedInUser = useSelector((state) => state.user.current);
@@ -103,55 +103,49 @@ function GroupList(props) {
   }
 
   console.log(groups);
-  const linkto = (id) =>{
-    history.push('/groups/'+id); 
+  const linkto = (id) => {
+    history.push("/groups/" + id);
     window.location.reload();
- }
-  
+  };
+
   return (
     <div>
       <Grid container spacing={4}>
-      {
-        loggedInUser.role == 'teacher' || loggedInUser.role == 'admin'? (
-          
-        <Grid item xs={12} sm={6} md={4}>
-          
-          <ControlPointIcon
-            className={classes.addGroup}
-            onClick={handleClickOpen}
-          />
-        </Grid>
-        ):''
-      }
-      
+        {loggedInUser.role == "teacher" || loggedInUser.role == "admin" ? (
+          <Grid item xs={12} sm={6} md={4}>
+            <ControlPointIcon
+              className={classes.addGroup}
+              onClick={handleClickOpen}
+            />
+          </Grid>
+        ) : (
+          ""
+        )}
+
         {groups.map((group) => (
-          <Grid item key={group._id} xs={12} sm={6} md={4} >
+          <Grid item key={group._id} xs={12} sm={6} md={4}>
             <Card className={classes.card}>
-              <CardActions >
+              <CardActions>
                 <Link
                   // to={`/groups/${group._id}`}
                   size="small"
                   color="primary"
                   className={classes.groups}
                   value={group._id}
-                  onClick={
-                    () =>{
-                      // console.log(group._id)
-                      Socket.emit("joinGroup", group._id);
-                      //join group
-                      Socket.on("joinGroup", (data) =>{
-                        console.log( "JOIN GROUP: ",data);
-                      });
-                      linkto(group._id)
-                    }
-                  }
-                  
+                  onClick={() => {
+                    // console.log(group._id)
+                    Socket.emit("joinGroup", group._id);
+                    //join group
+                    Socket.on("joinGroup", (data) => {
+                      console.log("JOIN GROUP: ", data);
+                    });
+                    linkto(group._id);
+                  }}
                 >
                   <CardMedia
                     className={classes.cardMedia}
-                    image="https://source.unsplash.com/random"
+                    image= {pic}
                     title={group.topic}
-                    
                   />
                   <CardContent className={classes.font_head}>
                     <Typography
@@ -160,8 +154,7 @@ function GroupList(props) {
                       variant="h5"
                       component="h2"
                     >
-                      {group.groupCode}
-                    
+                      {group.groupName}
                     </Typography>
                   </CardContent>
                 </Link>

@@ -86,6 +86,7 @@ function Screen(props) {
     };
     Socket.emit("groupCall", data);
   });
+  var dataShare = "";
 
   // call videoo
 
@@ -118,6 +119,8 @@ function Screen(props) {
   }
 
   function startStream() {
+    var record = document.getElementById("record");
+    record.classList.add("hidden");
     managerId == loggedInUser._id
       ? setstart(true)
       : console.log("chủ phòng chưa");
@@ -150,17 +153,24 @@ function Screen(props) {
             video.addEventListener("loadedmetadata", () => {
               video.play();
             });
+
             videoGrid.appendChild(video);
-            console.log("thêm người thứ 1: ", video);
+            console.log("thêm người thứ 2: ", video);
           });
         });
         Socket.on("start-video", (data) => {
           console.log(data);
           connectToNewUser(data.userId, stream);
+          if (dataShare != "") {
+            connectToNewUser(data.userId, dataShare);
+            console.log("stream share: ", dataShare);
+          }
           console.log("stream arayyyyyyyyyyyyyyyyyyyyyyyyyyy: ", stream);
         });
       });
   }
+
+  //share screen
 
   //share screen
 
@@ -180,6 +190,28 @@ function Screen(props) {
         myVideo.play();
       });
       videoGrid.appendChild(myVideo);
+      myPeer.on("call", (call) => {
+        console.log("start");
+        call.answer(myVideo);
+        const video = document.createElement("video");
+        call.on("stream", (userVideoStream) => {
+          const videoGrid = document.getElementById("video-call");
+          video.srcObject = userVideoStream;
+          video.controls = "controls";
+          video.className = "video-user";
+          video.addEventListener("loadedmetadata", () => {
+            video.play();
+          });
+
+          videoGrid.appendChild(video);
+          console.log("thêm video share: ", myVideo);
+        });
+      });
+      Socket.on("start-video", () => {
+        connectToNewUser("123", myVideo);
+        console.log("stream share: ", myVideo);
+      });
+      dataShare = myVideo;
       mediaRecorder = new MediaRecorder(screen);
       mediaRecorder.ondataavailable = handleDataAvailable;
       mediaRecorder.start();
@@ -189,6 +221,7 @@ function Screen(props) {
       };
     });
     shareSCreen();
+
     setbuttonshare(false);
     var reader = new FileReader();
     function sendStreams(data) {
@@ -219,7 +252,6 @@ function Screen(props) {
       if (peers[userId]) {
         peers[userId].close();
       }
-      
     });
 
     myPeer.on("open", (id) => {
@@ -316,14 +348,14 @@ function Screen(props) {
       ) : (
         <div id="video-grid" class="video-grid">
           <div id="share" class="share"></div>
-          <div id="video-call" class="video-call"></div> 
+          <div id="video-call" class="video-call"></div>
           <Button
-              className={classes.font_button}
-              onClick={shareScreen}
-              component="label"
-            >
-              Chia sẻ màn hình
-            </Button>
+            className={classes.font_button}
+            onClick={shareScreen}
+            component="label"
+          >
+            Chia sẻ màn hình
+          </Button>
         </div>
       )}
     </div>

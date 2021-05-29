@@ -55,9 +55,9 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: "2px",
   },
   icon: {
-    fontSize:"25px !important",
-    marginTop:"2px"
-  }
+    fontSize: "25px !important",
+    marginTop: "2px",
+  },
 }));
 
 function UserBar(props) {
@@ -89,19 +89,29 @@ function UserBar(props) {
   // get name
   var fullName = String(loggedInUser.userName).trim();
   var lastName = fullName.split(" ").slice(-1).join(" ");
-  var id = loggedInUser._id ;
-  var linkProfile = '/profile/'+id;
-  var linkMess = '/tin-nhan/'+id;
+  var id = loggedInUser._id;
+  var linkProfile = "/profile/" + id;
+  var linkMess = "/tin-nhan/" + id;
   return (
     <div>
       <ul className="header__list-user">
         <li>
           <a className="header__user" href={linkProfile}>
-            <Avatar
-              className={classes.avt}
-              alt={lastName}
-              src="/static/images/avatar/1.jpg"
-            />
+            {
+              (loggedInUser.avatar == "" ? (
+                <Avatar
+                  className={classes.avt}
+                  alt={lastName}
+                  src="/static/images/avatar/1.jpg"
+                />
+              ) : (
+                <Avatar
+                  className={classes.avt}
+                  alt={lastName}
+                  src={loggedInUser.avatar}
+                />
+              ))
+            }
 
             <p className="name">{lastName}</p>
           </a>
@@ -109,9 +119,9 @@ function UserBar(props) {
         <li className="header__item-user">
           <div className="item-user-drop">
             <a href={linkMess}>
-            <Badge badgeContent={4} color="secondary">
-              <MailOutlineIcon className="icon-user" />
-            </Badge>
+              <Badge badgeContent={4} color="secondary">
+                <MailOutlineIcon className="icon-user" />
+              </Badge>
             </a>
           </div>
         </li>

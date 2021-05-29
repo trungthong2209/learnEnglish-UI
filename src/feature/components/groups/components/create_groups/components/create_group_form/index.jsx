@@ -68,13 +68,19 @@ function CreateGroupForm(props) {
       const selectedFile = document.getElementById("input").files[0];
       
 
-      let formData = new FormData();
-      formData.append("topicId", param.topicId);
-      formData.append("managerId", loggedInUser._id);
-      formData.append("groupName", name);
-      formData.append("timeTeaching", des);
-      formData.append("image", selectedFile);
-      console.log(formData);
+      // let formData = new FormData();
+      // formData.append("topicId", param.topicId);
+      // formData.append("managerId", loggedInUser._id);
+      // formData.append("groupName", name);
+      // formData.append("timeTeaching", des);
+      // formData.append("image", selectedFile);
+      // console.log(formData);
+      let formData= {
+        "topicId": param.topicId,
+        "managerId": loggedInUser._id,
+        "groupName": name,
+        "timeTeaching": des,
+      }
 
       const { onSubmit } = props;
       if (onSubmit) {

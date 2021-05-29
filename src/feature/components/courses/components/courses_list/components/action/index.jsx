@@ -58,6 +58,7 @@ function Action(props) {
 
   const sendIdToApi = async () => {
     const id = {courseId: course._id }
+    let setCourses = props.setCourses;
     try {
       console.log("Topic id submit: ", id);
       await CoursesApi.deleteCourses(id);
@@ -67,7 +68,12 @@ function Action(props) {
       handleCloseDelete();
 
       enqueueSnackbar("Xóa khóa học thành công", { variant: "success" });
-      window.location.reload(false);
+      // window.location.reload(false);
+      const fetchCourses = async () => {
+        const groupList = await CoursesApi.getAll();
+        setCourses(groupList);
+      };
+      fetchCourses();
     } catch (error) {
       console.log("Lỗi: ",error);
       enqueueSnackbar("Xóa khóa học thất bại", { variant: "error" });
@@ -109,7 +115,7 @@ function Action(props) {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{"Bạn có chắc chắn muốn xóa chủ đề này không?"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{"Bạn có chắc chắn muốn xóa khóa học này không?"}</DialogTitle>
         <DialogActions>
           <Button onClick={sendIdToApi} color="primary">
             Đồng ý

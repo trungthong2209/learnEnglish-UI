@@ -87,7 +87,7 @@ const useStyles = makeStyles((theme) => ({
 
 function CoursesList(props) {
   const loggedInUser = useSelector((state) => state.user.current);
-  const { courses, loading } = props;
+  const { courses, setCourses, loading } = props;
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => {
@@ -144,14 +144,14 @@ function CoursesList(props) {
                       variant="h5"
                       component="h2"
                     >
-                      {course._id}
+                      {course.nameCouse}
                     
                     </Typography>
                   </CardContent>
                 </Link>
               </CardActions>
               <CardActions>
-              <Action course = {course} />
+              <Action course = {course} setCourses={setCourses} />
                   </CardActions >
             </Card>
           </Grid>
@@ -169,7 +169,7 @@ function CoursesList(props) {
             <Close />
           </IconButton>
           <DialogContent>
-            <CreateCourses closeDialog={handleClose} />
+            <CreateCourses closeDialog={handleClose} setCourses= {setCourses} />
           </DialogContent>
         </Dialog>
       </div>

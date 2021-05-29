@@ -18,12 +18,45 @@ const CoursesApi = {
   },
 
   createCourses(data) {
-    const url = "/courses";
+    const url = "/courses/createCourse";
+    return axiosClient.post(url, data);
+  },
+  uploadFileVocabulary(data,id) {
+    const url = "/courses/insertCourseVocabulary/"+id;
+    return axiosClient.post(url, data);
+  },
+  getFileVocabulary(id) {
+    const url = "/courses/getCourseVocabulary/"+id;
+    return axiosClient.get(url);
+  },
+  uploadFileQuestion(data,id) {
+    const url = "/courses/insertCourseQuestion/"+id;
+    return axiosClient.post(url, data);
+  },
+  getFileQuestion(id) {
+    const url = "/courses/getCourseQuestion/"+id;
+    return axiosClient.get(url);
+  },
+  
+  insertVcb(data) {
+    const url = "/courses/insertCourseVocabulary";
+    return axiosClient.post(url, data);
+  },
+  postQuestion(data) {
+    const url = "/courses/tickVocabularyOfUser";
     return axiosClient.post(url, data);
   },
 
   getCoursesById(id) {
     const url = '/courses/get-course-id/'+id;
+    return axiosClient.get(url);
+  },
+  getQuestionById(id) {
+    const url = '/courses/tickVocabularyOfUser/'+id;
+    return axiosClient.get(url);
+  },
+  getAllCourseVocabulary() {
+    const url = 'http://3.131.71.201:3001/courses/getAllCourseVocabulary';
     return axiosClient.get(url);
   },
   deleteCourses(data) {

@@ -1,17 +1,11 @@
-import { yupResolver } from "@hookform/resolvers/yup";
-import {
-  Button,
-  LinearProgress,
-  makeStyles,
-  Typography,
-} from "@material-ui/core";
+import { Button, makeStyles, TextField, Typography } from "@material-ui/core";
 import Avatar from "@material-ui/core/Avatar";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import PropTypes from "prop-types";
 import React from "react";
-import { useForm } from "react-hook-form";
-import * as yup from "yup";
-import InputField from "../../../../../../../../../components/form-controls/InputField";
+import Select from "@material-ui/core/Select";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
 
 const useStyle = makeStyles((theme) => ({
   rootRegister: {
@@ -50,66 +44,158 @@ UpdateProfileForm.propTypes = {
 
 function UpdateProfileForm(props) {
   const classes = useStyle();
+  var profile = props.profile;
+  console.log("ádja: ", profile);
+
+  const toBase64 = (file) =>
+    new Promise((resolve, reject) => {
+     if(file){
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+     }
+    });
   const handleSubmit = async (event) => {
     try {
       event.preventDefault();
-      const name = document.getElementById("name").value;
-      const facebook = document.getElementById("facebook").value;
-      const google = document.getElementById("google").value;
-      const des = document.getElementById("description").value;
-      const avt = document.getElementById("avt").files[0];
+      const userName = document.getElementById("userName").value;
+      const dob = document.getElementById("dob").value;
+      const sex = document.getElementById("sex").value;
+      const facebookLink = document.getElementById("facebookLink").value;
+      const instagramLink = document.getElementById("instagramLink").value;
+      const password = document.getElementById("password").value;
+      const image = document.getElementById("image").files[0];
+      const certificates = document.getElementById("certificates").files[0];
+      var image64 = await toBase64(image);
+      var certificates64;
+      if(certificates != undefined){
+         certificates64 = await toBase64(certificates);
+      }
+      // var certificates64 = await toBase64(certificates);
 
-      let formData = new FormData();
-      formData.append("name", name);
-      formData.append("facebook", facebook);
-      formData.append("google", google);
-      formData.append("description", des);
-      formData.append("avt", avt);
+      let data = {
+        userName: userName,
+        dob: dob,
+        sex: sex,
+        facebookLink: facebookLink,
+        instagramLink: instagramLink,
+        password: password,
+        image: image64,
+        certificates: certificates64,
+      };
+      console.log("DATA: ",data)
       
-      console.log(formData);
-
+      
       const { onSubmit } = props;
       if (onSubmit) {
-        await onSubmit(formData);
+        await onSubmit(data);
       }
     } catch (error) {
       console.log("LỖI", error);
     }
   };
+  const sex = ["Nam", "Nữ"];
+  const [age, setAge] = React.useState("Nam");
 
-  
+  const handleChange = (event) => {
+    setAge(event.target.value);
+  };
+
   return (
     <div className={classes.rootRegister}>
-      <Avatar className={classes.avatarRegister}>
-        <LockOutlinedIcon />
-      </Avatar>
       <Typography className={classes.title} component="h3" variant="h5">
-        Chỉnh sửa thông tin
+        Thay đổi thông tin
       </Typography>
       <form
         action="javascript:void(0)"
         onSubmit={handleSubmit}
         encType="multipart/form-data"
       >
-        <label htmlFor="nameCouse"> Tên khóa học</label>
-        <input type="text" name="name" id="name" />
-        <input type="text" name="facebook" id="facebook" />
-        <input type="text" name="google" id="google" />
-        <label htmlFor="description"> Mô tả</label>
-        <textarea
-          name="description"
-          id="description"
-          cols="30"
-          rows="10"
-        ></textarea>
-        <input id="avt" type="file" />
+        <TextField
+          name="userName"
+          id="userName"
+          label="Tên"
+          margin="normal"
+          required
+          fullWidth
+          autoFocus
+          defaultValue={profile.userName}
+          variant="outlined"
+        />
+        <TextField
+          name="dob"
+          id="dob"
+          label="Ngày sinh"
+          margin="normal"
+          required
+          fullWidth
+          autoFocus
+          defaultValue={profile.dob}
+          variant="outlined"
+        />
+        <InputLabel id="demo-simple-select-label">Giới tính</InputLabel>
+        <select name="sex" id="sex" form="carform">
+          <option value="Nam">Nam</option>
+          <option value="Nữ">Nữ</option>
+ 
+        </select>
+        <TextField
+          name="facebookLink"
+          id="facebookLink"
+          label="facebook"
+          margin="normal"
+          required
+          fullWidth
+          autoFocus
+          defaultValue={profile.facebookLink}
+          variant="outlined"
+        />
+        <TextField
+          name="instagramLink"
+          id="instagramLink"
+          label="google"
+          margin="normal"
+          required
+          fullWidth
+          autoFocus
+          defaultValue={profile.instagramLink}
+          variant="outlined"
+        />
+        <label htmlFor="input">Chứng chỉ tiếng anh (nếu có)</label>
+        <TextField
+          id="certificates"
+          type="file"
+          variant="outlined"
+          margin="normal"
+          fullWidth
+        />
+        <label htmlFor="input">Ảnh đại diện</label>
+        <TextField
+          id="image"
+          type="file"
+          variant="outlined"
+          margin="normal"
+          fullWidth
+        />
+        <TextField
+          name="password"
+          id="password"
+          label="Mật khẩu"
+          variant="outlined"
+          margin="normal"
+          required
+          fullWidth
+          autoFocus
+        />
+
         <Button
           type="submit"
           className={classes.submit}
           variant="contained"
           fullWidth
         >
-          Tạo khóa học
+          Thay đổi
         </Button>
       </form>
     </div>

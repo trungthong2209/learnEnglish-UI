@@ -38,6 +38,7 @@ function CreateGroups(props) {
       }
 
       enqueueSnackbar("Tạo nhóm thành công", { variant: "success" });
+      window.location.reload();
     } catch (error) {
       console.log(error);
       enqueueSnackbar("Tạo nhóm thất bại", { variant: "error" });

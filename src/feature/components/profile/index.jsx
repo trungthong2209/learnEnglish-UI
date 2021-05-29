@@ -87,19 +87,14 @@ function Profile(props) {
   useEffect(() => {
     const fetchInfoGroup = async () => {
       let info = await userApi.infoProfile(id);
-      ifor = info[0];
-      console.log("info: ",ifor)
-      pr = {
-        name : ifor.userName,
-        avatar : ifor.avartar,
-        des : ifor.description,
-      }
-      setProfile(info);
+      console.log(info[0])
+       setProfile(info[0]);
+
     };
     fetchInfoGroup();
   }, []);
   
-      console.log("pr",pr);
+      console.log("pr",profile);
     
     
 
@@ -113,12 +108,12 @@ function Profile(props) {
             <Grid container spacing={0}>
             <Grid item xs={12}>
             <Paper elevation={3} className={classes.paper}>
-                 <HeaderUser user={loggedInUser} userFake={user} profile={pr}/>
+                 <HeaderUser user={loggedInUser}  profile={profile}/>
                  </Paper>
             </Grid>
               <Grid item xs={12}>
                 <Paper  className={classes.paper}>
-                 <CoursesForProfile user={loggedInUser} userFake={user}  />
+                 <CoursesForProfile user={loggedInUser} userFake={user} profile={profile}  />
                 </Paper>
               </Grid>
             </Grid>

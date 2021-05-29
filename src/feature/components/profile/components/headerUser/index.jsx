@@ -99,7 +99,7 @@ const useStyles = makeStyles((theme) => ({
 
 function HeaderUser(props) {
   var profile = props.profile;
-  console.log(profile);
+  console.log("mmm",profile);
   const classes = useStyles();
   const loggedInUser = useSelector((state) => state.user.current);
   const param = useParams();
@@ -122,7 +122,7 @@ function HeaderUser(props) {
               <Grid item xs={3}>
                 <Paper className={classes.paperImg} elevation={0}>
                   <img
-                    src={props.userFake.avt}
+                    src={profile.avatar}
                     className={classes.imgUser}
                     alt=""
                   />
@@ -131,7 +131,7 @@ function HeaderUser(props) {
               <Grid item xs={6}>
                 <Paper className={classes.paperName} elevation={0}>
                   <p className={classes.nameUser}>
-                    {profile.name}
+                    {profile.userName}
                     {
                       temp == 0  ? 
                       <Button
@@ -151,10 +151,10 @@ function HeaderUser(props) {
                     </Button>
                     }
                   </p>
-                  <p className={classes.info}><b>{props.userFake.numFollower}</b>  Người theo dõi &emsp;&emsp;&emsp;&emsp; Đang theo dõi <b>{props.userFake.numFollowing}</b> người dùng</p>
+                  {/* <p className={classes.info}><b>{props.userFake.numFollower}</b>  Người theo dõi &emsp;&emsp;&emsp;&emsp; Đang theo dõi <b>{props.userFake.numFollowing}</b> người dùng</p>
                   <p className={classes.introUser}>
                     {props.userFake.intro}
-                  </p>
+                  </p> */}
                 </Paper>
               </Grid>
               <Grid item xs={3}>
@@ -171,6 +171,9 @@ function HeaderUser(props) {
                       color="primary"
                       className={classes.button}
                       startIcon={<FacebookIcon />}
+                      onClick={()=>{
+                        window.location= profile.facebookLink;
+                      }}
                     >
                       Facebook
                     </Button>
@@ -179,6 +182,9 @@ function HeaderUser(props) {
                       color="default"
                       className={classes.button}
                       startIcon={<InstagramIcon />}
+                      onClick={()=>{
+                        window.location= profile.instagramLink;
+                      }}
                     >
                       Instagram
                     </Button>
@@ -199,7 +205,7 @@ function HeaderUser(props) {
             <Close />
           </IconButton>
           <DialogContent>
-            <UpdateProfile closeDialog={handleClose} />
+            <UpdateProfile profile={profile} closeDialog={handleClose} />
           </DialogContent>
         </Dialog>
       </div>

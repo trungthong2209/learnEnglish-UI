@@ -1,4 +1,4 @@
-import { makeStyles, Typography } from '@material-ui/core';
+import { Divider, makeStyles, Typography } from '@material-ui/core';
 import Avatar from "@material-ui/core/Avatar";
 import Grid from "@material-ui/core/Grid";
 import List from "@material-ui/core/List";
@@ -6,7 +6,11 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Paper from "@material-ui/core/Paper";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import groupsApi from '../../../../../../../api/groupsApi';
+import { useSelector } from "react-redux";
+import { useParams } from "react-router";
+import StarsIcon from '@material-ui/icons/Stars';
 Members.propTypes = {};
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,66 +35,41 @@ const useStyles = makeStyles((theme) => ({
   //  -webkit-box-orient: vertical, 
   },
   role:{
-    marginTop:"5px",
+    margin:"0 0 0 10px",
     fontSize:"30px",
     color:"#fce66d",
 
   },
   backk:{
     padding:0,
+  },
+  div:{
+    display:"flex"
   }
 }));
 
-const users = [
-  {
-    id: 1,
-    avt:"https://source.unsplash.com/random/200x200?sig=1",
-    name: "Lê Xuân Hiếu",
-    role: "owner",
-    status: "online",
-  },
-  {
-    id: 2,
-    avt:"https://source.unsplash.com/random/200x200?sig=2",
-    name: "Lê Hạ Hiếu",
-    role: "member",
-    status: "ofline",
-  },
-  {
-    id: 3,
-    avt:"https://source.unsplash.com/random/200x200?sig=3",
-    name: "Lê Thu Hiếu",
-    role: "member",
-    status: "ofline",
-  },
-  {
-    id: 4,
-    avt:"https://source.unsplash.com/random/200x200?sig=4",
-    name: "Lê Đông Hiếu",
-    role: "member",
-    status: "online",
-  },
-  {
-    id: 5,
-    avt:"https://source.unsplash.com/random/200x200?sig=5",
-    name: "Lê Mưa Hiếu",
-    role: "member",
-    status: "ofline",
-  },
-  {
-    id: 6,
-    avt:"https://source.unsplash.com/random/200x200?sig=6",
-    name: "Lê Khô Hiếu",
-    role: "member",
-    status: "online",
-  },
-];
+
   
 
 function Members(props) {
+  const loggedInUser = useSelector((state) => state.user.current);
   const classes = useStyles();
-  let member = props.member;
+  const param = useParams();
+  const groupId = param.groupId;
+  let managerId =  props.managerId;
+  const [member, setMember] = useState([props.member]);
   console.log(member)
+  useEffect(() => {
+    const params = {
+      _limit: 10,
+    };
+    const fetchGroups = async () => {
+      let info = await groupsApi.getGroupById(groupId);
+      setMember(info[0].userJoinGroup);
+
+    };
+    fetchGroups();
+  }, []);
   return (
     <React.Fragment>
       <List>
@@ -104,6 +83,8 @@ function Members(props) {
             </ListItemIcon>
             <ListItemText
               primary={
+                managerId == mem.userId ?
+                <div className={classes.div}> <Typography className={classes.name}>{mem.userName} </Typography> <StarsIcon className={classes.role}/></div>:
                 <Typography className={classes.name}>{mem.userName}</Typography>
               }
             >

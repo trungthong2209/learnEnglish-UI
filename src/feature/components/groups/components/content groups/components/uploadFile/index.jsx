@@ -15,7 +15,7 @@ import { Box, IconButton } from "@material-ui/core";
 import Upload from "./upload";
 import groupsApi from "../../../../../../../api/groupsApi";
 import { Link } from "react-router-dom";
-
+import { useSnackbar } from "notistack";
 UploadFile.propTypes = {};
 const useStyles = makeStyles((theme) => ({
   font_button: {
@@ -67,12 +67,46 @@ const useStyles = makeStyles((theme) => ({
     height: "530px",
     padding: "0",
     marginBottom:"20px"
+  },
+  border:{
+    border: "1px dashed gray",
+    borderRadius:"5px",
+    padding:"20px"
+  },
+  input:{
+    visibility:"hidden",
+    height:"1px",
+    margin:0
+  },
+  submit: {
+    marginTop: theme.spacing(2),
+    background: "linear-gradient(315deg, #63a4ff  0%, #83eaf1  74%)",
+    border: 0,
+    borderRadius: 3,
+    boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
+    color: "white",
+    height: 48,
+    padding: "0 30px",
+    width:"100%",
+    cursor:"pointer"
+  },
+  choose:{
+    marginTop: theme.spacing(2),
+    background: "linear-gradient(315deg, #63a4ff  0%, #83eaf1  74%)",
+    border: 0,
+    borderRadius: 3,
+    boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
+    color: "white",
+    height: 48,
+    padding: "5px 30px",
+    width:"100%"
   }
 }));
 
 function UploadFile(props) {
   let groupId = props.groupId;
-  let files = props.file;
+  const { enqueueSnackbar } = useSnackbar();
+  const [files, setFiles] = React.useState(props.file);
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => {
@@ -87,6 +121,7 @@ function UploadFile(props) {
     const handleChange = (event) => {
         console.log(event.target.value);
         setFileUpload(event.target.value);
+        document.getElementById("name1").innerHTML = String(event.target.value);
         
     }
     function unique(arr) {
@@ -102,8 +137,13 @@ function UploadFile(props) {
             formData.append("files", selectedFile);
             console.log(formData);
             await groupsApi.uploadFile(formData, groupId);
+            let info = await groupsApi.getGroupById(groupId);
+            setFiles(info[0].files);
+            enqueueSnackbar("Tải tệp thành công", { variant: "success" });
+            handleClose();
                 } catch (error) {
                   console.log("LỖI", error);
+                  enqueueSnackbar("Tải tệp thất bại", { variant: "error" });
                 }
     }
   return (
@@ -143,8 +183,14 @@ function UploadFile(props) {
           <DialogContent>
             <form onSubmit={handleSubmit} encType="multipart/form-data">
               <h3>Tải tệp lên</h3>
-              <input id='input' type="file" onChange={handleChange} />
-              <button type="submit">Upload</button>
+              <div className={classes.border}>
+              <label htmlFor="input" className={classes.choose} >Chọn tệp</label> <br /><br />
+              <span className={classes.name1} id="name1" ></span>
+              <input id='input' type="file" onChange={handleChange} className={classes.input}  />       
+              
+            </div>
+            <br />
+            <button type="submit" className={classes.submit}>Tải lên</button>
             </form>
 
           </DialogContent>

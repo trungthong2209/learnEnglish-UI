@@ -2,16 +2,68 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
+import { useSnackbar } from "notistack";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import VolumeUpIcon from "@material-ui/icons/VolumeUp";
+import {TextField} from "@material-ui/core";
 
-
-const useStyles = makeStyles((theme) => ({}));
+const useStyles = makeStyles((theme) => ({
+  dialog: {
+    background: "rgb(251 251 247)",
+  },
+  vcb1: {
+    fontSize: "23px",
+    fontWeight: "700",
+    margin: "0 0 0 20px",
+    fontFamily: "Open Sans', sans-serif",
+    color: "black",
+    
+  },
+  vcb2: {
+    fontSize: "20px",
+    fontWeight: "600",
+    margin: "0 0 0 20px",
+    fontFamily: "Open Sans', sans-serif",
+    color: "black",
+  },
+  img: {
+    margin: 0,
+    width: "300px",
+    height: "300px",
+  },
+  backSpeak: {
+    background: "rgb(236 233 228)",
+    width:"10%",
+    padding:"10px",
+    borderRadius:"25px"
+  },
+  speak: {
+    fontSize: "50px !important",
+    cursor: "pointer",
+    margin: 0,
+    color:"black"
+  },
+  button:{
+    marginTop: theme.spacing(2),
+    border: 0,
+    borderRadius: 3,
+    boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+    height: 48,
+    padding: '0 30px',
+    fontFamily: [
+        "Open Sans",
+        'sans-serif',
+      ].join(','),
+    fontSize:"16px",
+  }
+}));
 
 function Answers(props) {
+  const { enqueueSnackbar } = useSnackbar();
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
@@ -22,6 +74,20 @@ function Answers(props) {
   const handleClose = () => {
     setOpen(false);
   };
+  const [open1, setOpen1] = React.useState(false);
+
+  const handleClickOpen1 = () => {
+    handleClose();
+    setOpen1(true);
+  };
+
+  const handleClose1 = () => {
+    const vcb = document.getElementById("eng").value;
+    if(vcb == answers[4])
+      setOpen1(false);
+    else
+    enqueueSnackbar("Bạn nhập chưa đúng", { variant: "error" });
+  };
   var answers = props.answers;
   var selectClick = props.OnClick;
   const [stateAnswers, setStateAnswers] = useState({
@@ -30,7 +96,7 @@ function Answers(props) {
   });
   let checkAnswer = (e) => {
     let { isAnswered } = props.isAnswered;
-
+    console.log("annnnnnnnnnnnnnn", answers);
     if (!isAnswered) {
       let elem = e.currentTarget;
       let correct = props.correct;
@@ -39,11 +105,12 @@ function Answers(props) {
       let updatedClassNames = stateAnswers.classNames;
 
       if (answer === correct) {
-        updatedClassNames[answer - 1] = "right";
-        increaseScore();
+        // updatedClassNames[answer - 1] = "right";
+        increaseScore(1);
         selectClick();
       } else {
-        updatedClassNames[answer - 1] = "wrong";
+        increaseScore(-0.5);
+        // updatedClassNames[answer - 1] = "wrong";
         handleClickOpen();
       }
       const newstateAnswers = {
@@ -55,6 +122,10 @@ function Answers(props) {
       props.showButton();
     }
   };
+  const play = () => {
+    var audio = document.getElementById("audio");
+    audio.play();
+  };
 
   return (
     <div>
@@ -63,6 +134,7 @@ function Answers(props) {
           <li
             onClick={checkAnswer}
             className={stateAnswers.classNames[0]}
+            // style={{marginLeft: "150px" }}
             data-id="1"
           >
             <span>A</span> <p>{answers[0]}</p>
@@ -77,7 +149,7 @@ function Answers(props) {
           <li
             onClick={checkAnswer}
             className={stateAnswers.classNames[2]}
-            data-id="3" 
+            data-id="3"
           >
             <span>C</span> <p>{answers[2]}</p>
           </li>
@@ -94,20 +166,69 @@ function Answers(props) {
         open={open}
         onClose={handleClose}
         aria-labelledby="draggable-dialog-title"
+        
       >
-        <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title">
-          Bạn đã chọn sai
-        </DialogTitle>
+        <div className={classes.dialog}>
         <DialogContent>
           <DialogContentText>
-            Sự quảng cáo có nghĩa là
+            <span>ENGLISH: </span>{" "}
+            <p className={classes.vcb1}> {answers[4]} </p>
+          </DialogContentText>
+          <DialogContentText>
+            <span>NGHĨA: </span>{" "}
+            <p className={classes.vcb2}> {answers[props.correct - 1]} </p>
+          </DialogContentText>
+          <hr />
+          <DialogContentText>
+            <p>ẢNH MINH HỌA</p>
+            <img src={answers[5]} alt="" className={classes.img} />
+          </DialogContentText>
+          <DialogContentText>
+            <p>NGHE</p>
+            <div className={classes.backSpeak}>
+              <VolumeUpIcon onClick={play} className={classes.speak} />
+            </div>
+
+            <audio id="audio" src={answers[6]}></audio>
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={handleClose} color="primary">
+          <Button autoFocus onClick={handleClickOpen1} color="primary" className={classes.button}>
             Đồng ý
           </Button>
         </DialogActions>
+        </div>
+      </Dialog>
+      <Dialog
+        open={open1}
+        onClose={handleClose1}
+        aria-labelledby="draggable-dialog-title"
+      >
+        <div className={classes.dialog}>
+        <DialogContent>
+          <DialogContentText>
+          Hãy nhập lại từ :{answers[props.correct - 1]}
+          </DialogContentText>
+          <TextField
+          name="eng"
+          id="eng"
+          label={answers[props.correct - 1]}
+          variant="outlined"
+          margin="normal"
+          required
+          fullWidth
+          autoFocus
+        />
+        </DialogContent>
+        <DialogActions>
+        <Button autoFocus onClick={handleClickOpen} color="primary" className={classes.button}>
+            Xem lại
+          </Button>
+          <Button autoFocus onClick={handleClose1} color="primary" className={classes.button}>
+            Đồng ý
+          </Button>
+        </DialogActions>
+        </div>
       </Dialog>
     </div>
   );

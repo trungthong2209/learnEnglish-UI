@@ -11,9 +11,14 @@ import { makeStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import LocalLibraryIcon from "@material-ui/icons/LocalLibrary";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
+import { useDispatch, useSelector } from "react-redux";
+import { CircularProgress } from "@material-ui/core";
+import userApi from "../../../../../api/userApi";
+import Socket from "../../../../../service/socket";
+import pic from "../groupList/avtGroup.jpg"
+import { useHistory } from "react-router-dom";
 GroupsForYou.propTypes = {};
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -80,6 +85,9 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "16px",
     textDecoration: "none",
   },
+  h3:{
+    marginLeft:"40%"
+  }
 }));
 
 const Groups = [
@@ -102,9 +110,26 @@ const Groups = [
 
 function GroupsForYou(props) {
   const classes = useStyles();
-  const [roomName, setRoomName] = useState("Nhóm");
-  const handleRoomNameChange = (event) => {
-    setRoomName(event.target.value);
+  const loggedInUser = useSelector((state) => state.user.current);
+  const [groups, setGroups] = useState('');
+  const [loading, setLoading] = useState(false);
+  const history = useHistory();
+  useEffect(() => {
+    const fetchCourses = async () => {
+      // setLoading(true);
+      const groupList = await userApi.GetGroupsByIdUser(loggedInUser._id);
+      setGroups(groupList);
+      console.log(groups)
+      setLoading(false);
+    };
+    fetchCourses();
+  }, []);
+  if (loading) {
+    return <CircularProgress size="100px" />;
+  }
+  const linkto = (id) => {
+    history.push("/groups/" + id);
+    window.location.reload();
   };
 
   return (
@@ -135,39 +160,54 @@ function GroupsForYou(props) {
             </AppBar>
             <Paper className={classes.paper}>
               <Grid container spacing={4}>
-              {Groups.map((group) => (
-                  <Grid item key={group.id} xs={12} sm={6} md={4}>
-                    <Card className={classes.card}>
-                      <CardActions>
-                        <Link
-                          to={`/groups/${group.id}`}
-                          size="small"
-                          color="primary"
-                          className={classes.groups}
-                          value={group.id}
-                          onClick={handleRoomNameChange}
-                        >
-                          <CardMedia
-                            className={classes.cardMedia}
-                            image="https://source.unsplash.com/random"
-                            title={group.topic}
-                          />
-                          <CardContent className={classes.font_head}>
-                            <Typography
-                              gutterBottom
-                              className={classes.font_head}
-                              variant="h5"
-                              component="h2"
-                            >
-                              {group.name}
-                              
-                            </Typography>
-                          </CardContent>
-                        </Link>
-                      </CardActions>
-                    </Card>
-                  </Grid>
-                ))}
+              {
+                groups == '' ? (
+                  <h3 className={classes.h3}>Hiện tại bạn chưa có nhóm nào</h3>
+                ):(
+                  groups.map((group) => (
+                    <Grid item key={group._id} xs={12} sm={6} md={4}>
+                      <Card className={classes.card}>
+                        <CardActions>
+                          <Link
+                            to={`/groups/${group._id}`}
+                            size="small"
+                            color="primary"
+                            className={classes.groups}
+                            value={group._id}
+                            onClick={() => {
+                              // console.log(group._id)
+                              Socket.emit("joinGroup", group._id);
+                              //join group
+                              Socket.on("joinGroup", (data) => {
+                                console.log("JOIN GROUP: ", data);
+                              });
+                              linkto(group._id);
+                            }}
+                           
+                          >
+                            <CardMedia
+                              className={classes.cardMedia}
+                              image= {pic}
+                              title={group.groupName}
+                            />
+                            <CardContent className={classes.font_head}>
+                              <Typography
+                                gutterBottom
+                                className={classes.font_head}
+                                variant="h5"
+                                component="h2"
+                              >
+                                {group.groupName}
+                                
+                              </Typography>
+                            </CardContent>
+                          </Link>
+                        </CardActions>
+                      </Card>
+                    </Grid>
+                  ))
+                ) 
+              }
               </Grid>
             </Paper>
           </Grid>

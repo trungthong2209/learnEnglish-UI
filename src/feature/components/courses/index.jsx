@@ -74,7 +74,7 @@ function Courses() {
             <Paper className={classes.paper}>
               <CoursesList
                 courses={currentCourses}
-                
+                setCourses= {setCourses}
                 loading={loading}
               />
               <ReactPaginate

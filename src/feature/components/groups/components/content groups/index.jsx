@@ -22,10 +22,10 @@ import PhoneIcon from "@material-ui/icons/Phone";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import PersonPinIcon from "@material-ui/icons/PersonPin";
 import HelpIcon from "@material-ui/icons/Help";
-import ForumIcon from '@material-ui/icons/Forum';
-import GroupIcon from '@material-ui/icons/Group';
-import AttachFileIcon from '@material-ui/icons/AttachFile';
-import VideoLibraryIcon from '@material-ui/icons/VideoLibrary';
+import ForumIcon from "@material-ui/icons/Forum";
+import GroupIcon from "@material-ui/icons/Group";
+import AttachFileIcon from "@material-ui/icons/AttachFile";
+import VideoLibraryIcon from "@material-ui/icons/VideoLibrary";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -79,7 +79,7 @@ const useStyles = makeStyles((theme) => ({
   },
   paper2: {
     marginTop: "20px",
-    paddingTop:"1px",
+    paddingTop: "1px",
     textAlign: "center",
     color: theme.palette.text.secondary,
     height: "785px",
@@ -92,26 +92,33 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     textAlign: "center",
     color: theme.palette.text.secondary,
-    height:"610px"
+    height: "610px",
   },
-  paperLeft:{
-    width:"1350px",
-
-
+  paperLeft: {
+    width: "1350px",
   },
-  paperRight:{
-    width:"500px",
+  paperRight: {
+    width: "500px",
     marginLeft: "20px",
-    
   },
-  pap:{
-    padding:0
+  pap: {
+    padding: 0,
   },
   nav: {
-    width:"465px",
-    margin:"20px 20px 0 20px"
-  
+    width: "465px",
+    margin: "20px 20px 0 20px",
   },
+  title: {
+   
+    fontWeight: "500",
+    fontFamily: ["Open Sans", "sans-serif"].join(","),
+    color: "#fffffe",
+    background: "linear-gradient(315deg, #83eaf1 30%, #63a4ff 90%)",
+    marginBottom:"2rem"
+  },
+  paprc:{
+    margin: "0 auto",
+  }
 }));
 
 export default function ContentGroup() {
@@ -124,6 +131,7 @@ export default function ContentGroup() {
   const [file, setFile] = useState();
   const [managerId, setManagerId] = useState();
   const [value, setValue] = useState(0);
+  const [videoRecord, setvideoRecord] = useState([]);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -141,10 +149,11 @@ export default function ContentGroup() {
       setFile(info[0].files);
       setInfoGroup(info);
       setManagerId(info[0].manager.managerId);
+      setvideoRecord(info[0].videoLink)
     };
     fetchInfoGroup();
   }, []);
-  console.log("file", file);
+  console.log("file", videoRecord);
 
   console.log("manaaaanaaaa", managerId);
 
@@ -155,15 +164,25 @@ export default function ContentGroup() {
   return (
     <div className={classes.root}>
       <Grid spacing={3}>
-        <Grid container  className={classes.back}>
+        <Grid container className={classes.back}>
           <Grid item className={classes.paperLeft}>
             <Paper elevation={3} className={classes.paper}>
+              <Grid item xs={8} className={classes.paprc}>
+                <div id="record">
+                <Paper className={classes.title} >
+                  <Typography variant="h3" className="header-message">
+                    Danh sách bản ghi cũ
+                  </Typography>
+                </Paper>
+                <Record video ={videoRecord} />
+                </div>
+              </Grid>
               <Screen groupId={groupId} managerId={managerId} />
             </Paper>
           </Grid>
-          <Grid item  className={classes.paperRight}>
+          <Grid item className={classes.paperRight}>
             <Paper className={classes.paper2}>
-              <AppBar position="static" color="default"className={classes.nav}>
+              <AppBar position="static" color="default" className={classes.nav}>
                 <Tabs
                   value={value}
                   onChange={handleChange}
@@ -202,13 +221,13 @@ export default function ContentGroup() {
                 className={classes.pap}
               >
                 <TabPanel value={value} index={0} dir={theme.direction}>
-                <div >
-                  <ChatRoom groupId={groupId} />
+                  <div>
+                    <ChatRoom groupId={groupId} />
                   </div>
                 </TabPanel>
                 <TabPanel value={value} index={1} dir={theme.direction}>
                   <Paper elevation={3} className={classes.papermem}>
-                    <Members member={member} />
+                    <Members member={member} managerId={managerId} />
                   </Paper>
                 </TabPanel>
                 <TabPanel value={value} index={2} dir={theme.direction}>
@@ -218,7 +237,7 @@ export default function ContentGroup() {
                 </TabPanel>
                 <TabPanel value={value} index={3} dir={theme.direction}>
                   <Paper elevation={3} className={classes.papermem}>
-                    <Record />
+                  <Record video ={videoRecord} />
                   </Paper>
                 </TabPanel>
               </SwipeableViews>

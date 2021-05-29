@@ -16,6 +16,9 @@ const groupsApi = {
       },
     });
   },
+  getGroupsByTopicId(id) {
+    const url = "/groups/getGroupsByTopicId/"+id;
+    return axiosClient.get(url)},
 
   createGroup(data) {
     const url = "/groups/insert-group";
