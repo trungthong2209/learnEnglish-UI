@@ -12,7 +12,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { logout } from "../../../../feature/components/authentificaion/userSlice";
 import userApi from "../../../../api/userApi";
 import StorageKeys from "../../../../constants/storage-key";
-
+import { useHistory } from "react-router-dom";
 UserBar.propTypes = {};
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -63,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
 function UserBar(props) {
   const classes = useStyles();
   const loggedInUser = useSelector((state) => state.user.current);
-
+  const history = useHistory();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const handleCloseMenu = (e) => {
     setAnchorEl(null);
@@ -85,6 +85,12 @@ function UserBar(props) {
     const action = logout();
     dispatch(action);
   };
+  const teach = () =>{
+    history.push("/form-teacher");
+  }
+  const admin = () =>{
+    history.push("/dashboard");
+  }
 
   // get name
   var fullName = String(loggedInUser.userName).trim();
@@ -119,7 +125,7 @@ function UserBar(props) {
         <li className="header__item-user">
           <div className="item-user-drop">
             <a href={linkMess}>
-              <Badge badgeContent={4} color="secondary">
+              <Badge  color="secondary">
                 <MailOutlineIcon className="icon-user" />
               </Badge>
             </a>
@@ -157,6 +163,16 @@ function UserBar(props) {
         <MenuItem className={classes.font} onClick={handleCloseMenu}>
           Cài đặt
         </MenuItem>
+        {
+          loggedInUser.role != 'teacher'? <MenuItem className={classes.font} onClick={teach}>
+          Dạy trên LET
+        </MenuItem> : ''
+        }
+        {
+          loggedInUser.role == 'admin'? <MenuItem className={classes.font} onClick={admin}>
+          DashBoard
+        </MenuItem> : ''
+        }
         <MenuItem className={classes.font} onClick={handleLogoutClick}>
           Đăng xuất
         </MenuItem>

@@ -59,6 +59,10 @@ const CoursesApi = {
     const url = 'http://3.131.71.201:3001/courses/getAllCourseVocabulary';
     return axiosClient.get(url);
   },
+  getTopUser() {
+    const url = '/courses/highscores';
+    return axiosClient.get(url);
+  },
   deleteCourses(data) {
     const url = '/courses/delete-course-id';
     return axiosClient.delete(url, { data: data});

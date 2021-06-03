@@ -26,14 +26,22 @@ class Popup extends React.Component {
             
             this.props.startQuiz();
         } else {
+            let reload = () =>{
+                window.location.reload()
+            }
             let data = {
                 courseVocabularyId: this.props.coursesId,
                 quizz : this.props.dataIdLearn ,
                 highScore : this.props.score
             }
             console.log(data)
-            CoursesApi.postQuestion(data)       
-            window.location.reload();// restart the application
+             
+            const sendata = async () => {
+                await CoursesApi.postQuestion(data)
+                window.location.reload();
+              };
+              sendata();      
+            // window.location.reload();// restart the application
         }
     }
     

@@ -41,7 +41,7 @@ function ListBar(props) {
         <span class="tooltiptextGroup">Nhóm</span>
       </li>
 
-      <li className="header__item tooltipEvent">
+      {/* <li className="header__item tooltipEvent">
         <NavLink to="/su-kien" className="header__item-link">
           <EventIcon
             className="header__navbar-icon"
@@ -50,7 +50,7 @@ function ListBar(props) {
           />
         </NavLink>
         <span class="tooltiptextEvent">Sự kiện</span>
-      </li>
+      </li> */}
 
       <li className="header__item tooltipMatch">
         <NavLink to="/tro-giup" className="header__item-link">

@@ -119,14 +119,14 @@ function CreateGroupForm(props) {
           fullWidth
           autoFocus
         />
-        <label htmlFor="input">Ảnh nhóm</label>
+        {/* <label htmlFor="input">Ảnh nhóm</label>
         <TextField
           id="input"
           type="file"
           variant="outlined"
           margin="normal"
           fullWidth
-        />
+        /> */}
         
         
         <Button

@@ -22,6 +22,14 @@ import Switch from "@material-ui/core/Switch";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Socket from "../../../service/socket";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import CloseIcon from "@material-ui/icons/Close";
+import Typography from "@material-ui/core/Typography";
+import { useSnackbar } from 'notistack';
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
@@ -52,12 +60,24 @@ const useStyles = makeStyles({
     height: 48,
     padding: "0 30px",
   },
+  closeButton: {
+    position: "absolute",
+    right: "10px",
+    top: "10px",
+    color: "gray",
+  },
+  wait: {
+    margin: "0 0 10px 40%",
+  },
+  text: {
+    margin: "0 0 10px 20%",
+  },
 });
 
 const Messenger = () => {
   const classes = useStyles();
   const history = useHistory();
-
+  const {enqueueSnackbar} = useSnackbar();
   const [listFriend, setlistFriend] = useState("");
 
   const [userRe, setUserRe] = useState([]);
@@ -67,6 +87,15 @@ const Messenger = () => {
 
   //resret component
   const [value, setValue] = useState();
+
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   //id send
   const loggedInUser = useSelector((state) => state.user.current);
@@ -156,6 +185,8 @@ const Messenger = () => {
     }
   };
   const handelMatch = () => {
+    handleClickOpen();
+    let temp = 0;
     Socket.emit("matchVolunteers", "607bd8e8c3f0a0ade9846772");
     let dataVo = {};
     //send data
@@ -166,13 +197,27 @@ const Messenger = () => {
     });
     console.log(dataVo);
     Socket.on("pairing", (data) => {
+      temp = 1;
       console.log("data đã paring: ", data);
       sendId(data._id, data.avatar, data.userName);
     });
+    setTimeout(() => {
+      if (temp == 1) {
+        handleClose();
+        enqueueSnackbar('Tìm thành công, hãy tương tác với người đó đi nào.',{variant:'success'});
+      } else {
+        cancelMatch();
+        enqueueSnackbar('Không thể tìm được người trợ giúp cho bạn, hãy thử lại.',{variant:'error'} );
+      }
+    }, 10000);
+
     setLoading(false);
   };
-  console.log("useRRRRRRRRRRREEEEEEEEEEEEEEEE: ", userRe[0]);
 
+  const cancelMatch = () => {
+    Socket.emit("stopMatching", "607bd8e8c3f0a0ade9846772");
+    handleClose();
+  };
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
       handleSendMessage();
@@ -340,6 +385,34 @@ const Messenger = () => {
           </Grid>
         </Grid>
       </Container>
+      <div>
+        <Dialog
+          onClose={handleClose}
+          aria-labelledby="customized-dialog-title"
+          open={open}
+        >
+          <DialogTitle
+            id="customized-dialog-title"
+            onClose={handleClose}
+          ></DialogTitle>
+          <DialogContent>
+            <CircularProgress size="100px" className={classes.wait} />
+            <h2 className={classes.text}>Đang tìm kiếm, bạn vui lòng chờ!!!</h2>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              autoFocus
+              onClick={handleClose}
+              className={classes.submit}
+              variant="contained"
+              fullWidth
+              onClick={cancelMatch}
+            >
+              Hủy
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
     </div>
   );
 };

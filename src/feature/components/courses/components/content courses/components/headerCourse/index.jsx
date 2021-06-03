@@ -191,7 +191,7 @@ function HeaderCourses(props) {
         <Grid item xs={3}>
           <Paper className={classes.paperImg} elevation={0}>
             <img
-              src="https://static-s.aa-cdn.net/img/ios/1084540807/c1bb52463ac4cc1e3695917b10e39092?v=1&fbclid=IwAR1b7RuYW3a2LJXiRlFpbJYIKmc6QBfzNoHgCkVShq0LnsYtxJcddiVt-oI"
+              src="http://glomacs.com/wp-content/uploads/2018/02/The-Best-Training-Course.jpg"
               className={classes.imgCourses}
               alt=""
             />

@@ -109,7 +109,7 @@ function CoursesList(props) {
     <div>
       <Grid container spacing={4}>
       {
-        loggedInUser.role == 'teacher' || loggedInUser.role == 'admin'? (
+        loggedInUser.role == 'admin'? (
           
         <Grid item xs={12} sm={6} md={4}>
           
@@ -133,7 +133,7 @@ function CoursesList(props) {
                 >
                   <CardMedia
                     className={classes.cardMedia}
-                    image="https://static-s.aa-cdn.net/img/ios/1084540807/c1bb52463ac4cc1e3695917b10e39092?v=1&fbclid=IwAR1b7RuYW3a2LJXiRlFpbJYIKmc6QBfzNoHgCkVShq0LnsYtxJcddiVt-oI"
+                    image="http://glomacs.com/wp-content/uploads/2018/02/The-Best-Training-Course.jpg"
                     title={course.id}
                     
                   />
@@ -150,9 +150,10 @@ function CoursesList(props) {
                   </CardContent>
                 </Link>
               </CardActions>
-              <CardActions>
+              {loggedInUser.role =='admin'? <CardActions>
               <Action course = {course} setCourses={setCourses} />
-                  </CardActions >
+                  </CardActions > : ""}
+              
             </Card>
           </Grid>
         ))}

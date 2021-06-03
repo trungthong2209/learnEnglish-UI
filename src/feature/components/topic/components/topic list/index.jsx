@@ -128,7 +128,7 @@ function TopicList(props) {
                 >
                   <CardMedia
                     className={classes.cardMedia}
-                    image="https://source.unsplash.com/random"
+                    image="https://assets-api.kathmandupost.com/thumb.php?src=https://assets-cdn.kathmandupost.com/uploads/source/news/2020/opinion/Abhiforonline-1597475661.jpg&w=400&height=400"
                     title={topic.topic}
                   />
                   <CardContent className={classes.font_head}>
@@ -144,9 +144,10 @@ function TopicList(props) {
                   </CardContent>
                   </Link>
               </CardActions>
+              {loggedInUser.role =='admin'?
               <CardActions>
               <ActionTopic idTopic={topic._id} topic={topic.topic} description={topic.description}  />
-                  </CardActions >
+                  </CardActions > : ""}
             </Card>
           </Grid>
         ))}

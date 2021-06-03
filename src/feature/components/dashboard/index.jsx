@@ -36,6 +36,8 @@ import BarChartIcon from '@material-ui/icons/BarChart';
 import LayersIcon from '@material-ui/icons/Layers';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import ManageAccount from "./components/accounts";
+import Courses from "./components/courses";
+import Groups from "./components/groups";
 
 const drawerWidth = 240;
 
@@ -256,13 +258,13 @@ export default function Dashboard() {
               selected == 'Groups' ?
               (
                   <div>
-                      Nhóm
+                      < Groups/>
                   </div>
               ) :
             //   selected == 'Courses' ?
               (
                   <div>
-                      Khóa học
+                      < Courses/>
                   </div>
               )
 

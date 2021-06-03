@@ -68,8 +68,10 @@ function ContentCourse(props) {
   const [wrongg, setWrongg] = useState(0);
   const [dataQuizz, setDataQuizz] = useState([]);
   const [vocabularys, setVocabularys] = useState([]);
+  const [topUser, setTopUser] = useState([]);
   const [questionDuplicate, setQuestionDuplicate] = useState([]);
-  const [ready, setReady] = useState(false);
+  const [readyVoca, setReadyVoca] = useState(false);
+  const [readyRelearn, setReadyRelearn] = useState(false);
   console.log(coursesId);
   const [infor, setInfor] = React.useState([]);
   useEffect(() => {
@@ -78,24 +80,38 @@ function ContentCourse(props) {
       let vocabulary = await CoursesApi.getFileVocabulary(coursesId);
       let question = await CoursesApi.getFileQuestion(coursesId);
       let questionDup = await CoursesApi.getQuestionById(coursesId);
+      let topUsers = await CoursesApi.getTopUser();
+     
+
 
       console.log("iiiii: ", info);
       console.log("Vocabulary: ", vocabulary);
       console.log("Question: ", question);
       console.log("questionDuplicate:  ", questionDup);
+      console.log("topUsersssssssssssssssssssssssssssssssssssss: ",topUsers)
 
       if (questionDup[0] != undefined) {
         setQuestionDuplicate(questionDup[0].quizz[0]);
+        setReadyRelearn(true);
       }
       setInfor(info[0]);
       if (vocabulary[0] != undefined) {
         setVocabularys(vocabulary[0].vocabularys);
+
       }
       if (question[0] != undefined) {
         setDataQuizz(question[0].quizz);
+        setReadyVoca(true);
       }
+      if (topUsers != undefined) {
+        setTopUser(topUsers);
+        setReadyVoca(true);
+      }
+      
+     
+     
 
-      setReady(true);
+      
     };
     fetchInfoCourse();
   }, []);
@@ -146,7 +162,7 @@ function ContentCourse(props) {
               <Grid item xs={4}>
                 <Paper elevation={0} className={classes.paper}>
                   <p className={classes.title}>Bảng xếp hạng</p>
-                  <Rank />
+                  <Rank topUser={topUser} />
                 </Paper>
               </Grid>
             </Grid>
@@ -177,7 +193,7 @@ function ContentCourse(props) {
             </Toolbar>
           </AppBar>
           <div>
-            {ready == true ? (
+            {readyVoca == true ? (
               <Learn
                 data={dataQuizz}
                 score={score}
@@ -218,7 +234,7 @@ function ContentCourse(props) {
             </Toolbar>
           </AppBar>
           <div>
-            {ready == true ? (
+            {readyRelearn == true ? (
               <Learn
                 data={dataQuizz}
                 score={score}
@@ -230,7 +246,7 @@ function ContentCourse(props) {
                 action={action}
               />
             ) : (
-              <h2>Hiện tại khóa học chưa hoàn thiện</h2>
+              <h2>Hiện tại bạn chưa học từ nào</h2>
             )}
           </div>
         </Dialog>

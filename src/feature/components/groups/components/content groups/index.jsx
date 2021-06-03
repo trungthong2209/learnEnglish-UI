@@ -143,7 +143,6 @@ export default function ContentGroup() {
   useEffect(() => {
     const fetchInfoGroup = async () => {
       let info = await groupsApi.getGroupById(groupId);
-
       console.log("info: ", info);
       setMember(info[0].userJoinGroup);
       setFile(info[0].files);

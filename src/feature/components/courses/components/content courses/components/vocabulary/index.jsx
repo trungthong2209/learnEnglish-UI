@@ -54,13 +54,6 @@ export default function Vocabulary(props) {
   const classes = useStyles();
   var vocabulary = props.vocabularys;
   console.log("VNNNNNNN: ", vocabulary);
-  // unique(vocabulary).map((vcb, index)=>{
-  //   // insertRows(vocabulary)
-  //   console.log(index);
-  //   rows.push(createData(vcb.vocabulary, vcb.type ,vcb.pronounce, vcb.means));
-  //   console.log(rows);
-  //   if(rows.length === vocabulary.length) console.log("")
-  // })
   for (var i = 0; i < vocabulary.length; i++) {
     if (rows.length === vocabulary.length) {
       break;

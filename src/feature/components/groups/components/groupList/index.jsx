@@ -17,7 +17,7 @@ import Socket from "../../../../../service/socket";
 import CreateGroups from "../create_groups";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import pic from "./avtGroup.jpg"
+import pic from "./avtGroup.jpg";
 GroupList.propTypes = {};
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -144,7 +144,7 @@ function GroupList(props) {
                 >
                   <CardMedia
                     className={classes.cardMedia}
-                    image= {pic}
+                    image="https://thumbs.dreamstime.com/b/studying-english-whiteboard-teacher-explains-teaching-material-to-students-193164791.jpg"
                     title={group.topic}
                   />
                   <CardContent className={classes.font_head}>

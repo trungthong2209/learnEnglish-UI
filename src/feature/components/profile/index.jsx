@@ -8,6 +8,7 @@ import userApi from "../../../api/userApi";
 import CoursesForProfile from "./components/courses";
 import HeaderUser from "./components/headerUser";
 import { useParams } from "react-router";
+import GroupsForYou from "../groups/components/group_personal";
 
 
 Profile.propTypes = {};
@@ -113,7 +114,7 @@ function Profile(props) {
             </Grid>
               <Grid item xs={12}>
                 <Paper  className={classes.paper}>
-                 <CoursesForProfile user={loggedInUser} userFake={user} profile={profile}  />
+                 <GroupsForYou/>
                 </Paper>
               </Grid>
             </Grid>

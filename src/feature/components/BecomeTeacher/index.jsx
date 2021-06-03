@@ -10,6 +10,7 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
+import { useHistory } from "react-router-dom";
 import "./style.css";
 
 const useStyles = makeStyles((theme) => ({
@@ -64,6 +65,7 @@ function getStepContent(stepIndex) {
 
 export default function BecomeTeacher() {
   const classes = useStyles();
+  const history = useHistory();
   const [activeStep, setActiveStep] = React.useState(0);
   const [file, setFile] = React.useState({ file: "", imagePreviewUrl: "" });
   const steps = getSteps();
@@ -93,6 +95,9 @@ export default function BecomeTeacher() {
     $imagePreview = <img className={classes.imgpre} src={imagePreviewUrl} />;
   } else {
     $imagePreview = <div className="previewText"></div>;
+  }
+  const backto = () =>{
+    history.push("/home");
   }
 
   const handleSubmit = (e) => {
@@ -129,9 +134,9 @@ export default function BecomeTeacher() {
         {activeStep === steps.length ? (
           <div>
             <Typography className={classes.instructions}>
-              All steps completed
+                Bạn đã hoàn thành, chúng tôi sẽ xem xét và thông báo lại với bạn sau.
             </Typography>
-            <Button onClick={(e) => handleSubmit(e)}>Đồng ý</Button>
+            <Button variant="contained" color="primary" onClick={backto}>Đồng ý</Button>
           </div>
         ) : (
           <div>

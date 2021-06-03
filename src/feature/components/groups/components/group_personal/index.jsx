@@ -187,7 +187,7 @@ function GroupsForYou(props) {
                           >
                             <CardMedia
                               className={classes.cardMedia}
-                              image= {pic}
+                              image= "https://thumbs.dreamstime.com/b/studying-english-whiteboard-teacher-explains-teaching-material-to-students-193164791.jpg"
                               title={group.groupName}
                             />
                             <CardContent className={classes.font_head}>
