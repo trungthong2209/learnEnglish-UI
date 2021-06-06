@@ -74,9 +74,6 @@ function CreateTopicForm(props) {
   return (
     <div className={classes.rootRegister}>
       {isSubmitting && <LinearProgress className={classes.progress} />}
-      <Avatar className={classes.avatarRegister}>
-        <LockOutlinedIcon />
-      </Avatar>
       <Typography className={classes.title} component="h3" variant="h5">
         Tạo chủ đề mới
       </Typography>

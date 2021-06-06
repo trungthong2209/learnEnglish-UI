@@ -26,6 +26,7 @@ Action.defaultProps={
 
 function Action(props) {
     const {course} = props;
+    const setCourses = props.setCourses;
     const { enqueueSnackbar } = useSnackbar();
     const useStyles = makeStyles((theme) => ({
         closeButton: {
@@ -102,7 +103,7 @@ function Action(props) {
           <Close />
         </IconButton>
         <DialogContent>
-            <UpdateCourse course = {course}  />
+        <UpdateCourse course = {course}  idCourses={course._id} setCourses= {setCourses} />
           {/* <CreateTopics  */}
         </DialogContent>
       </Dialog>

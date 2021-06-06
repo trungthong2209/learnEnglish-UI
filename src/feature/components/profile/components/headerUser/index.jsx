@@ -99,6 +99,7 @@ const useStyles = makeStyles((theme) => ({
 
 function HeaderUser(props) {
   var profile = props.profile;
+  var setProfile = props.setProfile;
   console.log("mmm",profile);
   const classes = useStyles();
   const loggedInUser = useSelector((state) => state.user.current);
@@ -186,7 +187,7 @@ function HeaderUser(props) {
                         window.location= profile.instagramLink;
                       }}
                     >
-                      Instagram
+                      Google
                     </Button>
                   </div>
                 </Paper>
@@ -205,7 +206,7 @@ function HeaderUser(props) {
             <Close />
           </IconButton>
           <DialogContent>
-            <UpdateProfile profile={profile} closeDialog={handleClose} />
+            <UpdateProfile profile={profile} closeDialog={handleClose} setProfile={setProfile}/>
           </DialogContent>
         </Dialog>
       </div>

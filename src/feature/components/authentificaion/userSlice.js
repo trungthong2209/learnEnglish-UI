@@ -42,7 +42,7 @@ const userSlice = createSlice({
       localStorage.removeItem(StorageKeys.TOKEN);
 
       state.current = {};
-      window.location.href = "http://localhost:3000/about";
+      window.location.href = "/about";
 
     },
   },

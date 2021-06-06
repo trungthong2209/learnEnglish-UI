@@ -9,6 +9,7 @@ import CoursesForProfile from "./components/courses";
 import HeaderUser from "./components/headerUser";
 import { useParams } from "react-router";
 import GroupsForYou from "../groups/components/group_personal";
+import StorageKeys from "../../../constants/storage-key";
 
 
 Profile.propTypes = {};
@@ -73,8 +74,9 @@ function Profile(props) {
   const loggedInUser = useSelector((state) => state.user.current);
   const param = useParams();
   const classes = useStyles();
-  
-  
+  var x = JSON.parse(localStorage.getItem("user"));
+  x.email ="Hehehe"
+  console.log( "xxx", x)
 
   //get api profile
   const [profile, setProfile]= useState([]);
@@ -109,11 +111,11 @@ function Profile(props) {
             <Grid container spacing={0}>
             <Grid item xs={12}>
             <Paper elevation={3} className={classes.paper}>
-                 <HeaderUser user={loggedInUser}  profile={profile}/>
+                 <HeaderUser user={loggedInUser}  profile={profile} setProfile={setProfile} />
                  </Paper>
             </Grid>
               <Grid item xs={12}>
-                <Paper  className={classes.paper}>
+                <Paper className={classes.paper}>
                  <GroupsForYou/>
                 </Paper>
               </Grid>

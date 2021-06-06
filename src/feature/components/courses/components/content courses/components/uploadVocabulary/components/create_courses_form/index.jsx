@@ -70,9 +70,7 @@ function CreateCoursesForm(props) {
 
   return (
     <div className={classes.rootRegister}>
-      <Avatar className={classes.avatarRegister}>
-        <LockOutlinedIcon />
-      </Avatar>
+
       <Typography className={classes.title} component="h3" variant="h5">
         Thêm từ vựng
       </Typography>

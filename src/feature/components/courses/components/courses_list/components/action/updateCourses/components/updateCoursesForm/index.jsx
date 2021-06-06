@@ -1,3 +1,7 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   Button,
@@ -5,18 +9,9 @@ import {
   makeStyles,
   Typography,
 } from "@material-ui/core";
-import Avatar from "@material-ui/core/Avatar";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import PropTypes from "prop-types";
-import React from "react";
-import { useForm } from "react-hook-form";
-import * as yup from "yup";
-import InputField from "../../../../../../../../components/form-controls/InputField";
+import InputField from '../../../../../../../../../../components/form-controls/InputField';
 
-
-
-
-UploadFileForm.propTypes = {
+UpdateCoursesForm.propTypes = {
     
 };
 const useStyle = makeStyles((theme) => ({
@@ -49,43 +44,46 @@ const useStyle = makeStyles((theme) => ({
       right: 0,
     },
   }));
-   
 
-
-  
-
-function UploadFileForm(props) {
-    const classes = useStyle();
-  
+function UpdateCoursesForm(props) {
+const classes = useStyle();
+  const {idCourses,course, onSubmit } = props;
   const schema = yup.object().shape({
-    timeTeaching: yup.string(),
+    nameCouse: yup.string(),
+    description: yup.string(),
   });
   const formm = useForm({
     defaultValues: {
-      timeTeaching: "",
+      nameCouse: course.nameCouse,
+      description: course.description,
     },
     resolver: yupResolver(schema),
   });
-  const [valueTime, setValueTime] = React.useState("00:00");
+
 
   const handleSubmit = async (value) => {
-    const {onSubmit} = props;
-    if(onSubmit){
-      await onSubmit(value);
+    const valueTopic ={
+      _id: idCourses,
+      nameCouse: value.nameCouse,
+      description: value.description,
+    }
+    console.log(valueTopic);
+    if(props.onSubmit){
+      await onSubmit(valueTopic);
+      
     }
     
 };
-
   const { isSubmitting } = formm.formState;
   return (
     <div className={classes.rootRegister}>
       {isSubmitting && <LinearProgress className={classes.progress} />}
-
       <Typography className={classes.title} component="h3" variant="h5">
-        Tạo nhóm mới
+        Chỉnh sửa khóa học
       </Typography>
       <form onSubmit={formm.handleSubmit(handleSubmit)}>
-      <InputField name="timeTeaching" label="Giờ học" form={formm} />
+      <InputField name="nameCouse" label="Tên khóa học" form={formm} />
+      <InputField name="description" label="Mô tả" form={formm} />
         
         <Button
           disabled={isSubmitting}
@@ -94,11 +92,11 @@ function UploadFileForm(props) {
           variant="contained"
           fullWidth
         >
-          Tạo nhóm
+          Sửa khóa học
         </Button>
       </form>
     </div>
   );
 }
 
-export default UploadFileForm;
+export default UpdateCoursesForm;

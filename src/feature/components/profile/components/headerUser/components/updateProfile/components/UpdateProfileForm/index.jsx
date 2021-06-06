@@ -66,12 +66,12 @@ function UpdateProfileForm(props) {
       const instagramLink = document.getElementById("instagramLink").value;
       const password = document.getElementById("password").value;
       const image = document.getElementById("image").files[0];
-      const certificates = document.getElementById("certificates").files[0];
+      // const certificates = document.getElementById("certificates").files[0];
       var image64 = await toBase64(image);
       var certificates64;
-      if(certificates != undefined){
-         certificates64 = await toBase64(certificates);
-      }
+      // if(certificates != undefined){
+      //    certificates64 = await toBase64(certificates);
+      // }
       // var certificates64 = await toBase64(certificates);
 
       let data = {
@@ -162,14 +162,14 @@ function UpdateProfileForm(props) {
           defaultValue={profile.instagramLink}
           variant="outlined"
         />
-        <label htmlFor="input">Chứng chỉ tiếng anh (nếu có)</label>
+        {/* <label htmlFor="input">Chứng chỉ tiếng anh (nếu có)</label>
         <TextField
           id="certificates"
           type="file"
           variant="outlined"
           margin="normal"
           fullWidth
-        />
+        /> */}
         <label htmlFor="input">Ảnh đại diện</label>
         <TextField
           id="image"
@@ -187,6 +187,7 @@ function UpdateProfileForm(props) {
           required
           fullWidth
           autoFocus
+          type="password"
         />
 
         <Button

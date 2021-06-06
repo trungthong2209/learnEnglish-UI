@@ -1,4 +1,4 @@
-import { IconButton } from "@material-ui/core";
+import { IconButton, TextField } from "@material-ui/core";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
@@ -11,13 +11,14 @@ import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import { Close } from "@material-ui/icons";
 import ControlPointIcon from "@material-ui/icons/ControlPoint";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Socket from "../../../../../service/socket";
 import CreateGroups from "../create_groups";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import pic from "./avtGroup.jpg";
+import SearchBar from 'material-ui-search-bar';
 GroupList.propTypes = {};
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -82,6 +83,14 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.grey[500],
     zIndex: 1,
   },
+  search:{
+    borderRadius:"30px !important",
+    margin: "10px 0 20px 70%",
+    height: "50px",
+    padding:"10px",
+    width:"30%"
+
+  }
 }));
 
 function GroupList(props) {
@@ -89,7 +98,17 @@ function GroupList(props) {
   const loggedInUser = useSelector((state) => state.user.current);
   const history = useHistory();
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState("");
+  const [filteredGroups, setFilteredGroups] = useState([]);
+ 
+  useEffect(() => {
+    setFilteredGroups(
+      groups.filter((group) =>
+      group.groupName.toLowerCase().includes(search.toLowerCase())
+      )
+    );
+  }, [search, groups]);
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -107,10 +126,21 @@ function GroupList(props) {
     history.push("/groups/" + id);
     window.location.reload();
   };
+ 
 
   return (
     <div>
+        <SearchBar
+          className="search_input"
+          placeholder="Nhập tên nhóm bạn cần tìm"
+          autoFocus
+          className={classes.search}
+          // onChange={(e) => setSearch(e.target.value)}
+          onChange={(searchVal) => setSearch(searchVal)}
+         
+        />
       <Grid container spacing={4}>
+        
         {loggedInUser.role == "teacher" || loggedInUser.role == "admin" ? (
           <Grid item xs={12} sm={6} md={4}>
             <ControlPointIcon
@@ -121,8 +151,8 @@ function GroupList(props) {
         ) : (
           ""
         )}
-
-        {groups.map((group) => (
+        
+        {filteredGroups.map((group) => (
           <Grid item key={group._id} xs={12} sm={6} md={4}>
             <Card className={classes.card}>
               <CardActions>

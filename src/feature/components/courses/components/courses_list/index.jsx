@@ -11,12 +11,13 @@ import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import { Close } from "@material-ui/icons";
 import ControlPointIcon from "@material-ui/icons/ControlPoint";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Socket from "../../../../../service/socket";
 import CreateCourses from "../create_courses";
 import Action from "./components/action";
 import { useDispatch, useSelector } from "react-redux";
+import SearchBar from 'material-ui-search-bar';
 
 CoursesList.propTypes = {};
 const useStyles = makeStyles((theme) => ({
@@ -82,6 +83,14 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.grey[500],
     zIndex: 1,
   },
+  search:{
+    borderRadius:"30px !important",
+    margin: "10px 0 20px 70%",
+    height: "50px",
+    padding:"10px",
+    width:"30%"
+
+  }
 }));
 
 
@@ -90,6 +99,15 @@ function CoursesList(props) {
   const { courses, setCourses, loading } = props;
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
+  const [search, setSearch] = useState("");
+  const [filteredGroups, setFilteredGroups] = useState([]);
+  useEffect(() => {
+    setFilteredGroups(
+      courses.filter((course) =>
+      course.nameCouse.toLowerCase().includes(search.toLowerCase())
+      )
+    );
+  }, [search, courses]);
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -101,12 +119,22 @@ function CoursesList(props) {
   if (loading) {
     return <CircularProgress size="100px" />;
   }
+  
 
 
  
   
   return (
     <div>
+      <SearchBar
+          className="search_input"
+          placeholder="Nhập tên khóa học bạn cần tìm"
+          autoFocus
+          className={classes.search}
+          // onChange={(e) => setSearch(e.target.value)}
+          onChange={(searchVal) => setSearch(searchVal)}
+         
+        />
       <Grid container spacing={4}>
       {
         loggedInUser.role == 'admin'? (
@@ -120,7 +148,7 @@ function CoursesList(props) {
         </Grid>
         ):''
       }
-        {courses.map((course) => (
+        {filteredGroups.map((course) => (
           <Grid item key={course._id} xs={12} sm={6} md={4} >
             <Card className={classes.card}>
               <CardActions >

@@ -67,6 +67,10 @@ const CoursesApi = {
     const url = '/courses/delete-course-id';
     return axiosClient.delete(url, { data: data});
   },
+  updateCourse(data) {
+    const url = '/frames/update-frame';
+    return axiosClient.put(url, data);
+  },
   
 
 };

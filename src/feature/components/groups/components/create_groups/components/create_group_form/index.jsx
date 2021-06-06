@@ -65,7 +65,7 @@ function CreateGroupForm(props) {
       event.preventDefault();
       const name = document.getElementById("groupName").value;
       const des = document.getElementById("timeTeaching").value;
-      const selectedFile = document.getElementById("input").files[0];
+      // const selectedFile = document.getElementById("input").files[0];
       
 
       // let formData = new FormData();
@@ -92,9 +92,7 @@ function CreateGroupForm(props) {
   };
   return (
     <div className={classes.rootRegister}>
-      <Avatar className={classes.avatarRegister}>
-        <LockOutlinedIcon />
-      </Avatar>
+
       <Typography className={classes.title} component="h3" variant="h5">
         Tạo nhóm mới
       </Typography>

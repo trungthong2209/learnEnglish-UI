@@ -164,7 +164,7 @@ function UserBar(props) {
           Cài đặt
         </MenuItem>
         {
-          loggedInUser.role != 'teacher'? <MenuItem className={classes.font} onClick={teach}>
+          loggedInUser.role == 'student'? <MenuItem className={classes.font} onClick={teach}>
           Dạy trên LET
         </MenuItem> : ''
         }
