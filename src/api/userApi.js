@@ -2,6 +2,10 @@ import StorageKeys from '../constants/storage-key';
 import axiosClient from './axiosClient';
 
 const userApi = {
+  getAllUser() {
+    const url = "/dashboard/users";
+    return axiosClient.get(url);
+  }, 
   register(data) {
     const url = '/register';
     return axiosClient.post(url, data);
@@ -70,6 +74,10 @@ const userApi = {
     updateRole(data) {
       const url = '/updateRole';
       return axiosClient.put(url, data);
+    },
+    action(data) {
+      const url = 'dashboard/updateStatus';
+      return axiosClient.post(url, data);
     }
   
 };

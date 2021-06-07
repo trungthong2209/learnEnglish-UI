@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import pic from "./avtGroup.jpg";
 import SearchBar from 'material-ui-search-bar';
+import ActionGroup from "./components/action";
 GroupList.propTypes = {};
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -94,7 +95,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function GroupList(props) {
-  const { groups, loading } = props;
+  const { groups, loading,setGroups } = props;
   const loggedInUser = useSelector((state) => state.user.current);
   const history = useHistory();
   const classes = useStyles();
@@ -189,6 +190,10 @@ function GroupList(props) {
                   </CardContent>
                 </Link>
               </CardActions>
+              {loggedInUser.role =='admin' || loggedInUser._id == group.manager.managerId?
+              <CardActions>
+              <ActionGroup idgroup={group._id}  groupName={group.groupName} setGroups={setGroups}  />
+                  </CardActions > : ""}
             </Card>
           </Grid>
         ))}

@@ -76,8 +76,8 @@ function Groups(props) {
             <Paper className={classes.paper}>
               <GroupList
                 groups={currentGroups}
-                
                 loading={loading}
+                setGroups={setGroups}
               />
               <ReactPaginate
                className={classes.paginationcss}

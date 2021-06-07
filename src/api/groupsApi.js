@@ -41,8 +41,15 @@ const groupsApi = {
         'Content-Type': 'multipart/form-data',
       },
     });
-
-  }
+  },
+  updateGroup(data) {
+    const url = '/groups/editgroup';
+    return axiosClient.post(url, data);
+  },
+  updateBlock(data) {
+    const url = '/groups/editgroup';
+    return axiosClient.post(url, data);
+  },
   
 };
 

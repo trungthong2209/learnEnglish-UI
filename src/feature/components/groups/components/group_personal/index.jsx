@@ -17,7 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { CircularProgress } from "@material-ui/core";
 import userApi from "../../../../../api/userApi";
 import Socket from "../../../../../service/socket";
-import pic from "../groupList/avtGroup.jpg"
+import pic from "../groupList/avtGroup.jpg";
 import { useHistory } from "react-router-dom";
 GroupsForYou.propTypes = {};
 const useStyles = makeStyles((theme) => ({
@@ -40,7 +40,6 @@ const useStyles = makeStyles((theme) => ({
   heroContent: {
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(8, 0, 6),
-    
   },
   heroButtons: {
     marginTop: theme.spacing(4),
@@ -49,8 +48,8 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(8),
     paddingBottom: theme.spacing(8),
   },
-  groups:{
-    width:"100%",
+  groups: {
+    width: "100%",
     textDecoration: "none",
   },
   card: {
@@ -78,16 +77,16 @@ const useStyles = makeStyles((theme) => ({
   font_head: {
     fontFamily: ["Open Sans", "sans-serif"].join(","),
     fontSize: "20px",
-    textDecoration:"none",
+    textDecoration: "none",
   },
   font_content: {
     fontFamily: ["Open Sans", "sans-serif"].join(","),
     fontSize: "16px",
     textDecoration: "none",
   },
-  h3:{
-    marginLeft:"40%"
-  }
+  h3: {
+    marginLeft: "40%",
+  },
 }));
 
 const Groups = [
@@ -111,16 +110,28 @@ const Groups = [
 function GroupsForYou(props) {
   const classes = useStyles();
   const loggedInUser = useSelector((state) => state.user.current);
-  const [groups, setGroups] = useState('');
+  const [groups, setGroups] = useState("");
   const [loading, setLoading] = useState(false);
   const history = useHistory();
   useEffect(() => {
     const fetchCourses = async () => {
       // setLoading(true);
-      const groupList = await userApi.GetGroupsByIdUser(loggedInUser._id);
-      setGroups(groupList);
-      console.log(groups)
-      setLoading(false);
+
+      if (loggedInUser._id == window.location.pathname.split("/")[2] || window.location.pathname.split("/")[1]=='home') {
+        let groupList = await userApi.GetGroupsByIdUser(loggedInUser._id);
+        setGroups(groupList);
+        console.log(groups);
+        setLoading(false);
+      } else {
+        let groupList1 = await userApi.GetGroupsByIdUser(
+          window.location.pathname.split("/")[2]
+        );
+        setGroups(groupList1);
+        console.log(groups);
+        setLoading(false);
+      }
+
+      //window.location.pathname.split('/')[2]
     };
     fetchCourses();
   }, []);
@@ -131,10 +142,11 @@ function GroupsForYou(props) {
     history.push("/groups/" + id);
     window.location.reload();
   };
+  console.log(window.location.pathname.split("/")[1]);
 
   return (
     <React.Fragment>
-<Container>
+      <Container>
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <CssBaseline />
@@ -154,16 +166,15 @@ function GroupsForYou(props) {
                   color="inherit"
                   noWrap
                 >
-                  NHÓM CỦA BẠN
+                  NHÓM
                 </Typography>
               </Toolbar>
             </AppBar>
             <Paper className={classes.paper}>
               <Grid container spacing={4}>
-              {
-                groups == '' ? (
+                {groups == "" ? (
                   <h3 className={classes.h3}>Hiện tại bạn chưa có nhóm nào</h3>
-                ):(
+                ) : (
                   groups.map((group) => (
                     <Grid item key={group._id} xs={12} sm={6} md={4}>
                       <Card className={classes.card}>
@@ -183,11 +194,10 @@ function GroupsForYou(props) {
                               });
                               linkto(group._id);
                             }}
-                           
                           >
                             <CardMedia
                               className={classes.cardMedia}
-                              image= "https://thumbs.dreamstime.com/b/studying-english-whiteboard-teacher-explains-teaching-material-to-students-193164791.jpg"
+                              image="https://thumbs.dreamstime.com/b/studying-english-whiteboard-teacher-explains-teaching-material-to-students-193164791.jpg"
                               title={group.groupName}
                             />
                             <CardContent className={classes.font_head}>
@@ -198,7 +208,6 @@ function GroupsForYou(props) {
                                 component="h2"
                               >
                                 {group.groupName}
-                                
                               </Typography>
                             </CardContent>
                           </Link>
@@ -206,8 +215,7 @@ function GroupsForYou(props) {
                       </Card>
                     </Grid>
                   ))
-                ) 
-              }
+                )}
               </Grid>
             </Paper>
           </Grid>

@@ -11,6 +11,7 @@ import groupsApi from '../../../../../../../api/groupsApi';
 import { useSelector } from "react-redux";
 import { useParams } from "react-router";
 import StarsIcon from '@material-ui/icons/Stars';
+import { useHistory } from "react-router-dom";
 Members.propTypes = {};
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -58,6 +59,7 @@ function Members(props) {
   const groupId = param.groupId;
   let managerId =  props.managerId;
   const [member, setMember] = useState([props.member]);
+  const history = useHistory();
   console.log(member)
   useEffect(() => {
     const params = {
@@ -74,7 +76,9 @@ function Members(props) {
     <React.Fragment>
       <List>
         {member.map((mem) => (
-          <ListItem button key={mem.id}>
+          <ListItem button key={mem.id} onClick={()=>{
+            history.push("/profile/"+mem.userId);
+          }}>
             <ListItemIcon>
               <Avatar
                 alt={mem.name}

@@ -13,6 +13,7 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
+import { useHistory } from "react-router-dom";
 Rank.propTypes = {};
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -67,6 +68,7 @@ const useStyles = makeStyles((theme) => ({
 function Rank(props) {
 
   const classes = useStyles();
+  const history = useHistory();
   var topUser = props.topUser.sort((a,b) => parseFloat(b.score) - parseFloat(a.score));
   console.log("topusser: ", topUser[0])
   return (
@@ -76,7 +78,9 @@ function Rank(props) {
         <List>
         {
           topUser != undefined ? topUser.map((top, index) => (
-            <ListItem button key={top.id}>
+            <ListItem button key={top.id} onClick={()=>{
+              history.push("/profile/"+top._id.userId);
+            }}>
               <ListItemIcon>
               <Typography className={classes.stt}>{index +1 }. </Typography>
                 <Avatar alt={top.user.nameUser} src={top.user.avatar} />

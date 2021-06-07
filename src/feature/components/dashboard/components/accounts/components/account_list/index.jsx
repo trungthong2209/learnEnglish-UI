@@ -1,11 +1,3 @@
-import { useState } from "react";
-import React from "react";
-import PropTypes from "prop-types";
-import moment from "moment";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import CreateIcon from '@material-ui/icons/Create';
-import LockOpenIcon from '@material-ui/icons/LockOpen';
-import LockIcon from '@material-ui/icons/Lock';
 import {
   Avatar,
   Box,
@@ -15,57 +7,82 @@ import {
   TableBody,
   TableCell,
   TableHead,
-  TablePagination,
+
   TableRow,
-  Typography,
+  Typography
 } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import Select from '@material-ui/core/Select';
+import PropTypes from "prop-types";
+import React, { useEffect, useState } from "react";
+import ReactPaginate from "react-paginate";
+import PerfectScrollbar from "react-perfect-scrollbar";
 import userApi from "../../../../../../../api/userApi";
 
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    marginTop: theme.spacing(2),
+    padding: theme.spacing(2),
+    textAlign: "center",
+    color: theme.palette.text.secondary,
+    flexWrap: "wrap",
+  },
+  paginationcss: {
+    margin: "300px",
+  },
+}));
+
 const AccountList = ({ ...rest }) => {
+  const classes = useStyles();
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
   const [limit, setLimit] = useState(10);
-  const [page, setPage] = useState(0);
-  var customers = [
-    {
-      id: "60768f44c3f0a0ade9846736",
-      avatarUrl: "https://picsum.photos/seed/picsum/200/300",
-      name: "Lê Xuân Hiếu",
-      email: "xuanhieu.le.1999@gmail.com ",
-      role: "student",
-      status: "active",
-    },
-    {
-      id: "607bd8e8c3f0a0ade9846772",
-      avatarUrl: "https://picsum.photos/seed/picsum/200/300",
-      name: "Đoàn Trung Thông",
-      email: "doanthong002@gmail.com ",
-      role: "teacher",
-      status: "active",
-    },
-    {
-      id: "607bd8e8c3f0a0ade9846773",
-      avatarUrl: "https://picsum.photos/seed/picsum/200/300",
-      name: "Lê Thanh Hà",
-      email: "ThanhHa002@gmail.com ",
-      role: "student",
-      status: "block",
-    },
-    {
-      id: "607bd8e8c3f0a0ade9846774",
-      avatarUrl: "https://picsum.photos/seed/picsum/200/300",
-      name: "Ngô Ngọc Mỹ",
-      email: "NgocMy@gmail.com ",
-      role: "student",
-      status: "block",
-    },
-  ];
+ 
+  const [account, setAccount] = useState([]);
+  const [pageNumber, setPageNumber] = useState(0);
+  const [topicsPerPage, setTopicsPerPage] = useState(8);
+
+  
+  let arrAdmin = [];
+  let arrTeacher = [];
+  let arrStudent = [];
+  let fetchAccount;
+  useEffect(() => {
+  fetchAccount = async () => {
+    const accountList = await userApi.getAllUser();
+    accountList.map((x)=>{
+      if(x.role == "admin") arrAdmin.push(x);
+      else{
+        if(x.role == "teacher") arrTeacher.push(x);
+        else arrStudent.push(x);
+      }
+    })
+    let arrTemp = arrAdmin.concat(arrTeacher, arrStudent);
+    setAccount(arrTemp);
+  };
+  fetchAccount();
+}, []);
+console.log(account)
+const pagesVisited = pageNumber * topicsPerPage;
+
+  const currentAccount = account.slice(
+    pagesVisited,
+    pagesVisited + topicsPerPage
+  );
+  // const [pageNumber, setPageNumber] = useState(0);
+
+  // // Change page
+  // const paginate = (pageNumber) => (pageNumber)
+  const pageCount = Math.ceil(account.length / topicsPerPage);
+
+  const changePage = ({ selected }) => {
+    setPageNumber(selected);
+  };
 
   const handleSelectAll = (event) => {
     let newSelectedCustomerIds;
 
     if (event.target.checked) {
-      newSelectedCustomerIds = customers.map((customer) => customer.id);
+      newSelectedCustomerIds = account.map((user) => user._id);
     } else {
       newSelectedCustomerIds = [];
     }
@@ -100,27 +117,14 @@ const AccountList = ({ ...rest }) => {
     setSelectedCustomerIds(newSelectedCustomerIds);
   };
 
-  const handleLimitChange = (event) => {
-    setLimit(event.target.value);
-  };
-
-  const handlePageChange = (event, newPage) => {
-    setPage(newPage);
-  };
+  
   const [role, setRole] = React.useState("");
- 
-  const handleChange = (event) => {
-    // const name = event.target.value;
-    // setRole({
-    //   ...role,
-    //   [name]: event.target.value,
-    // });
-    setRole(event.target.value);
-    console.log(role);
-  };
+  const [action, setAction] = React.useState("");
+
 
   return (
-    <Card {...rest}>
+    <div>
+      <Card {...rest}>
       <PerfectScrollbar>
         <Box sx={{ minWidth: 1050 }}>
           <Table>
@@ -128,11 +132,11 @@ const AccountList = ({ ...rest }) => {
               <TableRow>
                 <TableCell padding="checkbox">
                   <Checkbox
-                    checked={selectedCustomerIds.length === customers.length}
+                    checked={selectedCustomerIds.length === account.length}
                     color="primary"
                     indeterminate={
                       selectedCustomerIds.length > 0 &&
-                      selectedCustomerIds.length < customers.length
+                      selectedCustomerIds.length < account.length
                     }
                     onChange={handleSelectAll}
                   />
@@ -141,24 +145,25 @@ const AccountList = ({ ...rest }) => {
                 <TableCell>Tên</TableCell>
                 <TableCell>Email</TableCell>
                 <TableCell>Vai trò</TableCell>
-                <TableCell></TableCell>
+                <TableCell>Trạng thái</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {customers.slice(0, limit).map((customer) => (
+              {currentAccount.slice(0, limit).map((user) => (
+                
                 <TableRow
                   hover
-                  key={customer.id}
-                  selected={selectedCustomerIds.indexOf(customer.id) !== -1}
+                  key={user._id}
+                  selected={selectedCustomerIds.indexOf(user._id) !== -1}
                 >
                   <TableCell padding="checkbox">
                     <Checkbox
-                      checked={selectedCustomerIds.indexOf(customer.id) !== -1}
-                      onChange={(event) => handleSelectOne(event, customer.id)}
+                      checked={selectedCustomerIds.indexOf(user._id) !== -1}
+                      onChange={(event) => handleSelectOne(event, user._id)}
                       value="true"
                     />
                   </TableCell>
-                  <TableCell>{customer.id}</TableCell>
+                  <TableCell>{user._id}</TableCell>
                   <TableCell>
                     <Box
                       sx={{
@@ -166,54 +171,66 @@ const AccountList = ({ ...rest }) => {
                         display: "flex",
                       }}
                     >
-                      <Avatar src={customer.avatarUrl} sx={{ mr: 2 }}>
-                        {customer.name}
+                      <Avatar src={user.avatar} sx={{ mr: 2 }}>
+                        {/* {user.userName} */}
                       </Avatar>
                       <Typography color="textPrimary" variant="body1">
-                        {customer.name}
+                        {user.userName}
                       </Typography>
                     </Box>
                   </TableCell>
 
-                  <TableCell>{customer.email}</TableCell>
-                  <TableCell onClick={async () => {
-                    let data = {
-                      _id: "60685a95a8953bc885582b75" ,
-                      role: "teacher",
-                      topics: "607bd8e8c3f0a0ade9846772"
-                    }
-                    await userApi.updateRole(data);
-                  }}>
-                  {customer.role} <CreateIcon fontSize='inherit' />
+                  <TableCell>{user.email}</TableCell>
+                  <TableCell>
                     {/* {moment(customer.createdAt).format('DD/MM/YYYY')} */}
-                    {/* <Select
+                    <Select
+                    id="select_role"
                       native
-
                       onChange={async (event) =>  {
+                        document.getElementById("select_role").value = event.target.value;
                         let data = {
-                          _id: customer.id,
+                          _id: user._id,
                           role: event.target.value,
-                          topics: ''
+                          topics: "607bd8e8c3f0a0ade9846772"
                         }
-                        // await userApi.updateRole(data);
+                        await userApi.updateRole(data);
                         setRole(event.target.value);
-                        console.log(event.target.value, customer.id);
-                        customer.role = event.target.value;
-                        console.log("re",customer.role)
+                        console.log(event.target.value, user._id);
+                        user.role = event.target.value;
                       }
                     }
-                    value={customer.role}
+                    
                     >
-
-                      <option value="student">Student</option>
-                      <option value="teacher">Teacher</option>
-                      <option value="mod">Mod</option>
-                      <option value="admin">Admin</option>
-                    </Select> */}
+                      <option value={user.role}>{user.role}</option>
+                      <option value="student">student</option>
+                      <option value="teacher">teacher</option>
+                      {/* <option value="mod">mod</option> */}
+                      <option value="admin">admin</option>
+                    </Select>
                   </TableCell>
                   <TableCell >
-                    {/* {moment(customer.createdAt).format('DD/MM/YYYY')} */}
-                    {customer.status == "active" ? "Khóa" : "Mở khóa"}
+                    
+                    {/* {customer.status == "active" ? "Khóa" : "Mở khóa"} */}
+                    <Select
+                      native
+                      onChange={async (event) =>  {
+                        let data = {
+                          _id: user._id,
+                          status: event.target.value,
+                        }
+                        await userApi.action(data);
+                        event.target.value == true? setAction('Hoạt động') : setAction('khóa')
+                        console.log(data);
+                        user.action = event.target.value;
+                        console.log("action ",action)
+                      }
+                    }
+                    > 
+                       <option value={user.action}>{user.action == true? "Hoạt động" : "Khóa"}</option>
+                      <option value="true">Hoạt động</option>
+                      <option value="false">Khóa</option>
+
+                    </Select>
                   </TableCell>
                 </TableRow>
               ))}
@@ -221,21 +238,26 @@ const AccountList = ({ ...rest }) => {
           </Table>
         </Box>
       </PerfectScrollbar>
-      <TablePagination
-        component="div"
-        count={customers.length}
-        onPageChange={handlePageChange}
-        onRowsPerPageChange={handleLimitChange}
-        page={page}
-        rowsPerPage={limit}
-        rowsPerPageOptions={[5, 10, 25]}
-      />
+      <ReactPaginate
+               className={classes.paginationcss}
+                previousLabel={"<"}
+                nextLabel={">"}
+                pageCount={pageCount}
+                onPageChange={changePage}
+                containerClassName={"paginationBttns"}
+                previousLinkClassName={"previousBttn"}
+                nextLinkClassName={"nextBttn"}
+                disabledClassName={"paginationDisabled"}
+                activeClassName={"paginationActive"}
+              />
+      
     </Card>
+    </div>
   );
 };
 
 AccountList.propTypes = {
-  customers: PropTypes.array.isRequired,
+  account: PropTypes.array.isRequired,
 };
 
 export default AccountList;

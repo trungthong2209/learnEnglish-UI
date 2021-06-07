@@ -30,6 +30,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import CloseIcon from "@material-ui/icons/Close";
 import Typography from "@material-ui/core/Typography";
 import { useSnackbar } from 'notistack';
+import { useParams } from "react-router";
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
@@ -79,12 +80,12 @@ const Messenger = () => {
   const history = useHistory();
   const {enqueueSnackbar} = useSnackbar();
   const [listFriend, setlistFriend] = useState("");
-
-  const [userRe, setUserRe] = useState([]);
+  const [profile, setProfile]= useState([]);
+  const [userRe, setUserRe] = useState([window.location.pathname.split("/")[2]]);
   const [loading, setLoading] = useState(false);
   //get mess
   const [MessesageOld, setMessesageOld] = useState([]);
-
+  const param = useParams();
   //resret component
   const [value, setValue] = useState();
 
@@ -107,7 +108,7 @@ const Messenger = () => {
 
   const [messagess, setMessagess] = useState([]); // Sent and received messages
 
-  const { messages, sendMessage } = useChat(userRe[0], setMessagess, messagess);
+  const { messages, sendMessage } = useChat(userRe[0], setMessagess, messagess,idSend);
   const [newMessage, setNewMessage] = useState("");
   const handleNewMessageChange = (event) => {
     setNewMessage(event.target.value);
@@ -144,6 +145,16 @@ const Messenger = () => {
 
     // window.location.reload();
   }
+  useEffect(() => {
+    const fetchInfoGroup = async () => {
+      let id= window.location.pathname.split('/')[2];
+      let info = await userApi.infoProfile(id);
+      console.log(info[0])
+       setProfile(info[0]);
+
+    };
+    fetchInfoGroup();
+  }, []);
 
   console.log(userRe);
   useEffect(() => {
@@ -184,39 +195,35 @@ const Messenger = () => {
       console.log("đã tắt");
     }
   };
+  let temp = 0;
+  Socket.on("pairing", (data) => {
+    console.log("data đã paring: ", data);
+      sendId(data._id, data.avatar, data.userName);
+      Socket.emit("stopMatching");
+      handleClose();
+  });
   const handelMatch = () => {
-    handleClickOpen();
-    let temp = 0;
+   
     Socket.emit("matchVolunteers", "607bd8e8c3f0a0ade9846772");
     let dataVo = {};
     //send data
-    setLoading(true);
+    setOpen(true);
+    // setLoading(true);
     Socket.on("matchVolunteers", (data) => {
+      enqueueSnackbar('Tìm thành công, hãy tương tác với người đó đi nào.',{variant:'success'});
       console.log("data đã match: ", data);
       dataVo = data;
+      handleClose();
+        Socket.emit("stopMatching");
+        setLoading(false);
     });
     console.log(dataVo);
-    Socket.on("pairing", (data) => {
-      temp = 1;
-      console.log("data đã paring: ", data);
-      sendId(data._id, data.avatar, data.userName);
-    });
-    setTimeout(() => {
-      if (temp == 1) {
-        handleClose();
-        enqueueSnackbar('Tìm thành công, hãy tương tác với người đó đi nào.',{variant:'success'});
-      } else {
-        cancelMatch();
-        enqueueSnackbar('Không thể tìm được người trợ giúp cho bạn, hãy thử lại.',{variant:'error'} );
-      }
-    }, 10000);
-
-    setLoading(false);
   };
 
   const cancelMatch = () => {
-    Socket.emit("stopMatching", "607bd8e8c3f0a0ade9846772");
-    handleClose();
+    Socket.emit("stopMatching");
+      handleClose();
+    temp++;
   };
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
@@ -229,6 +236,7 @@ const Messenger = () => {
   if (listFriend == "") console.log("frieeasd", listFriend);
 
   console.log("idddd", arrayIdList);
+  console.log("prooooooo: "+ profile);
 
   return (
     <div>
@@ -260,7 +268,30 @@ const Messenger = () => {
                   }
                   label="Chế độ rảnh"
                 />
-              ) : (
+              ) :  loggedInUser.role == "admin"? (
+                <div>
+                  <FormControlLabel
+                  control={
+                    <Switch
+                      checked={freeTime.checkedB}
+                      onChange={handleChange}
+                      name="checked"
+                      color="primary"
+                    />
+                  }
+                  label="Chế độ rảnh"
+                />
+                  <Button
+                  className={classes.submit}
+                  variant="contained"
+                  fullWidth
+                  onClick={handelMatch}
+                >
+                  Tìm người trợ giúp
+                </Button>
+                </div>
+                
+              ):(
                 <Button
                   className={classes.submit}
                   variant="contained"
@@ -290,9 +321,10 @@ const Messenger = () => {
                           <ListItem button>
                             <ListItemIcon>
                               (friend.recipients.recipientAvatar == "" ? (
-                              <Avatar src="/static/images/avatar/1.jpg" />
+                                <Avatar src={friend.recipients.recipientAvatar} />
+                             
                               ) : (
-                              <Avatar src={friend.recipients.recipientAvatar} />
+                                <Avatar src="/static/images/avatar/1.jpg" />
                               ))
                             </ListItemIcon>
                             <ListItemText
@@ -340,13 +372,14 @@ const Messenger = () => {
               <List>
                 <ListItem button key="RemySharp">
                   <ListItemIcon>
-                    {userRe[1] == undefined ? (
+                    {profile.avatar == ""? (
                       <Avatar src="/static/images/avatar/1.jpg" />
                     ) : (
-                      <Avatar src={userRe[1]} />
+                      <Avatar src={profile.avatar} />
+                      // <Avatar src={userRe[1]} />
                     )}
                   </ListItemIcon>
-                  <ListItemText primary={userRe[2]}></ListItemText>
+                  <ListItemText primary={userRe[2]}>{profile.userName}</ListItemText>
                 </ListItem>
               </List>
               <Divider />

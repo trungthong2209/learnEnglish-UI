@@ -8,7 +8,7 @@ import PropTypes from "prop-types";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
-
+import { useHistory } from "react-router-dom";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import { IconButton } from "@material-ui/core";
@@ -100,14 +100,18 @@ const useStyles = makeStyles((theme) => ({
 function HeaderUser(props) {
   var profile = props.profile;
   var setProfile = props.setProfile;
+  const history = useHistory();
   console.log("mmm",profile);
   const classes = useStyles();
   const loggedInUser = useSelector((state) => state.user.current);
   const param = useParams();
+  
   var temp = 0;
    String(loggedInUser._id) == String(param.id) ? temp = 0 : temp = 1
    console.log(temp)
-  
+   function sendId(id) {
+    history.push("/tin-nhan/" + id);
+  }
    //action form
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => {
@@ -146,9 +150,10 @@ function HeaderUser(props) {
                       <Button
                       variant="contained"
                       color="default"
-                      className={classes.Learn}  
+                      className={classes.Learn} 
+                      onClick={()=> sendId(param.id)} 
                     >
-                      Theo dõi 
+                      Nhắn tin
                     </Button>
                     }
                   </p>
