@@ -10,12 +10,12 @@ const useStyles = makeStyles((theme) => ({
     pageNumber :{
         color: "black",
         float: "left",
-        padding: "0.8rem 1.6rem",
+        padding: "8px 16px",
         textDecoration:"none",
         transition:"background-color .3s",
         border: "1px solid #ddd",
-        margin: "0 0.4rem",
-        fontSize:"1.6rem",
+        margin: "0 4px",
+        fontSize:"16px",
         cursor:"pointer"
     },
     numberActive:{

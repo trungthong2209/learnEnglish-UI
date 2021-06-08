@@ -2,6 +2,10 @@ import StorageKeys from '../constants/storage-key';
 import axiosClient from './axiosClient';
 
 const userApi = {
+  getAllUser() {
+    const url = "/dashboard/users";
+    return axiosClient.get(url);
+  }, 
   register(data) {
     const url = '/register';
     return axiosClient.post(url, data);
@@ -33,8 +37,8 @@ const userApi = {
   }
   ,
 
-  infoProfile(data) {
-    const url = "/profile";
+  infoProfile(id) {
+    const url = "/profile/"+id;
     return axiosClient.get(url, {
       headers: {
         "Access-Control-Allow-Origin": "*",
@@ -47,10 +51,34 @@ const userApi = {
       },
     });
   },
-  getMess() {
-    const url = "/privateMessage/60685a61a8953bc885582b70";
+  updateProfile(data) {
+    const url = "/updateProfile";
+    return axiosClient.put(url, data);
+  },
+  getMessById(id) {
+    const url = "/privateMessage/"+id;
     return axiosClient.get(url)}
     ,
+  getUserMess() {
+    const url = "/privateMessage/all";
+    return axiosClient.get(url)}
+    ,
+    GetCoursesByIdUser(id){
+    const url = "/courses/getCoursesByUserId/"+id;
+    return axiosClient.get(url)
+    },
+    GetGroupsByIdUser(id){
+    const url = "/groups/getGroupsByUserId/"+id;
+    return axiosClient.get(url)
+    },
+    updateRole(data) {
+      const url = '/updateRole';
+      return axiosClient.put(url, data);
+    },
+    action(data) {
+      const url = 'dashboard/updateStatus';
+      return axiosClient.post(url, data);
+    }
   
 };
 

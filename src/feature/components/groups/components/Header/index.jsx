@@ -19,8 +19,8 @@ const useStyles = makeStyles((theme) => ({
     toolbar: {
       background: "linear-gradient(315deg, #83eaf1 30%, #63a4ff 90%)",
       fontFamily: "'Open Sans', sans-serif",
-      fontSize: "1.6 rem",
-      marginTop: "3rem",
+      fontSize: "16px",
+      marginTop: "30px",
     },
     icon: {
       marginRight: theme.spacing(2),
@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     },
     font_title: {
       fontFamily: ["Open Sans", "sans-serif"].join(","),
-      fontSize: "3rem",
+      fontSize: "30px",
     },
   }));
   

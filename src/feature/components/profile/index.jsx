@@ -7,6 +7,11 @@ import { useSelector } from "react-redux";
 import userApi from "../../../api/userApi";
 import CoursesForProfile from "./components/courses";
 import HeaderUser from "./components/headerUser";
+import { useParams } from "react-router";
+import GroupsForYou from "../groups/components/group_personal";
+import StorageKeys from "../../../constants/storage-key";
+
+
 Profile.propTypes = {};
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -67,18 +72,36 @@ const user = {
 
 function Profile(props) {
   const loggedInUser = useSelector((state) => state.user.current);
+  const param = useParams();
   const classes = useStyles();
+  var x = JSON.parse(localStorage.getItem("user"));
+  x.email ="Hehehe"
+  console.log( "xxx", x)
 
   //get api profile
-  const [profile, setProfile]= useState({});
+  const [profile, setProfile]= useState([]);
+  var id = param.id;
+  var pr ={
+    name : '',
+    avartar: '',
+    description: ''
+  };
+  var ifor;
   useEffect(() => {
-    const fetchProfile = async () => {
-      const Profile = await userApi.infoProfile();
-      setProfile(Profile);
+    const fetchInfoGroup = async () => {
+      let info = await userApi.infoProfile(id);
+      console.log(info[0])
+       setProfile(info[0]);
+
     };
-    fetchProfile();
-  }, {});
-  // console.log(profile);
+    fetchInfoGroup();
+  }, []);
+  
+      console.log("pr",profile);
+    
+    
+
+ 
 
   return (
     <div>
@@ -88,12 +111,12 @@ function Profile(props) {
             <Grid container spacing={0}>
             <Grid item xs={12}>
             <Paper elevation={3} className={classes.paper}>
-                 <HeaderUser user={loggedInUser} userFake={user}/>
+                 <HeaderUser user={loggedInUser}  profile={profile} setProfile={setProfile} />
                  </Paper>
             </Grid>
               <Grid item xs={12}>
-                <Paper  className={classes.paper}>
-                 <CoursesForProfile user={loggedInUser} userFake={user}  />
+                <Paper className={classes.paper}>
+                 <GroupsForYou/>
                 </Paper>
               </Grid>
             </Grid>

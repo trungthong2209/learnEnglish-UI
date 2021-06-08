@@ -16,6 +16,9 @@ const groupsApi = {
       },
     });
   },
+  getGroupsByTopicId(id) {
+    const url = "/groups/getGroupsByTopicId/"+id;
+    return axiosClient.get(url)},
 
   createGroup(data) {
     const url = "/groups/insert-group";
@@ -38,8 +41,15 @@ const groupsApi = {
         'Content-Type': 'multipart/form-data',
       },
     });
-
-  }
+  },
+  updateGroup(data) {
+    const url = '/groups/editgroup';
+    return axiosClient.post(url, data);
+  },
+  updateBlock(data) {
+    const url = '/groups/editgroup';
+    return axiosClient.post(url, data);
+  },
   
 };
 

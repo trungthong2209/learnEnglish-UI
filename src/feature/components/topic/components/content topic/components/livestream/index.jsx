@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
     },
     back:{
         
-        height:"60rem",
+        height:"550px",
     }
 }));
 

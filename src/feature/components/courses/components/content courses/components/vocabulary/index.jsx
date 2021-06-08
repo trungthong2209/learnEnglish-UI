@@ -9,18 +9,26 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
 const useStyles = makeStyles({
+  tableVocabulary:{
+    height:"575px"
+  },
   table: {
     minWidth: 650,
   },
   fontText1:{
     fontFamily: ["Open Sans", "sans-serif"].join(","),
-    fontSize: "1.6rem",
+    fontSize: "16px",
     fontWeight:"700"
   },
   fontText:{
     fontFamily: ["Open Sans", "sans-serif"].join(","),
-    fontSize: "1.6rem",
+    fontSize: "16px",
     fontWeight:"600"
+  },
+  content:{
+    overflow: "scroll",
+    overflowX: "hidden",
+    
   }
 });
 
@@ -29,17 +37,32 @@ function createData(vocabulary,wordClass ,pronounce, means) {
 }
 
 const rows = [
-  createData('department','N' ,"dəˈpärtmənt", 'Phòng ban'),
-  createData('encouragement', 'N', "inˈkərijmənt", 'Sự khuyến khích'),
-  createData('advertisement','N', "'advərˌtīzmənt", 'Quảng cáo'),
+  // createData('department','N' ,"dəˈpärtmənt", 'Phòng ban'),
+  // createData('encouragement', 'N', "inˈkərijmənt", 'Sự khuyến khích'),
+  // createData('advertisement','N', "'advərˌtīzmənt", 'Quảng cáo'),
   
 ];
+var insertRows = (data) =>{
+  
 
-export default function Vocabulary() {
+}
+function unique(arr) {
+  return Array.from(new Set(arr)) 
+}
+
+export default function Vocabulary(props) {
   const classes = useStyles();
+  var vocabulary = props.vocabularys;
+  console.log("VNNNNNNN: ", vocabulary);
+  for (var i = 0; i < vocabulary.length; i++) {
+    if (rows.length === vocabulary.length) {
+      break;
+    }
+    rows.push(createData(vocabulary[i].vocabulary, vocabulary[i].type ,vocabulary[i].pronounce, vocabulary[i].means));
+  }
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer className={classes.tableVocabulary} component={Paper}>
       <Table className={classes.table} aria-label="simple table">
         <TableHead>
           <TableRow >
@@ -50,7 +73,7 @@ export default function Vocabulary() {
 
           </TableRow>
         </TableHead>
-        <TableBody>
+        <TableBody className={classes.content}>
           {rows.map((row) => (
             <TableRow key={row.name}>
               <TableCell className={classes.fontText} component="th" scope="row">

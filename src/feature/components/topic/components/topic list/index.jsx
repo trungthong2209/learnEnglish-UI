@@ -14,7 +14,7 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import { Box, IconButton } from "@material-ui/core";
 import CreateTopics from "../create_topic";
-
+import { useDispatch, useSelector } from "react-redux";
 import ActionTopic from "./components/action";
 
 TopicList.propTypes = {};
@@ -57,21 +57,21 @@ const useStyles = makeStyles((theme) => ({
   },
   font_title: {
     fontFamily: ["Open Sans", "sans-serif"].join(","),
-    fontSize: "3rem",
+    fontSize: "30px",
   },
   font_head: {
     fontFamily: ["Open Sans", "sans-serif"].join(","),
-    fontSize: "2rem",
+    fontSize: "20px",
   },
   groups: {
     fontFamily: ["Open Sans", "sans-serif"].join(","),
-    fontSize: "1.6rem",
+    fontSize: "16px",
     textDecoration: "none",
     width: "100%",
     height: "100%",
   },
   addGroup: {
-    fontSize: "20rem",
+    fontSize: "200px",
     margin: "auto",
   },
   closeButton: {
@@ -84,6 +84,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function TopicList(props) {
+  const loggedInUser = useSelector((state) => state.user.current);
   const { topics, loading } = props;
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
@@ -96,18 +97,24 @@ function TopicList(props) {
   };
 
   if (loading) {
-    return <CircularProgress size="10rem" />;
+    return <CircularProgress size="100px" />;
   }
 
   return (
     <div>
       <Grid container spacing={4}>
+      {
+        loggedInUser.role == 'admin'? (
+          
         <Grid item xs={12} sm={6} md={4}>
+          
           <ControlPointIcon
             className={classes.addGroup}
             onClick={handleClickOpen}
           />
         </Grid>
+        ):''
+      }
         {topics.map((topic) => (
           <Grid item key={topic._id} xs={12} sm={6} md={4}>
             <Card className={classes.card}>
@@ -121,7 +128,7 @@ function TopicList(props) {
                 >
                   <CardMedia
                     className={classes.cardMedia}
-                    image="https://source.unsplash.com/random"
+                    image="https://assets-api.kathmandupost.com/thumb.php?src=https://assets-cdn.kathmandupost.com/uploads/source/news/2020/opinion/Abhiforonline-1597475661.jpg&w=400&height=400"
                     title={topic.topic}
                   />
                   <CardContent className={classes.font_head}>
@@ -137,9 +144,10 @@ function TopicList(props) {
                   </CardContent>
                   </Link>
               </CardActions>
+              {loggedInUser.role =='admin'?
               <CardActions>
               <ActionTopic idTopic={topic._id} topic={topic.topic} description={topic.description}  />
-                  </CardActions >
+                  </CardActions > : ""}
             </Card>
           </Grid>
         ))}

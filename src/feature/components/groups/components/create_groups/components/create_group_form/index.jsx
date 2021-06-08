@@ -3,16 +3,20 @@ import {
   Button,
   LinearProgress,
   makeStyles,
+  TextField,
   Typography,
 } from "@material-ui/core";
 import Avatar from "@material-ui/core/Avatar";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import { useParams } from "react-router";
 import PropTypes from "prop-types";
 import React from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
+import IconButton from '@material-ui/core/IconButton';
+import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import InputField from "../../../../../../../components/form-controls/InputField";
-
+import { useSelector } from "react-redux";
 const useStyle = makeStyles((theme) => ({
   rootRegister: {
     position: "relative",
@@ -28,7 +32,7 @@ const useStyle = makeStyles((theme) => ({
   },
   submit: {
     marginTop: theme.spacing(2),
-    background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
+    background: 'linear-gradient(315deg, #63a4ff  0%, #83eaf1  74%)',
     border: 0,
     borderRadius: 3,
     boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
@@ -42,6 +46,9 @@ const useStyle = makeStyles((theme) => ({
     left: 0,
     right: 0,
   },
+  input: {
+    display: 'none',
+  },
 }));
 
 CreateGroupForm.propTypes = {
@@ -50,41 +57,77 @@ CreateGroupForm.propTypes = {
 
 function CreateGroupForm(props) {
   const classes = useStyle();
-  
-  const schema = yup.object().shape({
-    timeTeaching: yup.string(),
-  });
-  const formm = useForm({
-    defaultValues: {
-      timeTeaching: "",
-    },
-    resolver: yupResolver(schema),
-  });
-  const [valueTime, setValueTime] = React.useState("00:00");
+  const param = useParams();
+  const loggedInUser = useSelector((state) => state.user.current);
 
-  const handleSubmit = async (value) => {
-    const {onSubmit} = props;
-    if(onSubmit){
-      await onSubmit(value);
+  const handleSubmit = async (event) => {
+    try {
+      event.preventDefault();
+      const name = document.getElementById("groupName").value;
+      const des = document.getElementById("timeTeaching").value;
+      // const selectedFile = document.getElementById("input").files[0];
+      
+
+      // let formData = new FormData();
+      // formData.append("topicId", param.topicId);
+      // formData.append("managerId", loggedInUser._id);
+      // formData.append("groupName", name);
+      // formData.append("timeTeaching", des);
+      // formData.append("image", selectedFile);
+      // console.log(formData);
+      let formData= {
+        "topicId": param.topicId,
+        "managerId": loggedInUser._id,
+        "groupName": name,
+        "timeTeaching": des,
+      }
+
+      const { onSubmit } = props;
+      if (onSubmit) {
+        await onSubmit(formData);
+      }
+    } catch (error) {
+      console.log("LỖI", error);
     }
-    
-};
-
-  const { isSubmitting } = formm.formState;
+  };
   return (
     <div className={classes.rootRegister}>
-      {isSubmitting && <LinearProgress className={classes.progress} />}
-      <Avatar className={classes.avatarRegister}>
-        <LockOutlinedIcon />
-      </Avatar>
+
       <Typography className={classes.title} component="h3" variant="h5">
         Tạo nhóm mới
       </Typography>
-      <form onSubmit={formm.handleSubmit(handleSubmit)}>
-      <InputField name="timeTeaching" label="Giờ học" form={formm} />
+      <form onSubmit={handleSubmit}>
+      <TextField
+          name="groupName"
+          id="groupName"
+          label="Tên nhóm"
+          variant="outlined"
+          margin="normal"
+          required
+          fullWidth
+          autoFocus
+        />
+      <TextField
+          name="timeTeaching"
+          id="timeTeaching"
+          label="Giờ dạy"
+          variant="outlined"
+          margin="normal"
+          required
+          fullWidth
+          autoFocus
+        />
+        {/* <label htmlFor="input">Ảnh nhóm</label>
+        <TextField
+          id="input"
+          type="file"
+          variant="outlined"
+          margin="normal"
+          fullWidth
+        /> */}
+        
         
         <Button
-          disabled={isSubmitting}
           type="submit"
           className={classes.submit}
           variant="contained"

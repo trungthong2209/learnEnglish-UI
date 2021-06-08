@@ -12,9 +12,12 @@ import { makeStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import LocalLibraryIcon from "@material-ui/icons/LocalLibrary";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import PersonIcon from "@material-ui/icons/Person";
+import { useDispatch, useSelector } from "react-redux";
+import { CircularProgress } from "@material-ui/core";
+import userApi from "../../../../../api/userApi";
 
 CoursesForYou.propTypes = {};
 const cards = [1, 2, 3];
@@ -29,8 +32,8 @@ const useStyles = makeStyles((theme) => ({
   toolbar: {
     background: "linear-gradient(315deg, #83eaf1 30%, #63a4ff 90%)",
     fontFamily: "'Open Sans', sans-serif",
-    fontSize: "1.6 rem",
-    marginTop: "3rem",
+    fontSize: "16px",
+    marginTop: "30px",
   },
   icon: {
     marginRight: theme.spacing(2),
@@ -66,30 +69,30 @@ const useStyles = makeStyles((theme) => ({
   },
   font_title: {
     fontFamily: ["Open Sans", "sans-serif"].join(","),
-    fontSize: "3rem",
+    fontSize: "30px",
   },
   font_head: {
     fontFamily: ["Open Sans", "sans-serif"].join(","),
-    fontSize: "2rem",
+    fontSize: "20px",
   },
   font_head_title:{
     fontFamily: ["Open Sans", "sans-serif"].join(","),
-    fontSize: "2rem",
-    height:"3rem"
+    fontSize: "20px",
+    height:"30px"
 
   },
 
   font_content: {
     fontFamily: ["Open Sans", "sans-serif"].join(","),
-    fontSize: "1.6rem",
+    fontSize: "16px",
     textDecoration: "none",
     height: "100%",
     width: "100%",
   },
   infoCourse:{
     fontFamily: ["Open Sans", "sans-serif"].join(","),
-    fontSize:"2rem !important",
-    padding: '1rem',
+    fontSize:"20px !important",
+    padding: '10px',
     // background:"#fff",
     // border: "solid black",
     // borderColor: "black",
@@ -104,7 +107,7 @@ const useStyles = makeStyles((theme) => ({
 
   },
   maginInfo:{
-    marginRight:"1rem",
+    marginRight:"10px",
   },
   pInfo:{
     margin:"0",
@@ -131,12 +134,25 @@ const courses = [
   },
 ];
 
-function CoursesForYou(props) {
+function CoursesForYou() {
   const classes = useStyles();
-  const [roomName, setRoomName] = useState("Nhóm");
-  const handleRoomNameChange = (event) => {
-    setRoomName(event.target.value);
-  };
+  const loggedInUser = useSelector((state) => state.user.current);
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(false);
+ 
+  // useEffect(() => {
+  //   const fetchCourses = async () => {
+  //     // setLoading(true);
+  //     // const courseList = await userApi.GetCoursesByIdUser(loggedInUser._id);
+  //     // setCourses(courseList);
+  //     console.log(courseList)
+  //     setLoading(false);
+  //   };
+  //   fetchCourses();
+  // }, []);
+  if (loading) {
+    return <CircularProgress size="100px" />;
+  }
 
   return (
     <React.Fragment>
@@ -176,7 +192,7 @@ function CoursesForYou(props) {
                           color="primary"
                           className={classes.font_content}
                           value={course.id}
-                          onClick={handleRoomNameChange}
+                          
                         >
                           <CardMedia
                             className={classes.cardMedia}

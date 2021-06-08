@@ -14,12 +14,13 @@ import { Close } from "@material-ui/icons";
 import { Box, IconButton } from "@material-ui/core";
 import Upload from "./upload";
 import groupsApi from "../../../../../../../api/groupsApi";
-
+import { Link } from "react-router-dom";
+import { useSnackbar } from "notistack";
 UploadFile.propTypes = {};
 const useStyles = makeStyles((theme) => ({
   font_button: {
     fontFamily: ["Open Sans", "sans-serif"].join(","),
-    fontSize: "1.6rem",
+    fontSize: "13px",
     textAlign: "center",
     boxShadow: "none",
     backgroundColor: "#63a4ff",
@@ -30,17 +31,17 @@ const useStyles = makeStyles((theme) => ({
     color: "white",
     height: 48,
     width: "100%",
-    padding: "0, 3rem",
+    padding: "0, 30px",
   },
   title: {
     fontWeight: "500",
     fontFamily: ["Open Sans", "sans-serif"].join(","),
     color: "#fffffe",
     background: "linear-gradient(315deg, #83eaf1 30%, #63a4ff 90%)",
-    marginBottom: "2rem",
+    marginBottom: "20px",
   },
   name: {
-    fontSize: "1.6rem",
+    fontSize: "16px",
     fontWeight: "500",
     fontFamily: ["Open Sans", "sans-serif"].join(","),
     color: "#0d0800",
@@ -50,10 +51,62 @@ const useStyles = makeStyles((theme) => ({
     //  -webkit-line-clamp: 1, /* number of lines to show */
     //  -webkit-box-orient: vertical,
   },
+  closeButton: {
+    position: "absolute",
+    top: theme.spacing(1),
+    right: theme.spacing(1),
+    color: theme.palette.grey[500],
+    zIndex: 1,
+  },
+  list:{
+    textAlign:'center'
+  },
+  listFile:{
+    overflow: "scroll",
+    overflowX: "hidden",
+    height: "530px",
+    padding: "0",
+    marginBottom:"20px"
+  },
+  border:{
+    border: "1px dashed gray",
+    borderRadius:"5px",
+    padding:"20px"
+  },
+  input:{
+    visibility:"hidden",
+    height:"1px",
+    margin:0
+  },
+  submit: {
+    marginTop: theme.spacing(2),
+    background: "linear-gradient(315deg, #63a4ff  0%, #83eaf1  74%)",
+    border: 0,
+    borderRadius: 3,
+    boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
+    color: "white",
+    height: 48,
+    padding: "0 30px",
+    width:"100%",
+    cursor:"pointer"
+  },
+  choose:{
+    marginTop: theme.spacing(2),
+    background: "linear-gradient(315deg, #63a4ff  0%, #83eaf1  74%)",
+    border: 0,
+    borderRadius: 3,
+    boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
+    color: "white",
+    height: 48,
+    padding: "5px 30px",
+    width:"100%"
+  }
 }));
 
 function UploadFile(props) {
-  let { groupId } = props;
+  let groupId = props.groupId;
+  const { enqueueSnackbar } = useSnackbar();
+  const [files, setFiles] = React.useState(props.file);
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => {
@@ -65,79 +118,51 @@ function UploadFile(props) {
   };
 
   const [fileUpload, setFileUpload] = useState("");
-//   function setFile(event) {
-//     // Get the details of the files
-//     setFileUpload(event.target.files);
-//   }
-//   const postFile = async (event) => {
-//     // HTTP POST
-//     try {
-//       console.log("evennt: ", typeof fileUpload[0]);
-//       let file = fileUpload[0];
-//       let data = {
-//         groupId: groupId,
-//         Files:
-//           '{name: "C2SE12_TOPIC.docx", lastModified: 1614875186141, lastModifiedDate: Thu Mar 04 2021 23:26:26 GMT+0700 (Indochina Time), webkitRelativePath: "", size: 20287, …}',
-//       };
-//       console.log(data);
-//       await groupsApi.uploadFile(JSON.stringify(data));
-//     } catch (error) {
-//       console.log("LỖI", error);
-//     }
-//   };
-
     const handleChange = (event) => {
         console.log(event.target.value);
         setFileUpload(event.target.value);
+        document.getElementById("name1").innerHTML = String(event.target.value);
         
+    }
+    function unique(arr) {
+      return Array.from(new Set(arr)) 
     }
     
 
     let handleSubmit = async (event) => {
         try {
             event.preventDefault();
+            const selectedFile = document.getElementById('input').files[0];
             let formData = new FormData();
-            formData.append("groupId", groupId);
-            formData.append("files", fileUpload);
-            // console.log(formData);
-            // console.log(typeof fileUpload);
-            // const data = {
-            //     "groupId": groupId,
-            //     "files" : fileUpload
-            // }
-            // console.log(data);
+            formData.append("files", selectedFile);
+            console.log(formData);
             await groupsApi.uploadFile(formData, groupId);
+            let info = await groupsApi.getGroupById(groupId);
+            setFiles(info[0].files);
+            enqueueSnackbar("Tải tệp thành công", { variant: "success" });
+            handleClose();
                 } catch (error) {
                   console.log("LỖI", error);
+                  enqueueSnackbar("Tải tệp thất bại", { variant: "error" });
                 }
-
-
-      
     }
   return (
     <div>
-      <Grid item xs={12}>
-        <Paper className={classes.title}>
-          <Typography variant="h4" className="header-message">
-            Tệp
-          </Typography>
-        </Paper>
-      </Grid>
-      <List>
-        <ListItem>
-          <ListItemText
-            primary={<Typography className={classes.name}>Tệp 1</Typography>}
-          ></ListItemText>
+      <List className={classes.listFile} >
+          {
+            unique(files).map((file)=>(
+            
+              <ListItem className={classes.list}>
+                <a href={file} target= "_blank" className={classes.name}>{String(file).slice(62, )}</a>
         </ListItem>
-        <ListItem>
-          <ListItemText
-            primary={<Typography className={classes.name}>Tệp 1</Typography>}
-          ></ListItemText>
-        </ListItem>
+            ))
+          }
+          
+        
       </List>
 
       <Button className={classes.font_button} onClick={handleClickOpen} component="label">
-        Upload File
+        Tải tệp lên
         
       </Button>
       {/* <div>
@@ -157,9 +182,15 @@ function UploadFile(props) {
           </IconButton>
           <DialogContent>
             <form onSubmit={handleSubmit} encType="multipart/form-data">
-              <h1>File Upload</h1>
-              <input type="file" onChange={handleChange} />
-              <button type="submit">Upload</button>
+              <h3>Tải tệp lên</h3>
+              <div className={classes.border}>
+              <label htmlFor="input" className={classes.choose} >Chọn tệp</label> <br /><br />
+              <span className={classes.name1} id="name1" ></span>
+              <input id='input' type="file" onChange={handleChange} className={classes.input}  />       
+              
+            </div>
+            <br />
+            <button type="submit" className={classes.submit}>Tải lên</button>
             </form>
 
           </DialogContent>

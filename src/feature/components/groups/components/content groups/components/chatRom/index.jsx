@@ -44,40 +44,50 @@ const useStyles = makeStyles((theme) => ({
   },
   messageArea: {
     height: "70vh",
-    overflowY: "hiden",
+    overflowY: "hiden !important",
   },
   headerMessage: {
-    fontSize: "1.6rem",
+    fontSize: "16px",
     fontWeight: "500",
     fontFamily: ["Open Sans", "sans-serif"].join(","),
     color: "#fffffe",
     background: "linear-gradient(315deg, #83eaf1 30%, #63a4ff 90%)",
   },
   paper: {
-    marginTop: "1rem",
-    padding: theme.spacing(1),
+    marginTop: "10px",
+    // padding: theme.spacing(1),
+    textAlign: "center",
+    color: theme.palette.text.secondary,
+  },
+  paper1: {
+    marginTop: "10px",
     textAlign: "center",
     color: theme.palette.text.secondary,
   },
   chatRom: {
+   
     width: "100%",
-    marginTop: "1rem",
-    padding: theme.spacing(1),
+    // marginTop: "10px",
+    // padding: theme.spacing(1),
+    padding: "0 12px 0 0",
     textAlign: "center",
     color: theme.palette.text.secondary,
-    border: "1px solid #83eaf1"
+    // border: "1px solid #83eaf1",
+    
+    
   },
   avt: {
-    height: "4rem",
-    width: "4rem",
+    height: "40px",
+    width: "40px",
   },
   block:{
-    width:"90%"
+    width:"80%",
+    marginLeft:"30px",
   },
   name: {
-    fontSize: "1.8rem",
+    fontSize: "18px",
     fontWeight: "700",
-    marginLeft: "2rem",
+    marginLeft: "-15px",
     fontFamily: ["Open Sans", "sans-serif"].join(","),
     color: "#0d0800",
     textAlign: "justify",
@@ -86,46 +96,55 @@ const useStyles = makeStyles((theme) => ({
     
   },
   message: {
-    fontSize: "1.8rem",
+    fontSize: "18px",
     fontWeight: "500",
-    marginLeft: "2.0rem",
     fontFamily: ["Open Sans", "sans-serif"].join(","),
     color: "#0d0800",
-    wordWrap:"break-word"
+    wordWrap:"break-word",
+    textAlign:"justify"
   },
   time: {
-    fontSize: "1.3rem",
-    marginRight: "7rem",
+    fontSize: "13px",
+    marginRight: "-20px",
     fontWeight: "500",
     fontFamily: ["Open Sans", "sans-serif"].join(","),
     color: "#gray",
+    margin:"8px"
+    
   },
   mess: {
     padding: 0,
-    width: "40rem",
+    width: "469px",
     wordWrap: "breakWord",
+    
+    
   },
   content :{
+    width:"96%",
+    height:"595px",
+    overflow: "scroll",
     overflowX: "hidden",
-    height:"80vh"
+    padding:'0 25px 0 0'
   },
   inputMess: {
-    marginTop: "0.3rem",
-    fontSize: "2rem",
+    marginTop: "3px",
+    fontSize: "20px",
     // borderWidth: "calc(var(--border-width) * 1px)",
     // borderStyle: "solid",
-    // borderColor: "0.5rem",
+    // borderColor: "5px",
     // borderRadius: "calc(var(--border-radius) * 1px",
     // outline: "transparent",
     // width: "100%",
     // transition: "border-color calc(var(--transition, 0.2) * 1s) ease",
-    borderStyle: "none",
-    width: "100%",
+    borderStyle: "none !important",
+    width: "95%",
     height: "80%",
   },
   paperInput: {
-    padding: " 0.5rem 0.5rem",
-    marginTop: "2rem",
+    padding: " 7px 5px 4px 5px",
+    marginTop: "0px",
+    height: "40px",
+    width:"448px"
   },
   submit: {
     background: "linear-gradient(315deg, #83eaf1 30%, #63a4ff 90%)",
@@ -133,10 +152,11 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 3,
     boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
     color: "white",
-    height: "100%",
+    height: "30px",
     padding: "0 30px",
     fontFamily: ["Open Sans", "sans-serif"].join(","),
-    fontSize: "1.6rem",
+    fontSize: "14px",
+    marginTop:"3px"
   },
 }));
 
@@ -237,25 +257,28 @@ const ChatRoom = (props) => {
   function unique(arr) {
     return Array.from(new Set(arr)) 
   }
+  
+  function scrollBot (){
+    var elmnt = document.getElementById("content");
+    if(elmnt){
+      elmnt.scrollIntoView(false); // Bottom
+    }
 
+  console.log("listttttttttttttt:",elmnt)
+  }
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      handleSendMessage();
+    }
+  }
   return (
     <div>
-      <Grid item xs={12}>
-        <Paper className={classes.headerMessage}>
-          <Typography variant="h3" className="header-message">
-            Trò chuyện
-          </Typography>
-        </Paper>
-      </Grid>
       <Grid item xs={12} class={classes.content}>
-        <Paper className={classes.chatRom}>
-          <List >
+        <div className={classes.chatRom}>
+          <List id="content">
           {unique(MessesageOld).map((message,i) => ( 
-            <ListItem
+            <div
             key={i}
-            className={`message-item ${
-              message.ownedByCurrentUser ? "my-message" : "received-message"
-            }`}
             >
               <Grid container>
                 <Grid item xs={1}>
@@ -286,7 +309,7 @@ const ChatRoom = (props) => {
                   ></ListItemText>
                 </Grid>
               </Grid>
-            </ListItem>
+            </div>
             ))}
              {unique(messages).map((message,i) => ( 
             <ListItem
@@ -328,8 +351,9 @@ const ChatRoom = (props) => {
             </ListItem>
             ))}
           </List>
-        </Paper>
+        </div>
       </Grid>
+      
 
       <Grid item xs={12}>
         <Paper elevation={3} className={classes.paperInput}>
@@ -348,6 +372,7 @@ const ChatRoom = (props) => {
                 //     ev.preventDefault();
                 //   }
                 // }}
+                onKeyDown={handleKeyDown}
               />
             </Grid>
             <Grid xs={2} align="right">
@@ -364,6 +389,7 @@ const ChatRoom = (props) => {
           </Grid>
         </Paper>
       </Grid>
+      {scrollBot()}
     </div>
   );
 };

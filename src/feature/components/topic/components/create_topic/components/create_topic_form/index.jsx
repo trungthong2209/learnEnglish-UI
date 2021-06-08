@@ -28,7 +28,7 @@ const useStyle = makeStyles((theme) => ({
   },
   submit: {
     marginTop: theme.spacing(2),
-    background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
+    background: 'linear-gradient(315deg, #63a4ff  0%, #83eaf1  74%)',
     border: 0,
     borderRadius: 3,
     boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
@@ -74,9 +74,6 @@ function CreateTopicForm(props) {
   return (
     <div className={classes.rootRegister}>
       {isSubmitting && <LinearProgress className={classes.progress} />}
-      <Avatar className={classes.avatarRegister}>
-        <LockOutlinedIcon />
-      </Avatar>
       <Typography className={classes.title} component="h3" variant="h5">
         Tạo chủ đề mới
       </Typography>

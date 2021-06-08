@@ -6,8 +6,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import React, { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 import topicGroupApi from "../../../api/topicGroup";
-
-
 import "./components/pagination/style.css";
 import TopicList from "./components/topic list";
 import HeaderTopics from "./components/Header";
@@ -21,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     flexWrap: "wrap",
   },
   paginationcss: {
-    margin: "30rem",
+    margin: "300px",
   },
 }));
 

@@ -38,13 +38,13 @@ const useStyles = makeStyles((theme) => ({
   },
   font: {
     fontFamily: ["Open Sans", "sans-serif"].join(","),
-    fontSize: "2rem",
+    fontSize: "20px",
     textDecoration:"none",
     color: "#0d0800",
   },
   font_text: {
     fontFamily: ["Open Sans", "sans-serif"].join(","),
-    fontSize: "1.6rem",
+    fontSize: "16px",
   },
   dialog: {
     width: "40%",

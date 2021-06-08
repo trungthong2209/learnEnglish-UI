@@ -21,14 +21,14 @@ const useStyles = makeStyles((theme) => ({
       marginLeft: "7%",
   },
   question:{
-    fontSize: "2.5rem",
+    fontSize: "25px",
     fontWeight: "500",
     fontFamily: ["Open Sans", "sans-serif"].join(","),
    
    
   },
   answers:{
-    fontSize: "2rem",
+    fontSize: "20px",
     fontWeight: "500",
     fontFamily: ["Open Sans", "sans-serif"].join(","),
    

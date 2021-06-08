@@ -6,6 +6,14 @@ import FacebookIcon from "@material-ui/icons/Facebook";
 import InstagramIcon from "@material-ui/icons/Instagram";
 import PropTypes from "prop-types";
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router";
+import { useHistory } from "react-router-dom";
+import Dialog from "@material-ui/core/Dialog";
+import DialogContent from "@material-ui/core/DialogContent";
+import { IconButton } from "@material-ui/core";
+import { Close } from "@material-ui/icons";
+import UpdateProfile from "./components/updateProfile";
 HeaderUser.propTypes = {
     user: PropTypes.object.isRequired,
 };
@@ -32,22 +40,22 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "10%",
   },
   imgUser: {
-    height: "25rem",
-    width: "25rem",
+    height: "250px",
+    width: "250px",
   },
   nameUser: {
-    fontSize: "3.5rem",
+    fontSize: "35px",
     textAlign: "left",
     fontWeight:"700",
   },
   info:{
-    fontSize: "1.3rem",
+    fontSize: "13px",
     color:"gray",
     textAlign: "left",
     fontWeight:"500",
   },
   introUser: {
-    fontSize: "1.6rem",
+    fontSize: "16px",
     fontStyle: "italic",
     textAlign: "left !important",
   },
@@ -63,7 +71,7 @@ const useStyles = makeStyles((theme) => ({
   },
   Learn: {
     marginLeft: "3%",
-    background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
+    background: 'linear-gradient(315deg, #63a4ff  0%, #83eaf1  74%)',
     border: 0,
     borderRadius: 3,
     boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
@@ -71,24 +79,55 @@ const useStyles = makeStyles((theme) => ({
     height: 40,
     padding: "0 30px",
     fontFamily: ["Open Sans", "sans-serif"].join(","),
-    fontSize: "1.6rem",
+    fontSize: "16px",
   },
   linkSocciel:{
     fontFamily: ["Open Sans", "sans-serif"].join(","),
-    fontSize: "1.6rem",
+    fontSize: "16px",
     fontWeight:700,
   },
+  closeButton: {
+    position: "absolute",
+    top: theme.spacing(1),
+    right: theme.spacing(1),
+    color: theme.palette.grey[500],
+    zIndex: 1,
+  }
 }));
 
+
+
 function HeaderUser(props) {
+  var profile = props.profile;
+  var setProfile = props.setProfile;
+  const history = useHistory();
+  console.log("mmm",profile);
   const classes = useStyles();
+  const loggedInUser = useSelector((state) => state.user.current);
+  const param = useParams();
+  
+  var temp = 0;
+   String(loggedInUser._id) == String(param.id) ? temp = 0 : temp = 1
+   console.log(temp)
+   function sendId(id) {
+    history.push("/tin-nhan/" + id);
+  }
+   //action form
+  const [open, setOpen] = React.useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <React.Fragment>
             <Grid container spacing={0}>
               <Grid item xs={3}>
                 <Paper className={classes.paperImg} elevation={0}>
                   <img
-                    src={props.userFake.avt}
+                    src={profile.avatar}
                     className={classes.imgUser}
                     alt=""
                   />
@@ -97,20 +136,31 @@ function HeaderUser(props) {
               <Grid item xs={6}>
                 <Paper className={classes.paperName} elevation={0}>
                   <p className={classes.nameUser}>
-                    {props.user.userName}
-                    <Button
-                    variant="contained"
-                    color="default"
-                    className={classes.Learn}
-                    
-                  >
-                    Theo dõi 
-                  </Button>
+                    {profile.userName}
+                    {
+                      temp == 0  ? 
+                      <Button
+                        variant="contained"
+                        color="default"
+                        className={classes.Learn} 
+                        onClick={handleClickOpen}
+                      >
+                        Chỉnh sửa
+                      </Button> :
+                      <Button
+                      variant="contained"
+                      color="default"
+                      className={classes.Learn} 
+                      onClick={()=> sendId(param.id)} 
+                    >
+                      Nhắn tin
+                    </Button>
+                    }
                   </p>
-                  <p className={classes.info}><b>{props.userFake.numFollower}</b>  Người theo dõi &emsp;&emsp;&emsp;&emsp; Đang theo dõi <b>{props.userFake.numFollowing}</b> người dùng</p>
+                  {/* <p className={classes.info}><b>{props.userFake.numFollower}</b>  Người theo dõi &emsp;&emsp;&emsp;&emsp; Đang theo dõi <b>{props.userFake.numFollowing}</b> người dùng</p>
                   <p className={classes.introUser}>
                     {props.userFake.intro}
-                  </p>
+                  </p> */}
                 </Paper>
               </Grid>
               <Grid item xs={3}>
@@ -127,6 +177,9 @@ function HeaderUser(props) {
                       color="primary"
                       className={classes.button}
                       startIcon={<FacebookIcon />}
+                      onClick={()=>{
+                        window.location= profile.facebookLink;
+                      }}
                     >
                       Facebook
                     </Button>
@@ -135,15 +188,33 @@ function HeaderUser(props) {
                       color="default"
                       className={classes.button}
                       startIcon={<InstagramIcon />}
+                      onClick={()=>{
+                        window.location= profile.instagramLink;
+                      }}
                     >
-                      Instagram
+                      Google
                     </Button>
                   </div>
                 </Paper>
               </Grid>
              
             </Grid>
-         
+         <div>
+        <Dialog
+          disableBackdropClick
+          disableEscapeKeyDown
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="form-dialog-title"
+        >
+          <IconButton className={classes.closeButton} onClick={handleClose}>
+            <Close />
+          </IconButton>
+          <DialogContent>
+            <UpdateProfile profile={profile} closeDialog={handleClose} setProfile={setProfile}/>
+          </DialogContent>
+        </Dialog>
+      </div>
     </React.Fragment>
   );
 }

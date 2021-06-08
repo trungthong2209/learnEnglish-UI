@@ -8,18 +8,6 @@ import React from "react";
 // import logo from "../header/logo/logoCap2.gif";
 Footer.propTypes = {};
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center" className={useStyles().font_item} >
-      {"Copyright © "}
-      <Link color="inherit" href="/">
-        C2SE.12
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
 
 const useStyles = makeStyles((theme) => ({
   "@global": {
@@ -68,11 +56,11 @@ const useStyles = makeStyles((theme) => ({
   },
   font_title:{
     fontFamily: ["Open Sans", "sans-serif"].join(","),
-    fontSize: "2rem",
+    fontSize: "20px",
   },
   font_item:{
     fontFamily: ["Open Sans", "sans-serif"].join(","),
-    fontSize: "1.6rem",}
+    fontSize: "16px",}
 }));
 
 const footers = [
@@ -127,9 +115,7 @@ function Footer(props) {
             </Grid>
           ))}
         </Grid>
-        <Box mt={5}>
-          <Copyright />
-        </Box>
+
       </Container>
     </div>
   );
