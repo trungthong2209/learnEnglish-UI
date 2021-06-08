@@ -4,13 +4,15 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import groupsApi from "../../../../../api/groupsApi";
 import CreateGroupForm from "./components/create_group_form";
-
+import { useParams } from "react-router";
 CreateGroups.propTypes = {
   closeDialog: PropTypes.func,
 };
 
 function CreateGroups(props) {
   const { enqueueSnackbar } = useSnackbar();
+  const param = useParams();
+  var idTopic = param.topicId;
   const loggedInUser = useSelector((state) => state.user.current);
   const [groups, setGroups] = useState({
     topicId: "",
@@ -30,9 +32,12 @@ function CreateGroups(props) {
     try {
       console.log(values);
       await groupsApi.createGroup(values);
-   
+      const groupList = await groupsApi.getGroupsByTopicId(idTopic);
+
       // close dialog
-      const { closeDialog } = props;
+      const { closeDialog } = props.closeDialog;
+      const {setGroups} = props.setGroups;
+      setGroups(groupList);
       if (closeDialog) {
         closeDialog();
       }

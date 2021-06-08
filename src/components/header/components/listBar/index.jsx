@@ -4,13 +4,14 @@ import { Link, NavLink } from "react-router-dom";
 import GroupIcon from "@material-ui/icons/Group";
 import HomeIcon from "@material-ui/icons/Home";
 import LocalLibraryIcon from "@material-ui/icons/LocalLibrary";
-import MailOutlineIcon from "@material-ui/icons/MailOutline";
-import EventIcon from "@material-ui/icons/Event";
+import { useDispatch, useSelector } from "react-redux";
+import DashboardIcon from '@material-ui/icons/Dashboard';
 import SupervisedUserCircleIcon from "@material-ui/icons/SupervisedUserCircle";
 
 ListBar.propTypes = {};
 
 function ListBar(props) {
+  const loggedInUser = useSelector((state) => state.user.current);
   return (
     <ul className="header__list">
       <li className="header__item tooltipHome">
@@ -28,7 +29,7 @@ function ListBar(props) {
             color="white"
           />
         </NavLink>
-        <span class="tooltiptextCourse">Khóa học</span>
+        <span class="tooltiptextCourse"></span>
       </li>
       <li className="header__item tooltipGroup">
         <NavLink to="/topic" className="header__item-link">
@@ -40,18 +41,6 @@ function ListBar(props) {
         </NavLink>
         <span class="tooltiptextGroup">Nhóm</span>
       </li>
-
-      {/* <li className="header__item tooltipEvent">
-        <NavLink to="/su-kien" className="header__item-link">
-          <EventIcon
-            className="header__navbar-icon"
-            fontSize="large"
-            color="white"
-          />
-        </NavLink>
-        <span class="tooltiptextEvent">Sự kiện</span>
-      </li> */}
-
       <li className="header__item tooltipMatch">
         <NavLink to="/tro-giup" className="header__item-link">
           <SupervisedUserCircleIcon
@@ -62,6 +51,20 @@ function ListBar(props) {
         </NavLink>
         <span class="tooltiptextMatch">Tìm người trợ giúp</span>
       </li>
+      {
+        loggedInUser.role =="admin"? (
+          <li className="header__item tooltipEvent">
+        <NavLink to="/dashboard" className="header__item-link">
+          <DashboardIcon
+            className="header__navbar-icon"
+            fontSize="large"
+            color="white"
+          />
+        </NavLink>
+        <span class="tooltiptextEvent">Quản lý tài khoản</span>
+      </li>
+        ): ""
+      }
     </ul>
   );
 }

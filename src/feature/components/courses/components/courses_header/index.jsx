@@ -51,7 +51,7 @@ function HeaderCourses() {
                   color="inherit"
                   noWrap
                 >
-                  KHÓA HỌC
+                  TỪ VỰNG
                 </Typography>
               </Toolbar>
             </AppBar>

@@ -123,7 +123,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Dashboard() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
-  const [selected, setSelected] = React.useState("Dashboard");
+  const [selected, setSelected] = React.useState("Accounts");
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -141,7 +141,7 @@ export default function Dashboard() {
     <div className={classes.root}>
       <CssBaseline />
 
-      <Drawer
+      {/* <Drawer
         variant="permanent"
         classes={{
           paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
@@ -225,7 +225,7 @@ export default function Dashboard() {
             <ListItemText primary="Year-end sale" />
           </ListItem>
         </List>
-      </Drawer>
+      </Drawer> */}
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>

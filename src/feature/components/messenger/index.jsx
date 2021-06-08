@@ -29,7 +29,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import CloseIcon from "@material-ui/icons/Close";
 import Typography from "@material-ui/core/Typography";
-import { useSnackbar } from 'notistack';
+import { useSnackbar } from "notistack";
 import { useParams } from "react-router";
 const useStyles = makeStyles({
   table: {
@@ -78,10 +78,12 @@ const useStyles = makeStyles({
 const Messenger = () => {
   const classes = useStyles();
   const history = useHistory();
-  const {enqueueSnackbar} = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
   const [listFriend, setlistFriend] = useState("");
-  const [profile, setProfile]= useState([]);
-  const [userRe, setUserRe] = useState([window.location.pathname.split("/")[2]]);
+  const [profile, setProfile] = useState([]);
+  const [userRe, setUserRe] = useState([
+    window.location.pathname.split("/")[2],
+  ]);
   const [loading, setLoading] = useState(false);
   //get mess
   const [MessesageOld, setMessesageOld] = useState([]);
@@ -108,7 +110,12 @@ const Messenger = () => {
 
   const [messagess, setMessagess] = useState([]); // Sent and received messages
 
-  const { messages, sendMessage } = useChat(userRe[0], setMessagess, messagess,idSend);
+  const { messages, sendMessage } = useChat(
+    userRe[0],
+    setMessagess,
+    messagess,
+    idSend
+  );
   const [newMessage, setNewMessage] = useState("");
   const handleNewMessageChange = (event) => {
     setNewMessage(event.target.value);
@@ -147,11 +154,10 @@ const Messenger = () => {
   }
   useEffect(() => {
     const fetchInfoGroup = async () => {
-      let id= window.location.pathname.split('/')[2];
+      let id = window.location.pathname.split("/")[2];
       let info = await userApi.infoProfile(id);
-      console.log(info[0])
-       setProfile(info[0]);
-
+      console.log(info[0]);
+      setProfile(info[0]);
     };
     fetchInfoGroup();
   }, []);
@@ -195,34 +201,40 @@ const Messenger = () => {
       console.log("đã tắt");
     }
   };
+
   let temp = 0;
   Socket.on("pairing", (data) => {
     console.log("data đã paring: ", data);
-      sendId(data._id, data.avatar, data.userName);
-      Socket.emit("stopMatching");
-      handleClose();
+    if (data._id == loggedInUser._id) {
+      enqueueSnackbar("Có một người cần bạn giúp đỡ, hãy vào phần tin nhắn.", {
+        variant: "success",
+      });
+    } else {
+      enqueueSnackbar("Tìm thành công, hãy tương tác với người đó đi nào.", {
+        variant: "success",
+      });
+    }
+    handleClose();
+    Socket.emit("stopMatching");
+    // sendId(data._id, data.avatar, data.userName);
   });
   const handelMatch = () => {
-   
     Socket.emit("matchVolunteers", "607bd8e8c3f0a0ade9846772");
     let dataVo = {};
     //send data
     setOpen(true);
     // setLoading(true);
     Socket.on("matchVolunteers", (data) => {
-      enqueueSnackbar('Tìm thành công, hãy tương tác với người đó đi nào.',{variant:'success'});
+      handleClose();
       console.log("data đã match: ", data);
       dataVo = data;
-      handleClose();
-        Socket.emit("stopMatching");
-        setLoading(false);
+      setLoading(false);
     });
-    console.log(dataVo);
   };
 
   const cancelMatch = () => {
     Socket.emit("stopMatching");
-      handleClose();
+    handleClose();
     temp++;
   };
   const handleKeyDown = (event) => {
@@ -236,7 +248,7 @@ const Messenger = () => {
   if (listFriend == "") console.log("frieeasd", listFriend);
 
   console.log("idddd", arrayIdList);
-  console.log("prooooooo: "+ profile);
+  console.log("prooooooo: " + profile);
 
   return (
     <div>
@@ -268,30 +280,29 @@ const Messenger = () => {
                   }
                   label="Chế độ rảnh"
                 />
-              ) :  loggedInUser.role == "admin"? (
+              ) : loggedInUser.role == "admin" ? (
                 <div>
                   <FormControlLabel
-                  control={
-                    <Switch
-                      checked={freeTime.checkedB}
-                      onChange={handleChange}
-                      name="checked"
-                      color="primary"
-                    />
-                  }
-                  label="Chế độ rảnh"
-                />
+                    control={
+                      <Switch
+                        checked={freeTime.checkedB}
+                        onChange={handleChange}
+                        name="checked"
+                        color="primary"
+                      />
+                    }
+                    label="Chế độ rảnh"
+                  />
                   <Button
-                  className={classes.submit}
-                  variant="contained"
-                  fullWidth
-                  onClick={handelMatch}
-                >
-                  Tìm người trợ giúp
-                </Button>
+                    className={classes.submit}
+                    variant="contained"
+                    fullWidth
+                    onClick={handelMatch}
+                  >
+                    Tìm người trợ giúp
+                  </Button>
                 </div>
-                
-              ):(
+              ) : (
                 <Button
                   className={classes.submit}
                   variant="contained"
@@ -321,10 +332,9 @@ const Messenger = () => {
                           <ListItem button>
                             <ListItemIcon>
                               (friend.recipients.recipientAvatar == "" ? (
-                                <Avatar src={friend.recipients.recipientAvatar} />
-                             
+                              <Avatar src={friend.recipients.recipientAvatar} />
                               ) : (
-                                <Avatar src="/static/images/avatar/1.jpg" />
+                              <Avatar src="/static/images/avatar/1.jpg" />
                               ))
                             </ListItemIcon>
                             <ListItemText
@@ -372,14 +382,16 @@ const Messenger = () => {
               <List>
                 <ListItem button key="RemySharp">
                   <ListItemIcon>
-                    {profile.avatar == ""? (
+                    {profile.avatar == "" ? (
                       <Avatar src="/static/images/avatar/1.jpg" />
                     ) : (
                       <Avatar src={profile.avatar} />
                       // <Avatar src={userRe[1]} />
                     )}
                   </ListItemIcon>
-                  <ListItemText primary={userRe[2]}>{profile.userName}</ListItemText>
+                  <ListItemText primary={userRe[2]}>
+                    {profile.userName}
+                  </ListItemText>
                 </ListItem>
               </List>
               <Divider />

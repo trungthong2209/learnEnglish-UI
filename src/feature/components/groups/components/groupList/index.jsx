@@ -210,7 +210,7 @@ function GroupList(props) {
             <Close />
           </IconButton>
           <DialogContent>
-            <CreateGroups closeDialog={handleClose} />
+            <CreateGroups closeDialog={handleClose} setGroups={setGroups} />
           </DialogContent>
         </Dialog>
       </div>

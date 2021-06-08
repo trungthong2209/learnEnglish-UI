@@ -86,7 +86,7 @@ function Screen(props) {
     };
     Socket.emit("groupCall", data);
   });
-  var dataShare = "";
+
 
   // call videoo
 
@@ -161,10 +161,6 @@ function Screen(props) {
         Socket.on("start-video", (data) => {
           console.log(data);
           connectToNewUser(data.userId, stream);
-          if (dataShare != "") {
-            connectToNewUser(data.userId, dataShare);
-            console.log("stream share: ", dataShare);
-          }
           console.log("stream arayyyyyyyyyyyyyyyyyyyyyyyyyyy: ", stream);
         });
       });
@@ -190,34 +186,13 @@ function Screen(props) {
         myVideo.play();
       });
       videoGrid.appendChild(myVideo);
-      myPeer.on("call", (call) => {
-        console.log("start");
-        call.answer(myVideo);
-        const video = document.createElement("video");
-        call.on("stream", (userVideoStream) => {
-          const videoGrid = document.getElementById("video-call");
-          video.srcObject = userVideoStream;
-          video.controls = "controls";
-          video.className = "video-user";
-          video.addEventListener("loadedmetadata", () => {
-            video.play();
-          });
-
-          videoGrid.appendChild(video);
-          console.log("thêm video share: ", myVideo);
-        });
-      });
-      Socket.on("start-video", () => {
-        connectToNewUser("123", myVideo);
-        console.log("stream share: ", myVideo);
-      });
-      dataShare = myVideo;
+     
       mediaRecorder = new MediaRecorder(screen);
       mediaRecorder.ondataavailable = handleDataAvailable;
       mediaRecorder.start();
       screen.onended = () => {
         // Click on browser UI stop sharing button
-        console.info("Đã bắt đc");
+        console.log("Đã bắt đc");
       };
     });
     shareSCreen();

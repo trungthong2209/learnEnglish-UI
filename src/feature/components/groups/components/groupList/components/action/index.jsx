@@ -44,7 +44,6 @@ function ActionGroup(props) {
   const handleClickOpen = () => {
     setOpen(true);
   };
- 
 
   const handleClose = () => {
     setOpen(false);
@@ -65,8 +64,8 @@ function ActionGroup(props) {
     //   await topicGroupApi.deleteTopic(id);
     let values={
         _id: idgroup,
-        groupName: groupName,
-        status: false
+        // groupName: groupName,
+        action: false
     };
     await groupsApi.updateBlock(values);
     const groupList = await groupsApi.getGroupsByTopicId(idTopic);

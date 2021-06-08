@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+
 import PropTypes from "prop-types";
 import { makeStyles, Typography } from "@material-ui/core";
 import { Avatar, Button } from "@material-ui/core";
@@ -16,6 +16,8 @@ import Upload from "./upload";
 import groupsApi from "../../../../../../../api/groupsApi";
 import { Link } from "react-router-dom";
 import { useSnackbar } from "notistack";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router";
 UploadFile.propTypes = {};
 const useStyles = makeStyles((theme) => ({
   font_button: {
@@ -116,6 +118,15 @@ function UploadFile(props) {
   const handleClose = () => {
     setOpen(false);
   };
+ 
+  useEffect(() => {
+    const fetchInfoGroup = async () => {
+      let info = await groupsApi.getGroupById(groupId);
+      console.log("info: ", info);
+      setFiles(info[0].files);
+    };
+    fetchInfoGroup();
+  }, []);
 
   const [fileUpload, setFileUpload] = useState("");
     const handleChange = (event) => {
@@ -138,6 +149,7 @@ function UploadFile(props) {
             console.log(formData);
             await groupsApi.uploadFile(formData, groupId);
             let info = await groupsApi.getGroupById(groupId);
+            console.log(info[0].files)
             setFiles(info[0].files);
             enqueueSnackbar("Tải tệp thành công", { variant: "success" });
             handleClose();

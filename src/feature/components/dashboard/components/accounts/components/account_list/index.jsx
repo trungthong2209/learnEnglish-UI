@@ -18,7 +18,7 @@ import React, { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import userApi from "../../../../../../../api/userApi";
-
+import SearchBar from 'material-ui-search-bar';
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(2),
@@ -30,24 +30,33 @@ const useStyles = makeStyles((theme) => ({
   paginationcss: {
     margin: "300px",
   },
+  search:{
+    borderRadius:"30px !important",
+    margin: "10px 10px 20px 69%",
+    height: "50px",
+    padding:"10px",
+    width:"30%"
+
+  }
 }));
 
 const AccountList = ({ ...rest }) => {
   const classes = useStyles();
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
   const [limit, setLimit] = useState(10);
- 
   const [account, setAccount] = useState([]);
   const [pageNumber, setPageNumber] = useState(0);
   const [topicsPerPage, setTopicsPerPage] = useState(8);
+  const [search, setSearch] = useState("");
+  const [filteredUser, setFilteredGroups] = useState([]);
 
   
   let arrAdmin = [];
   let arrTeacher = [];
   let arrStudent = [];
-  let fetchAccount;
+
   useEffect(() => {
-  fetchAccount = async () => {
+  const fetchAccount = async () => {
     const accountList = await userApi.getAllUser();
     accountList.map((x)=>{
       if(x.role == "admin") arrAdmin.push(x);
@@ -61,10 +70,17 @@ const AccountList = ({ ...rest }) => {
   };
   fetchAccount();
 }, []);
-console.log(account)
+useEffect(() => {
+  setFilteredGroups(
+    account.filter((user) =>
+    user.email.toLowerCase().includes(search.toLowerCase())
+    )
+  );
+}, [search, account]);
+
 const pagesVisited = pageNumber * topicsPerPage;
 
-  const currentAccount = account.slice(
+  const currentAccount = filteredUser.slice(
     pagesVisited,
     pagesVisited + topicsPerPage
   );
@@ -72,7 +88,7 @@ const pagesVisited = pageNumber * topicsPerPage;
 
   // // Change page
   // const paginate = (pageNumber) => (pageNumber)
-  const pageCount = Math.ceil(account.length / topicsPerPage);
+  const pageCount = Math.ceil(filteredUser.length / topicsPerPage);
 
   const changePage = ({ selected }) => {
     setPageNumber(selected);
@@ -125,6 +141,15 @@ const pagesVisited = pageNumber * topicsPerPage;
   return (
     <div>
       <Card {...rest}>
+      <SearchBar
+          className="search_input"
+          placeholder="Nhập email tài khoản cần tìm"
+          autoFocus
+          className={classes.search}
+          // onChange={(e) => setSearch(e.target.value)}
+          onChange={(searchVal) => setSearch(searchVal)}
+         
+        />
       <PerfectScrollbar>
         <Box sx={{ minWidth: 1050 }}>
           <Table>
