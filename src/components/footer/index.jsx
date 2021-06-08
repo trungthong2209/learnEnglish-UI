@@ -92,12 +92,6 @@ function Footer(props) {
     <div component="footer" className={classes.footer}>
       <Container>
         <Grid container spacing={4} justify="space-evenly">
-          <li>
-            <Link href="/" variant="subtitle1" color="textSecondary">
-              {/* <img className="header__logo" src={logo} alt="Logo" /> */}
-            </Link>
-          </li>
-
           {footers.map((footer) => (
             <Grid item xs={6} sm={2} key={footer.title}>
               <Typography variant="h3" color="textPrimary" gutterBottom className={classes.font_title}>

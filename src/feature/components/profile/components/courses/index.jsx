@@ -93,7 +93,7 @@ function CoursesForProfile({userFake}) {
             color="inherit"
             noWrap
           >
-            Từ vựng CỦA BẠN
+            KHÓA HỌC CỦA BẠN
           </Typography>
         </Toolbar>
       </AppBar>

@@ -29,7 +29,7 @@ function ListBar(props) {
             color="white"
           />
         </NavLink>
-        <span class="tooltiptextCourse"></span>
+        <span class="tooltiptextCourse">Khóa học</span>
       </li>
       <li className="header__item tooltipGroup">
         <NavLink to="/topic" className="header__item-link">

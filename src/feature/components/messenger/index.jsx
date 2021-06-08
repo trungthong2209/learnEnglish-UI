@@ -216,7 +216,7 @@ const Messenger = () => {
     }
     handleClose();
     Socket.emit("stopMatching");
-    // sendId(data._id, data.avatar, data.userName);
+    sendId(data._id, data.avatar, data.userName);
   });
   const handelMatch = () => {
     Socket.emit("matchVolunteers", "607bd8e8c3f0a0ade9846772");

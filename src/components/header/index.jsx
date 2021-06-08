@@ -91,7 +91,7 @@ function Header(props) {
               </label>
             <li><a href="" className="nav__mobile-link">{lastName}</a></li>
               <li><a href="" className="nav__mobile-link">Trang chủ</a></li>
-              <li><a href="" className="nav__mobile-link">Từ Vựng</a></li>
+              <li><a href="" className="nav__mobile-link">Khóa học</a></li>
               <li><a href="" className="nav__mobile-link">Nhóm</a></li>
               <li><a href="" className="nav__mobile-link">sự kiện</a></li>
               <li><a href="" className="nav__mobile-link">Đăng xuất</a></li>
