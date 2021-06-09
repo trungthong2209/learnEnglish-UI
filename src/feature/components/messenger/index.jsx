@@ -96,12 +96,26 @@ const Messenger = () => {
   const [value, setValue] = useState();
 
   const [open, setOpen] = useState(false);
+  const [openSucc, setOpenSucc] = useState(false);
+  const [openSuccTeach, setOpenSuccTeach] = useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
   };
   const handleClose = () => {
     setOpen(false);
+  };
+  const handleClickOpenSucc = () => {
+    setOpenSucc(true);
+  };
+  const handleCloseSucc = () => {
+    setOpenSucc(false);
+  };
+  const handleClickOpenSuccTeach = () => {
+    setOpenSucc(true);
+  };
+  const handleCloseSuccTeach = () => {
+    setOpenSucc(false);
   };
   //id send
   const loggedInUser = useSelector((state) => state.user.current);
@@ -229,13 +243,15 @@ const Messenger = () => {
   Socket.on("pairing", (data) => {
     console.log("data đã paring: ", data);
     if (data._id == loggedInUser._id) {
-      enqueueSnackbar("Có một người cần bạn giúp đỡ, hãy vào phần tin nhắn.", {
-        variant: "success",
-      });
+      // enqueueSnackbar("Có một người cần bạn giúp đỡ, hãy vào phần tin nhắn.", {
+      //   variant: "success",
+      // });
+      handleClickOpenSucc();
     } else {
-      enqueueSnackbar("Tìm thành công, hãy tương tác với người đó đi nào.", {
-        variant: "success",
-      });
+      handleClickOpenSucc();
+      // enqueueSnackbar("Tìm thành công, hãy tương tác với người đó đi nào.", {
+      //   variant: "success",
+      // });
     }
     handleClose();
     Socket.emit("stopMatching");
@@ -256,8 +272,10 @@ const Messenger = () => {
   };
 
   const cancelMatch = () => {
-    Socket.emit("stopMatching");
     handleClose();
+    Socket.emit("stopMatching");
+    handleCloseSucc();
+    
     temp++;
   };
   const handleKeyDown = (event) => {
@@ -453,7 +471,7 @@ const Messenger = () => {
 
             <Divider />
             <Grid container style={{ padding: "20px" }}>
-              <Grid item xs={11}>
+              <Grid item xs={10}>
                 <TextField
                   id="outlined-basic-email"
                   value={newMessage}
@@ -525,6 +543,58 @@ const Messenger = () => {
               onClick={cancelMatch}
             >
               Hủy
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        <Dialog
+          onClose={handleCloseSucc}
+          aria-labelledby="customized-dialog-title"
+          open={openSucc}
+        >
+          <DialogTitle
+            id="customized-dialog-title"
+            onClose={handleCloseSucc}
+          ></DialogTitle>
+          <DialogContent>
+            {/* <CircularProgress size="100px" className={classes.wait} /> */}
+            <h2 className={classes.text}>Đã tìm thành công, bạn hãy tương tác với người đó!!!</h2>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              autoFocus
+              className={classes.submit}
+              variant="contained"
+              fullWidth
+              onClick={cancelMatch}
+            >
+              Đồng ý
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        <Dialog
+          onClose={handleCloseSuccTeach}
+          aria-labelledby="customized-dialog-title"
+          open={openSuccTeach}
+        >
+          <DialogTitle
+            id="customized-dialog-title"
+            onClose={handleCloseSuccTeach}
+          ></DialogTitle>
+          <DialogContent>
+            {/* <CircularProgress size="100px" className={classes.wait} /> */}
+            <h2 className={classes.text}>Có một người cần bạn giúp đỡ!!!</h2>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              autoFocus
+              className={classes.submit}
+              variant="contained"
+              fullWidth
+              onClick={cancelMatch}
+            >
+              Đồng ý
             </Button>
           </DialogActions>
         </Dialog>

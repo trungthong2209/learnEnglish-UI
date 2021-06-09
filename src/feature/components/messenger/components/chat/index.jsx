@@ -14,7 +14,7 @@ const useChat = (idUser,setMessages,messages,idSend) => {
         if(loggedInUser._id == idSend){
           console.log("idsend: ", idSend);
           console.log("idUsser: ",idUser)
-          enqueueSnackbar('Bạn có 1 tin nhắn mới, hãy vô phần tin nhắn!!!.',{variant:'success'});
+          // enqueueSnackbar('Bạn có 1 tin nhắn mới, hãy vô phần tin nhắn!!!.',{variant:'success'});
           console.log("data đã send: ",data);
         }
       })
