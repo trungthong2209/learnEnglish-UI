@@ -131,11 +131,11 @@ function UserBar(props) {
             </a>
           </div>
         </li>
-        <li className="header__item-user">
+        {/* <li className="header__item-user">
           <div className="item-user-drop">
             <NotificationsActiveIcon className="icon-user" />
           </div>
-        </li>
+        </li> */}
         <li className="header__item-user">
           <div className="item-user-drop" onClick={handleMenuUserClick}>
             <ArrowDropDownIcon className="icon-user-drop" />
@@ -168,11 +168,11 @@ function UserBar(props) {
           Dạy trên LET
         </MenuItem> : ''
         }
-        {
+        {/* {
           loggedInUser.role == 'admin'? <MenuItem className={classes.font} onClick={admin}>
           DashBoard
         </MenuItem> : ''
-        }
+        } */}
         <MenuItem className={classes.font} onClick={handleLogoutClick}>
           Đăng xuất
         </MenuItem>

@@ -199,6 +199,13 @@ const ChatRoom = (props) => {
     };
     fetchMessage();
   }, []);
+  // console.log(Socket);
+  //   console.log("Connected to server");
+  //   //join group
+  //   Socket.emit("joinGroup", roomId);
+  //   Socket.on("joinGroup", (data) =>{
+  //     // console.log( "xxxxxxxxxxxxx: ",data);
+  //   });
 
   // socket
   // socket.on("send-message-public", (data)=>{
@@ -211,13 +218,7 @@ const ChatRoom = (props) => {
   
 
   
-    console.log(Socket);
-    console.log("Connected to server");
-    //join group
-    Socket.emit("joinGroup", roomId);
-    Socket.on("joinGroup", (data) =>{
-      // console.log( "xxxxxxxxxxxxx: ",data);
-    });
+    
 
     //send public
     // socket.on("send-message-public", (data)=>{

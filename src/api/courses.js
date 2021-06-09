@@ -56,7 +56,7 @@ const CoursesApi = {
     return axiosClient.get(url);
   },
   getAllCourseVocabulary() {
-    const url = 'http://3.131.71.201:3001/courses/getAllCourseVocabulary';
+    const url = 'http://18.116.60.188:3001//courses/getAllCourseVocabulary';
     return axiosClient.get(url);
   },
   getTopUser() {

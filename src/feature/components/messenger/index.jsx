@@ -31,6 +31,8 @@ import CloseIcon from "@material-ui/icons/Close";
 import Typography from "@material-ui/core/Typography";
 import { useSnackbar } from "notistack";
 import { useParams } from "react-router";
+import IconButton from '@material-ui/core/IconButton';
+import PhotoCamera from '@material-ui/icons/PhotoCamera';
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
@@ -72,6 +74,9 @@ const useStyles = makeStyles({
   },
   text: {
     margin: "0 0 10px 20%",
+  },
+  input: {
+    display: 'none',
   },
 });
 
@@ -153,7 +158,7 @@ const Messenger = () => {
     console.log(newMessage);
     sendMessage(newMessage, userSend);
     setNewMessage("");
-  
+
     // let fetchMessage = async () => {
     //   const messList = await userApi.getMessById(window.location.pathname.split("/")[2]);
     //   setMessesageOld(messList);
@@ -459,14 +464,30 @@ const Messenger = () => {
                   onKeyDown={handleKeyDown}
                 />
               </Grid>
-              <TextField
+              <input
+                accept="image/*"
+                className={classes.input}
+                id="image"
+                type="file"
+                onChange={handleSendPicture}
+              />
+              <label htmlFor="image">
+                <IconButton
+                  color="primary"
+                  aria-label="upload picture"
+                  component="span"
+                >
+                  <PhotoCamera />
+                </IconButton>
+              </label>
+              {/* <TextField
                 id="image"
                 type="file"
                 variant="outlined"
                 margin="normal"
                 fullWidth
                 onChange={handleSendPicture}
-              />
+              /> */}
               <Grid xs={1} align="right">
                 <Fab
                   color="primary"
