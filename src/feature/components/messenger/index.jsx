@@ -265,7 +265,8 @@ const Messenger = () => {
         <Grid container component={Paper} className={classes.chatSection}>
           <Grid item xs={3} className={classes.borderRight500}>
             <List>
-              <ListItem button key="RemySharp">
+              <ListItem button key="
+Sharp">
                 <ListItemIcon>
                   <Avatar
                     alt={loggedInUser.userName}
@@ -389,7 +390,9 @@ const Messenger = () => {
           <Grid item xs={9}>
             <Grid item xs={12}>
               <List>
-                <ListItem button key="RemySharp">
+                <ListItem button key="RemySharp" onClick={() => {
+                    history.push("/profile/" + window.location.pathname.split("/")[2] );
+                  }}>
                   <ListItemIcon>
                     {userRe[1] == "" ? (
                       <Avatar src="/static/images/avatar/1.jpg" />
