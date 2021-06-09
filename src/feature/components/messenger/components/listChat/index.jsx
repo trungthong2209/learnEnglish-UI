@@ -75,6 +75,19 @@ const useStyles = makeStyles({
     margin: "0 0 10px 10px",
     width:"40%",
   },
+  imgMe2:{
+    margin: "0 0 10px 170%",
+    width:"100%",
+    height:"100%",
+    display:"none"
+
+  },
+  imgGuest2:{
+    margin: "0 0 10px 10px",
+    width:"100%",
+    height:"100%",
+    display: "none"
+  },
   time3: {
     margin: "0 0 20px 170%",
     width:"300px"
@@ -145,7 +158,10 @@ function ListChat(props) {
               {compare(mess)==true? (
                 <div>
                   {/* <p className={classes.textMess}>{mess.message}</p> */}
-                  <img src={mess.message} alt="" className={classes.imgGuest} />
+                  <img src={mess.message} id="show" className={classes.imgGuest2} alt="" />
+                  <img src={mess.message} alt="" className={classes.imgGuest} onClick={()=>{
+                    document.getElementById("show").style.display("block");
+                  }} />
                 </div>
               ):
               <div>
@@ -159,7 +175,10 @@ function ListChat(props) {
                {compare(mess)==true? (
                 <div>
                   {/* <p className={classes.textMess}>{mess.message}</p> */}
-                  <img src={mess.message} alt="" className={classes.imgMe} />
+                  <img src={mess.message} id="show" className={classes.imgMe2} alt="" />
+                  <img src={mess.message} alt="" className={classes.imgMe} onClick={()=>{
+                    document.getElementById("show").style.display("block");
+                  }} />
                   
                 </div>
               ):

@@ -146,16 +146,18 @@ function Screen(props) {
           call.answer(stream);
           const video = document.createElement("video");
           call.on("stream", (userVideoStream) => {
-            const videoGrid = document.getElementById("video-call");
-            video.srcObject = userVideoStream;
-            video.controls = "controls";
-            video.className = "video-user";
-            video.addEventListener("loadedmetadata", () => {
-              video.play();
-            });
+            if (userVideoStream.id != stream.id) {
+              const videoGrid = document.getElementById("video-call");
+              video.srcObject = userVideoStream;
+              video.controls = "controls";
+              video.className = "video-user";
+              video.addEventListener("loadedmetadata", () => {
+                video.play();
+              });
 
-            videoGrid.appendChild(video);
-            console.log("thêm người thứ 2: ", video);
+              videoGrid.appendChild(video);
+              console.log("thêm người thứ 2: ", video);
+            }
           });
         });
         Socket.on("start-video", (data) => {

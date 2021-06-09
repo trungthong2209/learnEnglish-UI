@@ -46,6 +46,10 @@ const groupsApi = {
     const url = '/groups/editgroup';
     return axiosClient.post(url, data);
   },
+  uploadRecord(data,id) {
+    const url = '/groups/upload-record/'+id;
+    return axiosClient.post(url, data);
+  },
   updateBlock(data) {
     const url = '/groups/editgroup';
     return axiosClient.post(url, data);
