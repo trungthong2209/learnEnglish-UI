@@ -64,7 +64,7 @@ function CreateGroupForm(props) {
     try {
       event.preventDefault();
       const name = document.getElementById("groupName").value;
-      const des = document.getElementById("timeTeaching").value;
+      const des = '14:00';
       // const selectedFile = document.getElementById("input").files[0];
       
 
@@ -107,7 +107,7 @@ function CreateGroupForm(props) {
           fullWidth
           autoFocus
         />
-      <TextField
+      {/* <TextField
           name="timeTeaching"
           id="timeTeaching"
           label="Giờ dạy"
@@ -116,7 +116,7 @@ function CreateGroupForm(props) {
           required
           fullWidth
           autoFocus
-        />
+        /> */}
         {/* <label htmlFor="input">Ảnh nhóm</label>
         <TextField
           id="input"

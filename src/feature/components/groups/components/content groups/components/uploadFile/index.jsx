@@ -101,7 +101,8 @@ const useStyles = makeStyles((theme) => ({
     color: "white",
     height: 48,
     padding: "5px 30px",
-    width:"100%"
+    width:"100%",
+    cursor:"pointer",
   }
 }));
 

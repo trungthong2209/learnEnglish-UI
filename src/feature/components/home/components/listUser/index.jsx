@@ -107,7 +107,6 @@ function ListFriend(props) {
       const userList = await userApi.getUserMess();
       setlistFriend(userList);
       console.log("console.log(userList);", userList);
-      
     };
     fetchFriend();
   }, []);

@@ -68,25 +68,32 @@ function Answers(props) {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
+   
     setOpen(true);
   };
 
   const handleClose = () => {
+   
     setOpen(false);
   };
   const [open1, setOpen1] = React.useState(false);
 
   const handleClickOpen1 = () => {
+    document.getElementById("question").style.height = "135px";
     handleClose();
     setOpen1(true);
   };
-
+  
   const handleClose1 = () => {
     const vcb = document.getElementById("eng").value;
-    if(vcb == answers[4])
+    if(vcb == answers[4]){
       setOpen1(false);
+      document.getElementById("question").style.height = "auto";
+    }
+      
     else
     enqueueSnackbar("Bạn nhập chưa đúng", { variant: "error" });
+
   };
   var answers = props.answers;
   var selectClick = props.OnClick;
@@ -125,6 +132,11 @@ function Answers(props) {
   const play = () => {
     var audio = document.getElementById("audio");
     audio.play();
+  };
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      handleClose1();
+    }
   };
 
   return (
@@ -218,6 +230,7 @@ function Answers(props) {
           required
           fullWidth
           autoFocus
+          onKeyDown={handleKeyDown}
         />
         </DialogContent>
         <DialogActions>

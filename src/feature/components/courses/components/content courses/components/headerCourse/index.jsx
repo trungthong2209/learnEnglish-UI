@@ -116,7 +116,8 @@ const useStyles = makeStyles((theme) => ({
   border:{
     border: "1px dashed gray",
     borderRadius:"5px",
-    padding:"20px"
+    padding:"20px",
+    cursor:"pointer",
   },
   input:{
     visibility:"hidden"
@@ -130,7 +131,8 @@ const useStyles = makeStyles((theme) => ({
     color: "white",
     height: 48,
     padding: "0 30px",
-    width:"100%"
+    width:"100%",
+    cursor: "pointer"
   },
 }));
 
@@ -263,7 +265,7 @@ function HeaderCourses(props) {
                 className={classes.button}
                 startIcon={<InstagramIcon />}
               >
-                Instagram
+                Google
               </Button>
             </div>
           </Paper>

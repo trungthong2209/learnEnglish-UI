@@ -33,7 +33,7 @@ const useStyle = makeStyles((theme) => ({
   },
   submit: {
     marginTop: theme.spacing(2),
-    background: 'linear-gradient(315deg, #63a4ff  0%, #83eaf1  74%)',
+    background: "linear-gradient(315deg, #63a4ff  0%, #83eaf1  74%)",
     border: 0,
     borderRadius: 3,
     boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
@@ -62,14 +62,17 @@ LoginForm.propTypes = {
 function LoginForm(props) {
   const classes = useStyle();
   const schema = yup.object().shape({
-    email: yup
-      .string()
-      .required("Bạn hãy nhập email.")
-      .email("Bạn phải nhập đúng kiểu email."),
+    // email: yup
+    //   .string()
+    //   .required("Bạn hãy nhập email.")
+    //   .email("Bạn phải nhập đúng kiểu email."),
+    email: yup.string()
+      .email("Bạn phải nhập đúng kiểu email.")
+      .required("Bạn hãy nhập email."),
     password: yup
       .string()
       .required("Bạn hãy nhập mật khẩu")
-      .min(6,"Mật khẩu tối thiểu 6 kí tự."),
+      .min(6, "Mật khẩu tối thiểu 6 kí tự."),
   });
   const formm = useForm({
     defaultValues: {

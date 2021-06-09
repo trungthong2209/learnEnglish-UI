@@ -51,6 +51,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: "500",
     fontFamily: ["Open Sans", "sans-serif"].join(","),
     color: "gray",
+    
   },
   Dialog: {
     height: "700px !important",
@@ -111,10 +112,18 @@ function Record(props) {
                   </Typography>
                 }
               ></ListItemText>
+               <ListItemText align="center" className={classes.time}>
+              { String(video).slice(62, 72)}
+              </ListItemText>
               <ListItemText align="right">
                 <PlayCircleOutlineIcon className={classes.play} />
-              </ListItemText>
+              </ListItemText> 
+              
+              <p >
+           
+           </p>
             </ListItem>
+           
           ))}
           
         </List>

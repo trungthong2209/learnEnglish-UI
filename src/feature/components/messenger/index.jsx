@@ -1,4 +1,4 @@
-import { Container } from "@material-ui/core";
+import { Container, setRef } from "@material-ui/core";
 import Avatar from "@material-ui/core/Avatar";
 import Divider from "@material-ui/core/Divider";
 import Fab from "@material-ui/core/Fab";
@@ -81,9 +81,8 @@ const Messenger = () => {
   const { enqueueSnackbar } = useSnackbar();
   const [listFriend, setlistFriend] = useState("");
   const [profile, setProfile] = useState([]);
-  const [userRe, setUserRe] = useState([
-    window.location.pathname.split("/")[2],
-  ]);
+  const [arrUserRef, setArrUserRef] = useState([]);
+  
   const [loading, setLoading] = useState(false);
   //get mess
   const [MessesageOld, setMessesageOld] = useState([]);
@@ -99,7 +98,6 @@ const Messenger = () => {
   const handleClose = () => {
     setOpen(false);
   };
-
   //id send
   const loggedInUser = useSelector((state) => state.user.current);
   const idSend = loggedInUser._id;
@@ -107,6 +105,23 @@ const Messenger = () => {
   const userNameSend = loggedInUser.userName;
   console.log(loggedInUser);
   const [idd, setId] = useState("");
+  useEffect(() => {
+    const fetchInfoGroup = async () => {
+      let id = window.location.pathname.split("/")[2];
+      let info = await userApi.infoProfile(id);
+      console.log(info[0]);
+      console.log(info[0].avatar);
+      setProfile(info[0]);
+      setArrUserRef();
+      console.log("usasa",arrUserRef);
+      setUserRe(arrUserRef)
+    };
+    fetchInfoGroup();
+  }, []);
+  const [userRe, setUserRe] = useState([profile._id, profile.avatar, profile.userName]);
+  console.log("TEST USERRE",userRe);
+  console.log("TEST PROFILE",profile);
+  
 
   const [messagess, setMessagess] = useState([]); // Sent and received messages
 
@@ -117,6 +132,7 @@ const Messenger = () => {
     idSend
   );
   const [newMessage, setNewMessage] = useState("");
+
   const handleNewMessageChange = (event) => {
     setNewMessage(event.target.value);
   };
@@ -152,21 +168,14 @@ const Messenger = () => {
 
     // window.location.reload();
   }
-  useEffect(() => {
-    const fetchInfoGroup = async () => {
-      let id = window.location.pathname.split("/")[2];
-      let info = await userApi.infoProfile(id);
-      console.log(info[0]);
-      setProfile(info[0]);
-    };
-    fetchInfoGroup();
-  }, []);
+ 
 
   console.log(userRe);
   useEffect(() => {
     const fetchFriend = async () => {
       const userList = await userApi.getUserMess();
       setlistFriend(userList);
+      setUserRe([profile._id, profile.avatar, profile.userName])
       console.log("console.log(userList);", userList);
       if (userList == []) {
         sendId(
@@ -382,10 +391,10 @@ const Messenger = () => {
               <List>
                 <ListItem button key="RemySharp">
                   <ListItemIcon>
-                    {profile.avatar == "" ? (
+                    {userRe[1] == "" ? (
                       <Avatar src="/static/images/avatar/1.jpg" />
                     ) : (
-                      <Avatar src={profile.avatar} />
+                      <Avatar src={userRe[1]} />
                       // <Avatar src={userRe[1]} />
                     )}
                   </ListItemIcon>

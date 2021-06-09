@@ -76,6 +76,7 @@ const useStyles = makeStyles((theme) => ({
   addGroup: {
     fontSize: "200px",
     margin: "auto",
+    cursor:"pointer",
   },
   closeButton: {
     position: "absolute",
