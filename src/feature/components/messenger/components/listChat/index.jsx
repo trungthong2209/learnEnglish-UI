@@ -67,6 +67,18 @@ const useStyles = makeStyles({
     bottom: "-465%",
     right: "-100%",
   },
+  imgMe:{
+    margin: "0 0 10px 170%",
+    width:"40%",
+  },
+  imgGuest:{
+    margin: "0 0 10px 10px",
+    width:"40%",
+  },
+  time3: {
+    margin: "0 0 20px 170%",
+    width:"300px"
+  },
 });
 
 function ListChat(props) {
@@ -74,7 +86,7 @@ function ListChat(props) {
   let { messages, idSend, userRe, MessesageOld, loading } = props;
   console.log("MessesageOld", MessesageOld);
   var pathArray = window.location.pathname.split("/");
-
+  console.log("MESSSAGE: ",messages)
   //get message old
 
   const [id, setId] = useState(userRe[[0]]);
@@ -87,58 +99,81 @@ function ListChat(props) {
   if (loading) {
     return <CircularProgress size="20px" />;
   }
+  const compare = (mess) =>{
+    return mess.message.toLowerCase().includes('https://learn-english-storage.s3.ap-southeast-1.amazonaws.com/'.toLowerCase());
+  }
 
   return (
     <div>
       <List className={classes.messageArea}>
         {unique(MessesageOld).map((mess, index) =>
+        mess.message !=""?
           mess.author.authorId != idSend ? (
             <ListItem key={index} className={classes.content}>
-              <p className={classes.textMess}>{mess.message}</p>
-              <p className={classes.time}>{mess.timeSend.slice(0, 16)}</p>
+              {compare(mess)==true? (
+                <div>
+                  {/* <p className={classes.textMess}>{mess.message}</p> */}
+                  <img src={mess.message} alt="" className={classes.imgGuest} />
+                </div>
+              ):
+              <div>
+                  <p className={classes.textMess}>{mess.message}</p>
+                  <p className={classes.time}>{mess.timeSend.slice(0, 16)}</p>
+              </div> }
+              
             </ListItem>
           ) : (
             <ListItem key={index} className={classes.content2}>
-              <p className={classes.textMess2}>{mess.message}</p>
-              <p className={classes.time2}>{mess.timeSend.slice(0, 16)}</p>
+               {compare(mess)==true? (
+                <div>
+                  {/* <p className={classes.textMess}>{mess.message}</p> */}
+                  <img src={mess.message} alt="" className={classes.imgMe} />
+                  
+                </div>
+              ):
+              <div>
+                  <p className={classes.textMess2}>{mess.message}</p>
+                  <p className={classes.time2}>{mess.timeSend.slice(0, 16)}</p>
+              </div> }
             </ListItem>
-          )
+          ): ""
         )}
         {unique(messages).map((mess, index) =>
+        mess.message !=""?
           mess.authorId != idSend ? (
             <ListItem key={index} className={classes.content}>
-              <p className={classes.textMess}>{mess.message}</p>
-              <p className={classes.time}>{mess.timeSend.slice(0, 16)}</p>
+              {compare(mess)==true? (
+                <div>
+                  {/* <p className={classes.textMess}>{mess.message}</p> */}
+                  <img src={mess.message} alt="" className={classes.imgGuest} />
+                </div>
+              ):
+              <div>
+                  <p className={classes.textMess}>{mess.message}</p>
+                  <p className={classes.time}>{mess.timeSend.slice(0, 16)}</p>
+              </div> }
+              
             </ListItem>
           ) : (
             <ListItem key={index} className={classes.content2}>
-              <p className={classes.textMess2}>{mess.message}</p>
-              <p className={classes.time2}>{mess.timeSend.slice(0, 16)}</p>
+               {compare(mess)==true? (
+                <div>
+                  {/* <p className={classes.textMess}>{mess.message}</p> */}
+                  <img src={mess.message} alt="" className={classes.imgMe} />
+                  
+                </div>
+              ):
+              <div>
+                  <p className={classes.textMess2}>{mess.message}</p>
+                  <p className={classes.time2}>{mess.timeSend.slice(0, 16)}</p>
+              </div> }
             </ListItem>
-          )
+          ): ""
         )}
+
       </List>
     </div>
-    //     <List className={classes.messageArea}>
-    //     {unique(messages).map((mess, index) => (
-    //       <ListItem key={index}>
-    //           <Grid container>
-    //             <Grid item xs={12}>
-    //               <ListItemText
-    //                 align="left"
-    //                 primary={mess.message}
-    //               ></ListItemText>
-    //             </Grid>
-    //             <Grid item xs={12}>
-    //               <ListItemText
-    //                 align="left"
-    //                 secondary={mess.timeSend.slice(0,16)}
-    //               ></ListItemText>
-    //             </Grid>
-    //           </Grid>
-    //       </ListItem>
-    //     ))}
-    //   </List>
+
   );
 }
 

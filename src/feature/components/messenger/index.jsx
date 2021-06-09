@@ -82,7 +82,7 @@ const Messenger = () => {
   const [listFriend, setlistFriend] = useState("");
   const [profile, setProfile] = useState([]);
   const [arrUserRef, setArrUserRef] = useState([]);
-  
+
   const [loading, setLoading] = useState(false);
   //get mess
   const [MessesageOld, setMessesageOld] = useState([]);
@@ -113,15 +113,18 @@ const Messenger = () => {
       console.log(info[0].avatar);
       setProfile(info[0]);
       setArrUserRef();
-      console.log("usasa",arrUserRef);
-      setUserRe(arrUserRef)
+      console.log("usasa", arrUserRef);
+      setUserRe(arrUserRef);
     };
     fetchInfoGroup();
   }, []);
-  const [userRe, setUserRe] = useState([profile._id, profile.avatar, profile.userName]);
-  console.log("TEST USERRE",userRe);
-  console.log("TEST PROFILE",profile);
-  
+  const [userRe, setUserRe] = useState([
+    profile._id,
+    profile.avatar,
+    profile.userName,
+  ]);
+  console.log("TEST USERRE", userRe);
+  console.log("TEST PROFILE", profile);
 
   const [messagess, setMessagess] = useState([]); // Sent and received messages
 
@@ -147,8 +150,15 @@ const Messenger = () => {
     timeSend: time,
   };
   const handleSendMessage = () => {
+    console.log(newMessage);
     sendMessage(newMessage, userSend);
     setNewMessage("");
+  
+    // let fetchMessage = async () => {
+    //   const messList = await userApi.getMessById(window.location.pathname.split("/")[2]);
+    //   setMessesageOld(messList);
+    // };
+    // fetchMessage();
   };
 
   function sendId(id, avt, name) {
@@ -168,14 +178,13 @@ const Messenger = () => {
 
     // window.location.reload();
   }
- 
 
   console.log(userRe);
   useEffect(() => {
     const fetchFriend = async () => {
       const userList = await userApi.getUserMess();
       setlistFriend(userList);
-      setUserRe([profile._id, profile.avatar, profile.userName])
+      setUserRe([profile._id, profile.avatar, profile.userName]);
       console.log("console.log(userList);", userList);
       if (userList == []) {
         sendId(
@@ -258,6 +267,22 @@ const Messenger = () => {
 
   console.log("idddd", arrayIdList);
   console.log("prooooooo: " + profile);
+
+  const toBase64 = (file) =>
+    new Promise((resolve, reject) => {
+      if (file) {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = (error) => reject(error);
+      }
+    });
+  const handleSendPicture = async () => {
+    const image = document.getElementById("image").files[0];
+    var image64 = await toBase64(image);
+    sendMessage(image64, userSend);
+    setNewMessage("");
+  };
 
   return (
     <div>
@@ -389,7 +414,15 @@ const Messenger = () => {
           <Grid item xs={9}>
             <Grid item xs={12}>
               <List>
-                <ListItem button key="RemySharp">
+                <ListItem
+                  button
+                  key="RemySharp"
+                  onClick={() => {
+                    history.push(
+                      "/profile/" + window.location.pathname.split("/")[2]
+                    );
+                  }}
+                >
                   <ListItemIcon>
                     {userRe[1] == "" ? (
                       <Avatar src="/static/images/avatar/1.jpg" />
@@ -426,6 +459,14 @@ const Messenger = () => {
                   onKeyDown={handleKeyDown}
                 />
               </Grid>
+              <TextField
+                id="image"
+                type="file"
+                variant="outlined"
+                margin="normal"
+                fullWidth
+                onChange={handleSendPicture}
+              />
               <Grid xs={1} align="right">
                 <Fab
                   color="primary"
